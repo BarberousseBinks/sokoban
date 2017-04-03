@@ -1,0 +1,8 @@
+<#if licenseFirst??>
+${licenseFirst}
+</#if>
+${licensePrefix}SpeedyRoadie est le nom que l'on a donné à notre Sokoban
+${licensePrefix}Je vous souhaite un bon jeu!
+<#if licenseLast??>
+${licenseLast}
+</#if>
