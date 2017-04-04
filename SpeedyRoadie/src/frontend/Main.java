@@ -1,4 +1,4 @@
-package speedyRoadieFrontEnd;
+package frontend;
 
 import java.io.IOException;
 

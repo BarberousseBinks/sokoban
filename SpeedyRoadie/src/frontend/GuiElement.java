@@ -2,7 +2,7 @@
  * SpeedyRoadie est le nom que l'on a donn� � notre Sokoban
  * Je vous souhaite un bon jeu!
  */
-package speedyRoadieFrontEnd;
+package frontend;
 
 import java.awt.*;
 import java.io.IOException;
