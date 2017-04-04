@@ -45,7 +45,7 @@ public class Gui extends JFrame implements ActionListener{
         int width = level.getWidth()*50;
         guiGame.setSize(height, width);
         guiGame.setLayout(new GridLayout(level.getHeight(), level.getWidth()));
-        char[][] boardCode = level.getBoardCode();
+        char[][] boardCode = level.getRepr();
         for(int i = 0; i < boardCode.length; i++){
             for(int j = 0; j < boardCode[i].length; j++){
                 GuiElement elem = new GuiElement(boardCode[i][j], j, i);
@@ -67,11 +67,7 @@ public class Gui extends JFrame implements ActionListener{
         else if(source.getClass() == GuiElement.class){
             GuiElement temp;
             temp = (GuiElement)source;
-            try {
-                this.level.moveTo(temp.getPosX(), temp.getPosY());
-            } catch (IllegalMove ex) {
-                System.out.println("oops");
-            }
+            this.level.moveTo(temp.getPosX(), temp.getPosY());
         }
         this.setContentPane(guiGame(level));
         this.setVisible(true);
