@@ -9,20 +9,21 @@ package speedyRoadieFrontEnd.speedyRoadieBackEnd;
  *
  * @author Alfa
  */
-public class Wall implements Layoutable{
-
-    @Override
-    public String getType() {
-        return "wall";
+public class classicBox extends Box{
+    public String getType(){
+        //String a=super.getType();
+        //a="c"+a;
+        //return a;
+        return "cbox"; 
     }
-        
+          
     @Override
     public String toString() {
-        return "#";
+        return "$";
     }
     
     @Override
     public char toChar(){
-        return '#';
+        return '$';
     }
 }

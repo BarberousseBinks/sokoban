@@ -24,11 +24,11 @@ public class Gui extends JFrame implements ActionListener{
     public Gui() throws IOException{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.level = null;
-        this.setContentPane(speedyWelcome());
+        this.setContentPane(guiWelcome());
         this.setVisible(true);
     }
 
-    private JPanel speedyWelcome() throws IOException {
+    private JPanel guiWelcome() throws IOException {
         SpeedyWelcome panel = new SpeedyWelcome();
         panel.setLayout(new FlowLayout());
         randGame = new JButton("Nouvelle partie aléatoire");

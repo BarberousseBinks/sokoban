@@ -9,20 +9,22 @@ package speedyRoadieFrontEnd.speedyRoadieBackEnd;
  *
  * @author Alfa
  */
-public class Wall implements Layoutable{
+public class Emptycase implements Layoutable{
 
     @Override
     public String getType() {
-        return "wall";
+        return "emptycase";
     }
-        
+
     @Override
     public String toString() {
-        return "#";
+        return " ";
     }
     
     @Override
     public char toChar(){
-        return '#';
+        return ' ';
     }
+    
+    
 }

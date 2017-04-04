@@ -8,14 +8,7 @@ package speedyRoadieFrontEnd.speedyRoadieBackEnd;
 /**
  *
  * @author Alfa
- * 
  */
-public abstract class Box implements Layoutable {
-     @Override
-     public String getType(){
-        return "box"; 
-     }
-     
-     
+public abstract class Objectif {  //En faire une classe abstraite plutot qu'une interface me semblait avoir plus de sens
+    abstract boolean isCompleted(); //même si d'un point de vue syntaxe on dirait une interface plutot qu'une classe abstraite
 }
-

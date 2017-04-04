@@ -9,20 +9,6 @@ package speedyRoadieFrontEnd.speedyRoadieBackEnd;
  *
  * @author Alfa
  */
-public class Wall implements Layoutable{
-
-    @Override
-    public String getType() {
-        return "wall";
-    }
-        
-    @Override
-    public String toString() {
-        return "#";
-    }
+class FileNtFoundException extends Exception {
     
-    @Override
-    public char toChar(){
-        return '#';
-    }
 }

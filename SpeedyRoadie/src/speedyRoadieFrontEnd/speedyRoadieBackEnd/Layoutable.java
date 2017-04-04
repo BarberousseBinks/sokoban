@@ -9,20 +9,14 @@ package speedyRoadieFrontEnd.speedyRoadieBackEnd;
  *
  * @author Alfa
  */
-public class Wall implements Layoutable{
+public interface Layoutable {
 
-    @Override
-    public String getType() {
-        return "wall";
-    }
-        
-    @Override
-    public String toString() {
-        return "#";
-    }
+    /**
+     *
+     * @return le type de l'object (goal, mur,..)
+     */
+    String getType();  //renvoit "goal", "player", "box" ou "emptycase"
     
-    @Override
-    public char toChar(){
-        return '#';
-    }
+    char toChar();
+    
 }
