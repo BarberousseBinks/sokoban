@@ -1,5 +1,6 @@
 package frontend;
 
+import backend.PuzzleGenerator;
 import java.io.IOException;
 
 /*
@@ -17,8 +18,19 @@ public class Main {
     /**
      * @param args the command line arguments
      */
+        public static void printTab(char[][] b){
+        for(int i=0;i<b.length;i++){
+            for(int j=0;j<b[0].length;j++){
+                System.out.print(b[i][j]);
+            }
+            System.out.println("");
+        }        
+    }
+    
     public static void main(String[] args) throws IOException {
         Gui test = new Gui();
+     /*  System.out.println("kok");
+       printTab(PuzzleGenerator.SPatternTab[0].getPatternContent());*/
     }   
     
 

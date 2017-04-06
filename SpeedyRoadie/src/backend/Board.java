@@ -146,6 +146,8 @@ public class Board {
                     pX=targetPositionX;                                         
                     pY=targetPositionY;
                     tab.get(pY).set(pX,temp);
+                    isGameWon();
+                    return true;
                 }
                 else{                           //Il y a une boite sur ce goal
                     return false;
@@ -239,6 +241,7 @@ public class Board {
                     pX=targetPositionX;                                         
                     pY=targetPositionY;
                     tab.get(pY).set(pX,temp);
+                    isGameWon();
                     return true;
                 }
                 else{                                //Il y a une boite sur ce goal
