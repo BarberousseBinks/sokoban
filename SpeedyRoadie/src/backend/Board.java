@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package backend;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import static java.lang.Math.abs;
@@ -80,6 +79,19 @@ public class Board {
             System.out.println("");        
         }  
          System.out.println("Les coordonées du joueur sont:("+pX+"."+pY+")");
+    }
+    
+    public boolean movePlayerMouse(int mx, int my){  //(mx,my) étant les coordonées de la case qui a été clickée
+        int convMX=mx;                 //mx my avec la même convention que pX et pY
+        int convMY=my-(tab.size()-1);
+        int relativeX=convMX-pX;       //déplacement entre (convMX,convMY) et (pX,pY)
+        int relativeY=convMY-pY;
+        if(abs(relativeX)+abs(relativeY) != 1){
+            return false;       //Le test est fait même si il est refait dans movePlayer. Ici cela n'engendre pas
+        }                       //d'exception, c'est juste un mouvement impossible. Dans movePlayer(int x,int y), cela
+        else{                   //engendre une exception faisant planter le programme car il y a un problème quelque part (si ça arrive)
+            return movePlayer(relativeX,relativeY);
+        }
     }
     
     public boolean movePlayer(int x, int y){  //Fait avancer le joueur du vecteur (x,y)
@@ -322,6 +334,17 @@ public class Board {
             }      
         }  
         return repr;
+    }
+    
+    public int getWidth(){
+        if(tab.size()==0){
+            return 0;
+        }
+        return tab.get(0).size();
+    }
+    
+    public int getHeight(){
+        return tab.size();
     }
     
 }

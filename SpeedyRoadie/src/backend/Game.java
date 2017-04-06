@@ -17,7 +17,8 @@ public class Game {
     public Game(Board board) {
         this.board = board;
     }
-
+    
+    
     public Game() {
     }
     
@@ -29,7 +30,19 @@ public class Game {
         board.movePlayer(x, y);
     }
     
+    public boolean movePlayerMouse(int mx, int my){  //mx et my étant les valeurs d'une case dans le repère matriciel
+        return board.movePlayerMouse(mx, my);        //(avec (0,0) en haut à gauche et (1,0) juste en dessous
+    }
+    
     public char[][] getRepr(){
         return board.getRepr();
+    }
+    
+    public int getWidth(){
+        return board.getWidth();
+    }
+    
+    public int getHeight(){
+        return board.getHeight();
     }
 }

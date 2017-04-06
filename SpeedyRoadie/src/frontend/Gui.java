@@ -13,7 +13,9 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import javax.swing.*;
-import backend.Game;
+import backend.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 
@@ -60,14 +62,18 @@ public class Gui extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
         if(source == randGame){
-            this.level = new Game(4);
+            try {
+                this.level = new Game("gameMaps/level1.xsb");
+            } catch (IOException ex) {
+                Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+            }
             this.setContentPane(guiGame(level));
             this.setVisible(true);
         }
         else if(source.getClass() == GuiElement.class){
             GuiElement temp;
             temp = (GuiElement)source;
-            this.level.moveTo(temp.getPosX(), temp.getPosY());
+            this.level.movePlayerMouse(temp.getPosX(), temp.getPosY());
         }
         this.setContentPane(guiGame(level));
         this.setVisible(true);
