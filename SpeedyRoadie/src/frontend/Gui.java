@@ -50,7 +50,7 @@ public class Gui extends JFrame implements ActionListener{
         char[][] boardCode = level.getRepr();
         for(int i = 0; i < boardCode.length; i++){
             for(int j = 0; j < boardCode[i].length; j++){
-                GuiElement elem = new GuiElement(boardCode[i][j], j, i);
+                GuiElement elem = new GuiElement(boardCode[j][i], i, j);
                 elem.addActionListener(this);
                 guiGame.add(elem);
             }
