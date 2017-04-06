@@ -82,10 +82,9 @@ public class Board {
     }
     
     public boolean movePlayerMouse(int mx, int my){  //(mx,my) étant les coordonées de la case qui a été clickée
-        int convMX=mx;                 //mx my avec la même convention que pX et pY
-        int convMY=my-(tab.size()-1);
-        int relativeX=convMX-pX;       //déplacement entre (convMX,convMY) et (pX,pY)
-        int relativeY=convMY-pY;
+        int relativeX=mx-pX;       //déplacement entre (convMX,convMY) et (pX,pY)
+        int relativeY=my-pY;
+        relativeY=-relativeY; //car on est en valeur matricielle et movePlayer prend comme valeur dans un repère conventionnel
         if(abs(relativeX)+abs(relativeY) != 1){
             return false;       //Le test est fait même si il est refait dans movePlayer. Ici cela n'engendre pas
         }                       //d'exception, c'est juste un mouvement impossible. Dans movePlayer(int x,int y), cela
