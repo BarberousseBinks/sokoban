@@ -18,6 +18,9 @@ public class Game {
         this.board = board;
     }
     
+    public void printBoard(){
+        this.board.printBoard();
+    }
     
     public Game() {
     }

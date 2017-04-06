@@ -7,10 +7,6 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.IOException;
 import javax.swing.*;
 import backend.*;
@@ -42,15 +38,16 @@ public class Gui extends JFrame implements ActionListener{
     }
 
     private JPanel guiGame(Game level){
-        JPanel guiGame = new JPanel();
+        final JPanel guiGame = new JPanel();
         int height = level.getHeight()*50;
         int width = level.getWidth()*50;
         guiGame.setSize(height, width);
         guiGame.setLayout(new GridLayout(level.getHeight(), level.getWidth()));
         char[][] boardCode = level.getRepr();
+
         for(int i = 0; i < boardCode.length; i++){
             for(int j = 0; j < boardCode[i].length; j++){
-                GuiElement elem = new GuiElement(boardCode[j][i], i, j);
+                GuiElement elem = new GuiElement(boardCode[i][j], j ,i);
                 elem.addActionListener(this);
                 guiGame.add(elem);
             }
@@ -63,19 +60,26 @@ public class Gui extends JFrame implements ActionListener{
         Object source = e.getSource();
         if(source == randGame){
             try {
-                this.level = new Game("gameMaps/level1.xsb");
+                this.level = new Game("gameMaps/level2.xsb");
+                this.level.printBoard();
             } catch (IOException ex) {
                 Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
             }
-            this.setContentPane(guiGame(level));
+            this.setContentPane(guiGame(this.level));
             this.setVisible(true);
         }
         else if(source.getClass() == GuiElement.class){
             GuiElement temp;
             temp = (GuiElement)source;
             this.level.movePlayerMouse(temp.getPosX(), temp.getPosY());
+            System.out.println("Cliqué à "+temp.getPosX()+" "+temp.getPosY());
+            this.setContentPane(guiGame(this.level));
+            this.setVisible(true);
         }
-        this.setContentPane(guiGame(level));
-        this.setVisible(true);
+    }
+    
+    private void gameKeyPressed(java.awt.event.KeyEvent evt) {
+        // Added to help find the ID of each 'arrow' key
+        JOptionPane.showMessageDialog(null, "mainPanelKeyPressed"); 
     }
 }
