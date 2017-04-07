@@ -1,6 +1,5 @@
 package backend;
 
-import frontend.Main;
 import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.Random;
@@ -63,6 +62,7 @@ public class PuzzleGenerator {
      //       a=a+1;
             int r = rnd.nextInt(17);
             SPatternTab[r].rotateRandom(4);
+            SPatternTab[r].mirrorRandom();
             if(SPatternTab[r].isCompatible(c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13,c14,c15,c16,ca1,ca2,ca3,ca4,ca5,ca6,ca7,ca8,ca9)){
                 return SPatternTab[r];
             }
@@ -190,7 +190,7 @@ public class PuzzleGenerator {
         ArrayList<int[]> listEmpty = new ArrayList<int[]>(); //Liste pour stocker les coordonnées des cases vides de la map (taille: [nb cases vides][2])
         int[] tempCoord;
         for(int i=0;i<map.length;i++){
-            for(int j=0;j<map.length;j++){
+            for(int j=0;j<map[0].length;j++){
                 if(map[i][j]==' '){
                     tempCoord=new int[2];
                     tempCoord[0]=i;
@@ -199,6 +199,7 @@ public class PuzzleGenerator {
                 }
             }
         }
+        
         
         //Test suffisance de place libre
         if(listEmpty.size() < ((nbBox*2)+2)){  
@@ -222,7 +223,6 @@ public class PuzzleGenerator {
             }
         }
        
-        
         //Test connectivité de tout les espaces libres
         ArrayList<int[]> connectedEmpty = new ArrayList<int[]>(); //Liste des coordonnées des cases vides connectées les unes aux autres
         connectedEmpty.add(listEmpty.get(0));
@@ -238,7 +238,6 @@ public class PuzzleGenerator {
                 }
             }
         }while(added);
-        
         if(connectedEmpty.size() == listEmpty.size()){
             return true;
         }

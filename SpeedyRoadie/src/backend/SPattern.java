@@ -117,7 +117,10 @@ public class SPattern {
         this.patternContent = patternContent;
     }
     
-    public void rotate(){  //Fait une rotation d'un quarts de tour dans le sens horlogique
+    /**
+     * Fait une rotation d'un quarts de tour dans le sens horlogique (pour le SPattern this)
+     */
+    public void rotate(){  
         char temp1;                           //J'aurais pu utiliser les formules d'une rotation de 90° autour d'une origine mais redéfinir le milieu comme origine dans la double liste n'aurait pas prit beaucoup moins de temps
         char temp2;
         
@@ -169,13 +172,42 @@ public class SPattern {
         c12=temp2;
         c12=temp1;
     }
-    
-    public void rotateRandom(int nb){   //Effectue de 0 (comprit) à nb (non comprit) quarts de tours dans le sens horaire
+   
+    /**
+     * Effectue de 0 (comprit) à nb (non comprit) quarts de tours dans le sens horaire (pour le SPattern this)
+     * @param nb
+     */
+    public void rotateRandom(int nb){   
         Random rnd = new Random();
         int r = rnd.nextInt(nb);
         for(int i=0;i<r;i++){
             rotate();   
         }    
+    }
+    
+    /**
+     * Transforme un SPattern en son image en miroir (symmétra axe horizontal passant par le millieu)
+     */
+    public void mirror(){
+        char temp;
+        temp=patternContent[0][0]; patternContent[0][0]=patternContent[0][2]; patternContent[0][2]=temp;
+        temp=patternContent[1][0]; patternContent[1][0]=patternContent[1][2]; patternContent[1][2]=temp;
+        temp=patternContent[2][0]; patternContent[2][0]=patternContent[2][2]; patternContent[2][2]=temp;
+        temp=c1; c1=c3; c3=temp;
+        temp=c11; c11=c9; c9=temp;
+        temp=c16; c16=c4; c4=temp;
+        temp=c15; c15=c5; c5=temp;
+        temp=c14; c14=c6; c6=temp;
+        temp=c13; c13=c7; c7=temp;
+        temp=c12; c12=c8; c8=temp;
+        
+    }
+    
+    public void mirrorRandom(){
+        Random rnd = new Random();
+        if(rnd.nextInt(2) == 1){
+            mirror();
+        }
     }
     
     public void printSPattern(){  //Uniquement utile à des fins de débugage. Ne sert pas dans le programme
@@ -187,7 +219,7 @@ public class SPattern {
         }
     }
     
-    public void printCond(){
+    public void printCond(){      //Uniquement utile à des fins de débugage. Ne sert pas dans le programme
         System.out.println(""+c16+" "+c1+" "+c2+" "+c3+" "+c4);
         System.out.println(""+c15+"       "+c5);
         System.out.println(""+c14+"       "+c6);
