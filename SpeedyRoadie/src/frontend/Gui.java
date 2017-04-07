@@ -11,6 +11,8 @@ import java.io.IOException;
 import javax.swing.*;
 import backend.*;
 import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,36 +43,51 @@ public class Gui extends JFrame implements ActionListener{
     // Méthode Private car uniquement chargée par Gui()
     // Affiche le menu d'accueil
     private JPanel guiWelcome() throws IOException {
-        SpeedyBackground panel = new SpeedyBackground("gameGraphics/welcomeBG.jpg");
-        panel.setLayout(new FlowLayout());
+        JPanel panel = new JPanel();
+        SpeedyBackground backgroundPanel = new SpeedyBackground("gameGraphics/welcomeBG.jpg");
+        panel.setLayout(new BorderLayout());
+        JPanel buttonContainer = new JPanel();
         setResizable(false);
         this.setSize(600,400);
         randGame = new JButton("Nouvelle partie aléatoire");
         randGame.addActionListener(this);
-        panel.add(randGame);
         loadLevel = new JButton("Charger un niveau");
         loadLevel.addActionListener(this);
-        panel.add(loadLevel);
+        buttonContainer.add(randGame);
+        buttonContainer.add(loadLevel);
+        panel.add(backgroundPanel, BorderLayout.CENTER);
+        panel.add(buttonContainer, BorderLayout.SOUTH);
         return panel;
     }
     // Méthode Private car uniquement chargée par Gui()
     // Affiche le JPanel du jeu
     // Prend en paramètre un niveau du jeu
     private JPanel guiGame(Game level){
-        final JPanel guiGame = new JPanel();
-        int height = level.getHeight()*50;
+        setResizable(false);
+        final JPanel infos = new JPanel();
+        infos.setLayout(new FlowLayout());
+        final JLabel nbSteps = new JLabel("Nombre de pas: " + level.getNbSteps());
+        infos.add(nbSteps);
+        final JButton undo = new JButton("Annuler un mouvement");
+        infos.add(undo);
+        final JPanel gameContent = new JPanel();
+        int height = level.getHeight()*50 + 50;
         int width = level.getWidth()*50;
-        guiGame.setSize(height, width);
-        guiGame.setLayout(new GridLayout(level.getHeight(), level.getWidth()));
+        gameContent.setSize(height, width);
+        gameContent.setLayout(new GridLayout(level.getHeight(), level.getWidth()));
         char[][] boardCode = level.getRepr();
         this.setSize(width, height);
         for(int i = 0; i < boardCode.length; i++){
             for(int j = 0; j < boardCode[i].length; j++){
                 GuiElement elem = new GuiElement(boardCode[i][j], j ,i);
                 elem.addActionListener(this);
-                guiGame.add(elem);
+                gameContent.add(elem);
             }
         }
+        final JPanel guiGame = new JPanel();
+        guiGame.setLayout(new BorderLayout());
+        guiGame.add(infos, BorderLayout.NORTH);
+        guiGame.add(gameContent, BorderLayout.CENTER);
         return guiGame;
     }
     // Méthode Private car uniquement chargée par Gui()
@@ -82,19 +99,15 @@ public class Gui extends JFrame implements ActionListener{
     }
     
     private JPanel levelLoader(String path){
-        SpeedyBackground levelLoader = new SpeedyBackground("gameGraphics/wowBG.jpg");
+        SpeedyBackground levelLoader = new SpeedyBackground("gameGraphic/swelcomeBG.jpg");
         levelLoader.setLayout(new BorderLayout());
         File levelFolder = new File(path);
         File[] levelList = levelFolder.listFiles();
-        
-        JPanel buttonContainer = new JPanel();
-        buttonContainer.setLayout(new FlowLayout());
-        
+        SpeedyBackground buttonContainer = new SpeedyBackground("gameGraphics/welcomeBG.jpg");
+        buttonContainer.setLayout(new GridLayout(levelList.length , 1));
         back = new JButton("Retour");
         back.addActionListener(this);
-        
         levelLoader.add(back, BorderLayout.NORTH);
-        
         for (int i = 0; i < levelList.length; i++){
             if(levelList[i].isFile() && levelList[i].getName().endsWith(".xsb")){ //XSB est le format par défaut pour les fichiers de jeu
                 System.out.println(levelList[i].getPath());
@@ -105,9 +118,11 @@ public class Gui extends JFrame implements ActionListener{
                 
             }
         }
-        
-        levelLoader.add(buttonContainer, BorderLayout.CENTER);
-        
+        JScrollPane scroller = new JScrollPane(buttonContainer);
+        levelLoader.add(scroller, BorderLayout.CENTER);
+        JLabel notice = new JLabel("Pour ajouter vos fichiers xsb, entrez-les dans le dossier "+ path, SwingConstants.CENTER);
+        levelLoader.add(notice, BorderLayout.SOUTH);
+        this.setResizable(true);
         return levelLoader;
     }
 
@@ -163,16 +178,16 @@ public class Gui extends JFrame implements ActionListener{
             temp = (GuiFile)source;
             try {
                 this.level = new Game(temp.getPath());
-            } catch (IOException ex) {
-                Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
+                infoBox("Une erreur est survenue avec ce fichier XSB, veuillez vérifier s'il comporte des caractères autres que [#,@,.,$,!]", "Erreur, fichier XSB incorrect");
             }
             this.setContentPane(guiGame(this.level));
             this.setVisible(true);
         }
     }
     
-    private void gameKeyPressed(java.awt.event.KeyEvent evt) {
-        // Added to help find the ID of each 'arrow' key
-        JOptionPane.showMessageDialog(null, "mainPanelKeyPressed"); 
+    public static void infoBox(String infoMessage, String titleBar)
+    {
+        JOptionPane.showMessageDialog(null, infoMessage, titleBar, JOptionPane.INFORMATION_MESSAGE);
     }
 }

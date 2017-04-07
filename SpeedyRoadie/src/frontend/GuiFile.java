@@ -4,7 +4,18 @@
  */
 package frontend;
 
+import java.awt.Color;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Point;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.SwingConstants;
 
 /**
  *
@@ -30,5 +41,8 @@ public class GuiFile extends JButton{
     public GuiFile(String path){
         this.path = path;
         this.setText(path);
+        this.setBorderPainted(false);
+        this.setHorizontalTextPosition(SwingConstants.CENTER);
     }
+
 }
