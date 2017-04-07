@@ -339,7 +339,7 @@ public class Board {
     /**
      * Vérifie si la partie est gagnée, et lance la procédure de réussite si c'est le cas
      */
-    public void isGameWon(){
+    protected boolean isGameWon(){
         boolean check=true;
         
         for(int i=0;i<objectives.size();i++){
@@ -351,7 +351,9 @@ public class Board {
         
         if(check){
             winMethod();
-        }       
+            return true;
+        }     
+        return false;
     }
     
     /**

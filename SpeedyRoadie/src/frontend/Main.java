@@ -16,24 +16,11 @@ import java.io.IOException;
  */
 public class Main {
 
-    /**
-     * @param args the command line arguments
-     */
-        public static void printTab(char[][] b){
-        for(int i=0;i<b.length;i++){
-            for(int j=0;j<b[0].length;j++){
-                System.out.print(b[i][j]);
-            }
-            System.out.println("");
-        }        
-    }
     
     public static void main(String[] args) throws IOException {
-       // Gui test = new Gui();
+        Gui test = new Gui();
        
         char[][] newmap= PuzzleGenerator.generateEmptyRoom(3,4,3);
-        System.out.println("-----------------");
-        printTab(newmap);
 
     }   
     

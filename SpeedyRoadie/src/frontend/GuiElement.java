@@ -15,6 +15,8 @@ import javax.swing.JButton;
  * @author Louis Dhanis
  */
 public class GuiElement extends JButton{
+    protected int x;
+    protected int y;
     
     public int getPosX(){
         return this.x;
@@ -23,8 +25,6 @@ public class GuiElement extends JButton{
         return this.y;
     }
     
-    protected int x;
-    protected int y;
     public GuiElement(char content, int x, int y){
         this.x = x; 
         this.y = y;

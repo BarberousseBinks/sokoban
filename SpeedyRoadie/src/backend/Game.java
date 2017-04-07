@@ -91,4 +91,8 @@ public class Game {
     public int getHeight(){
         return board.getHeight();
     }
+    
+    public boolean isGameWon(){
+        return this.board.isGameWon();
+    }
 }
