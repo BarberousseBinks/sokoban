@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package backend;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -10,7 +5,7 @@ import static java.lang.Math.abs;
 import java.util.ArrayList;
 
 /**
- *
+ * Cette classe contient tout ce qu'il faut pour générer un board (avec l'aide de PuzzleDataReader si c'est à partir d'un chemin) et pour y déplacer le joueur
  * @author Alfa
  */
 public class Board {
@@ -24,14 +19,24 @@ public class Board {
         objectives=new ArrayList<Objectif>();
     }
     
+    
     public Board(String cheminTxtLab) throws FileNotFoundException, IOException{  //construire le jeu à partir d'un fichier .txt (constructeur)
         generateBoard(PuzzleDataReader.ReadPuzzleData(cheminTxtLab));
     }
     
+    /**
+     * Prend le chemin d'accès au fichier (par exemple "C:\\Users\\Alfatta\\Desktop\\testread\\level2.xsb") en génère le board en fonction du contenu du fichier. 
+     * Méthode susceptible de générer une excpetion sur le fichier n'est pas trouvé où qu'il ne correspond pas aux normes de fichier de data sokoban
+     * @param cheminTxtLab le chemin d'accès au fichier
+     */
     public void generateBoard(String cheminTxtLab) throws FileNtFoundException,IOException{  //construire le jeu à partir d'un fichier .txt
         generateBoard(PuzzleDataReader.ReadPuzzleData(cheminTxtLab));
     }
     
+    /**
+     * Génère le board à l'aide d'un tableau de char le représentant
+     * @param puzzleData le tableau de char représentant le puzzle
+     */
     public void generateBoard(ArrayList<char[]> puzzleData){     //construire le jeu à partir d'une ArrayList de tableau de char [#, ,i,b,o]
         objectives=new ArrayList<Objectif>();
         tab=new ArrayList<ArrayList<Layoutable>>(); 
@@ -46,6 +51,15 @@ public class Board {
         
     }
     
+    /**
+     * Génère un objet Layoutable en fonction du paramètre d. 
+     * Si il s'agit du joueur, met automatiquement ses coordonnées à jour.
+     * Si il s'agit d'un goal, l'ajoute automatiquement à la liste des objectifs.
+     * @param d le charactère représentant le Layoutable que l'on génère
+     * @param x la coordonnée x du point que l'on génère
+     * @param y la coordonnée y du point que l'on génère
+     * @return
+     */
     public Layoutable generateLayoutPiece(char d,int x,int y){          //Non static car si la pièce générée est un objectif, cette méthode
         if(d=='#'){                                                     //l'ajoutera automatiquement à la liste des objectifs. 
             return new Wall();                                          //           si la pièce génétée est le joueur, cette méthode
@@ -81,6 +95,12 @@ public class Board {
          System.out.println("Les coordonées du joueur sont:("+pX+"."+pY+")");
     }
     
+    /**
+     * Méthode faisant avancer le joueur vers la case (mx,my) si cela est possible
+     * @param mx la coordonnée en x d'une case
+     * @param my la coordonnée en y d'une case
+     * @return
+     */
     public boolean movePlayerMouse(int mx, int my){  //(mx,my) étant les coordonées de la case qui a été clickée
         int relativeX=mx-pX;       //déplacement entre (convMX,convMY) et (pX,pY)
         int relativeY=my-pY;
@@ -93,6 +113,12 @@ public class Board {
         }
     }
     
+    /**
+     * Déplace le joueur, si c'est possible, dans une direction donnée par le vecteur unitaire (x,y) aux connrdonnée donnée dans un repère cartésien classique.
+     * @param x +1 si on avance dans le sens conventionnel des x, -1 inversément, 0 si le déplacement se fait selon l'axe des y
+     * @param y +1 si on avance dans le sens conventionnel des y, -1 inversément, 0 si le déplacement se fait selon l'axe des y
+     * @return
+     */
     public boolean movePlayer(int x, int y){  //Fait avancer le joueur du vecteur (x,y)
         if(abs(x)+abs(y) != 1){
             throw new IllegalArgumentException("movePlayer(int x,int y) only takes [(0,1),(0,-1),(1,0)or(-1,0)] as parameters (x,y)"); 
@@ -310,6 +336,9 @@ public class Board {
         System.out.println("GG EASY");
     }
     
+    /**
+     * Vérifie si la partie est gagnée, et lance la procédure de réussite si c'est le cas
+     */
     public void isGameWon(){
         boolean check=true;
         
@@ -325,6 +354,9 @@ public class Board {
         }       
     }
     
+    /**
+     * @return un tableau de char représentant le board. '.' objectif vide. '!' objectif avec une box. '*' objectif avec le joueur. '#' mur. ' ' vide. '@' joueur
+     */
     public char[][] getRepr(){
         if(tab.size()==0){
             return new char[0][0];
@@ -338,6 +370,9 @@ public class Board {
         return repr;
     }
     
+    /**
+     * @return la largeur du board
+     */
     public int getWidth(){
         if(tab.size()==0){
             return 0;
@@ -345,6 +380,9 @@ public class Board {
         return tab.get(0).size();
     }
     
+    /**
+     * @return la hauteur du board
+     */
     public int getHeight(){
         return tab.size();
     }

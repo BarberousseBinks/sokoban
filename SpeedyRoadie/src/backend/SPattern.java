@@ -7,7 +7,7 @@ package backend;
 import java.util.Random;
 
 /**
- *
+ * Classe représentant un Pattenr pour le PuzzleGenerator
  * @author Alfatta
  */
 public class SPattern {

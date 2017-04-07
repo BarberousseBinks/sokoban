@@ -12,11 +12,20 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- *
+ * Classe comprenant les outils nécessaire pour tout ce qui concerne la lecture et l'écriture des fichier relatifs à notre Sokoban
  * @author Alfa
  */
 public class PuzzleDataReader {
-        public static ArrayList<char[]> ReadPuzzleData(String cheminTxtLab) throws FileNotFoundException, IOException{
+    
+    /**
+     * Renvoit une représentation du niveau sous forme de liste de char à partir d'un fichier contenant cette représentation. 
+     * Susceptible de générer des exception si le fichier spécifié est introuvable ou si les données qui le compose ne sont pas des caractères
+     * @param cheminTxtLab
+     * @return char[] représentation du niveau
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    public static ArrayList<char[]> ReadPuzzleData(String cheminTxtLab) throws FileNotFoundException, IOException{
 
             BufferedReader in = new BufferedReader(new FileReader(cheminTxtLab));
 
