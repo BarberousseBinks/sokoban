@@ -16,12 +16,13 @@ import java.io.IOException;
  */
 public class Main {
 
-    
+    /**
+     * Point d'entrée du programme.
+     * @param args
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException {
         Gui test = new Gui();
-       
-        char[][] newmap= PuzzleGenerator.generateEmptyRoom(3,4,3);
-
     }   
     
 

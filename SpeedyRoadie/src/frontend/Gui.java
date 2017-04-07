@@ -15,14 +15,22 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
-
+/**
+ * Classe de l'interface graphique.
+ * Dans ce fichier, on retrouve toute l'implémentation graphique du projet
+ * @author Louis Dhanis
+ */
 public class Gui extends JFrame implements ActionListener{
     private Game level;
     private JButton randGame;
     private JButton loadLevel;
     private JButton back;
     
+    /**
+     * Classe de l'interface graphique.
+     * étend JFrame (conteneur principal)
+     * @throws IOException
+     */
     public Gui() throws IOException{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.level = null;
@@ -30,7 +38,8 @@ public class Gui extends JFrame implements ActionListener{
         this.setVisible(true);
         this.setLayout(new BorderLayout());
     }
-
+    // Méthode Private car uniquement chargée par Gui()
+    // Affiche le menu d'accueil
     private JPanel guiWelcome() throws IOException {
         SpeedyBackground panel = new SpeedyBackground("gameGraphics/welcomeBG.jpg");
         panel.setLayout(new FlowLayout());
@@ -44,7 +53,9 @@ public class Gui extends JFrame implements ActionListener{
         panel.add(loadLevel);
         return panel;
     }
-
+    // Méthode Private car uniquement chargée par Gui()
+    // Affiche le JPanel du jeu
+    // Prend en paramètre un niveau du jeu
     private JPanel guiGame(Game level){
         final JPanel guiGame = new JPanel();
         int height = level.getHeight()*50;
@@ -62,7 +73,8 @@ public class Gui extends JFrame implements ActionListener{
         }
         return guiGame;
     }
-    
+    // Méthode Private car uniquement chargée par Gui()
+    // Affiche le menu de fin de niveau.
     private JPanel wowGG(){
         SpeedyBackground wowGG = new SpeedyBackground("gameGraphics/wowBG.jpg");
         
@@ -99,6 +111,13 @@ public class Gui extends JFrame implements ActionListener{
         return levelLoader;
     }
 
+    /**
+     * actionPerformed, gestionnaire des ActionEvent.
+     * Permet d'établir la correspondance entre les boutons et ce qu'ils font.
+     * Tous les boutons de l'interface graphique sont configurés dans cette partie
+     * Méthode issue de l'interface ActionListener
+     * @param e
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
