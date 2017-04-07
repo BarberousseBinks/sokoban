@@ -15,16 +15,40 @@ import javax.swing.JButton;
  * @author Louis Dhanis
  */
 public class GuiElement extends JButton{
+
+    /**
+     * x,y sont les coordonnées du bouton.
+     * Cela permet de déplacer facilement le joueur.
+     * En stockant les coordonnées de l'élément dans la classe du bouton, je n'ai qu'à appeler ces variables locales lors de l'utilisation des méthodes programmées dans la partie backend
+     */
     protected int x;
     protected int y;
     
+    /**
+     * Renvoie la coordonnée en x du bouton sur la map.
+     * @return
+     */
     public int getPosX(){
         return this.x;
     }
+
+    /**
+     * Renvoie la coordonnée en y du bouton sur la map.
+     * @return
+     */
     public int getPosY(){
         return this.y;
     }
     
+    /**
+     * Constructeur de l'objet GuiElement (qui est un bouton)
+     * Prend en paramètre le contenu de l'élément (son identifiant char sur le board)
+     * Prend en paramètre les coordonnées absolues sur le board.
+     * 
+     * @param content
+     * @param x
+     * @param y
+     */
     public GuiElement(char content, int x, int y){
         this.x = x; 
         this.y = y;
