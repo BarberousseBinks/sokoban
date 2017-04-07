@@ -92,7 +92,6 @@ public class Game {
         return board.getHeight();
     }
     
-    // J'ai ajouté cette méthode booleenne pour pouvoir gérer plus facilement la fin de partie dans l'interface graphique
     public boolean isGameWon(){
         return this.board.isGameWon();
     }

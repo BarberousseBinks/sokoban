@@ -73,7 +73,7 @@ public class Board {
             return new Player();
         }
         else if (d=='$'){
-            return new ClassicBox();
+            return new classicBox();
         }
         else if (d=='.'){
             Goal newgoal=new Goal();
@@ -339,7 +339,7 @@ public class Board {
     /**
      * Vérifie si la partie est gagnée, et lance la procédure de réussite si c'est le cas
      */
-    protected boolean isGameWon(){// J'ai ajouté un if / else à la fin renvoyant un booléen pour gérer isGameWon dans Game() pour pouvoir gérer la fin de niveau dans l'interface graphique
+    protected boolean isGameWon(){
         boolean check=true;
         
         for(int i=0;i<objectives.size();i++){

@@ -35,7 +35,7 @@ public class Goal extends Objectif implements Layoutable {
     public void setEmpty(Emptycase c){
         content=c;
     }
-    public void setcBoxOn(ClassicBox c){
+    public void setcBoxOn(classicBox c){
         content=c;
     }
     public void setPlayerOn(Player c){
