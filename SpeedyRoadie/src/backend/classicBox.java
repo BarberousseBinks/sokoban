@@ -9,7 +9,7 @@ package backend;
  *
  * @author Alfa
  */
-public class classicBox extends Box{
+public class ClassicBox extends Box{
     public String getType(){
         //String a=super.getType();
         //a="c"+a;
