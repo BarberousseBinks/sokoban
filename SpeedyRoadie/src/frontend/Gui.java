@@ -99,23 +99,24 @@ public class Gui extends JFrame implements ActionListener{
     }
     
     private JPanel levelLoader(String path){
-        SpeedyBackground levelLoader = new SpeedyBackground("gameGraphic/swelcomeBG.jpg");
+        SpeedyBackground levelLoader = new SpeedyBackground("gameGraphic/fade.jpg");
         levelLoader.setLayout(new BorderLayout());
         File levelFolder = new File(path);
         File[] levelList = levelFolder.listFiles();
-        SpeedyBackground buttonContainer = new SpeedyBackground("gameGraphics/welcomeBG.jpg");
-        buttonContainer.setLayout(new GridLayout(levelList.length , 1));
+        SpeedyBackground buttonContainer = new SpeedyBackground("gameGraphics/fade.jpg");
+        int height = Math.round(levelList.length / 2);
+        buttonContainer.setLayout(new GridLayout(height , 2, 5, 5));
         back = new JButton("Retour");
         back.addActionListener(this);
         levelLoader.add(back, BorderLayout.NORTH);
-        for (int i = 0; i < levelList.length; i++){
-            if(levelList[i].isFile() && levelList[i].getName().endsWith(".xsb")){ //XSB est le format par défaut pour les fichiers de jeu
-                System.out.println(levelList[i].getPath());
-                GuiFile tempButton = new GuiFile(levelList[i].getPath());
+        for (File levelList1 : levelList) {
+            if (levelList1.isFile() && levelList1.getName().endsWith(".xsb")) {
+                //XSB est le format par défaut pour les fichiers de jeu
+                System.out.println(levelList1.getPath());
+                GuiFile tempButton = new GuiFile(levelList1.getPath());
                 buttonContainer.add(tempButton);
                 tempButton.addActionListener(this);
                 levelLoader.add(buttonContainer);
-                
             }
         }
         JScrollPane scroller = new JScrollPane(buttonContainer);
