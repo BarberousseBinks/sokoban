@@ -247,6 +247,50 @@ public class PuzzleGenerator {
     }
     
     
+    public static char[][] generateLayout(char[][] map, int nbBox){
+        //Initialisation du nouveau Board
+        ArrayList<char[]> arraymap = new ArrayList<char[]>();
+        for(int i=0;i<map.length;i++){
+            arraymap.add(map[i]);
+        }
+        Board newBoard= new Board();
+        newBoard.generateBoard(arraymap);
+        
+        ArrayList<int[]> listEmpty = new ArrayList<int[]>(); //Liste pour stocker les coordonnées des cases vides de la map (taille: [nb cases vides][2])
+        int[] tempCoord;                                     //Même code que pour checkMap. Je pourrais faire une fonction ou même garder la liste calculée pour checkMap
+        for(int i=0;i<map.length;i++){
+            for(int j=0;j<map[0].length;j++){
+                if(map[i][j]==' '){
+                    tempCoord=new int[2];
+                    tempCoord[0]=i;
+                    tempCoord[1]=j;
+                    listEmpty.add(tempCoord);                    
+                }
+            }
+        }
+        
+        //Maintenant que l'on a la liste des cases vides, on va y ajouter des objectifs avec des caisses dessus
+        Random rnd = new Random();
+        Goal generatedNewGoal;
+        int[] selectedPlace;
+        for(int b=0;b<nbBox;b++){
+            selectedPlace= listEmpty.get(rnd.nextInt(listEmpty.size()));
+            listEmpty.remove(selectedPlace);    //Cette case ne va bientot plus être empty
+            generatedNewGoal=new Goal(new ClassicBox());
+            newBoard.setLayout(selectedPlace[1],selectedPlace[0],generatedNewGoal);
+        }
+        
+        newBoard.printBoard();
+        return map;
+    }
+    
+    public static char[][] generateBoard(int height, int width, int nbBox){ //EN CONSTRUCTION
+        char[][] map = generateEmptyRoom(height,width,nbBox);
+        generateLayout(map, nbBox);
+        return map;
+    }
+    
+    
     
     
     

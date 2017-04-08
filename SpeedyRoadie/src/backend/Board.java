@@ -85,6 +85,36 @@ public class Board {
         }
     }
     
+    /**
+     * Remplace l'élément en position x,y par un nouveau Layoutable. Ne devra être appelé que dans le PuzzleGenerator
+     * Met automatiquement à jour pX et pY si le Layoutable est le player et met automatique à jour objectives si il s'agit d'un goal
+     * Supprime des objectif un goal écrasé de cette manière.
+     * Attention, cela peut écraser le joueur (ou un goal contenant le joueur) (à moins de mettre un nouveau joueur par après bien entendu)
+     * @param x
+     * @param y
+     * @param layout
+     */
+    protected void setLayout(int x, int y, Layoutable layout){
+        if("goal".equals(tab.get(y).get(x).getType())){
+            objectives.remove(tab.get(y).get(x));
+        }        
+        
+        if("player".equals(layout.getType())){
+            pX=x;
+            pY=y;
+        }
+        if("goal".equals(layout.getType())){
+            Goal newgoal = (Goal) layout;
+            if("player".equals(newgoal.getContent().getType())){
+                pX=x;
+                pY=y;
+            }
+            objectives.add(newgoal);            
+        }
+        
+        tab.get(y).set(x, layout);
+    }
+    
     public void printBoard(){      //Cette méthode est uniquement là à des fin de débugage. Elle ne sert pas dans le programme
          for(int i=0;i<tab.size();i++){
             for(int j=0;j<tab.get(i).size();j++){
