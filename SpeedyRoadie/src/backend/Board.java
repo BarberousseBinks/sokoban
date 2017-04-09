@@ -86,7 +86,8 @@ public class Board {
     }
     
     /**
-     * Remplace l'élément en position x,y par un nouveau Layoutable. Ne devra être appelé que dans le PuzzleGenerator
+     * --Méthode pour PuzzleGenerator--
+     * Remplace l'élément en position x,y par un nouveau Layoutable. 
      * Met automatiquement à jour pX et pY si le Layoutable est le player et met automatique à jour objectives si il s'agit d'un goal
      * Supprime des objectif un goal écrasé de cette manière.
      * Attention, cela peut écraser le joueur (ou un goal contenant le joueur) (à moins de mettre un nouveau joueur par après bien entendu)
@@ -113,6 +114,84 @@ public class Board {
         }
         
         tab.get(y).set(x, layout);
+    }
+    
+    /**
+     *--Méthode pour PuzzleGenerator--
+     * Fait se déplacer le joueur du vecteur (x,y) unitaire et parrallèle aux axes d'un repère conventiel.
+     * Les logique de poussées se font dans l'autre sens que celui de movePlayer : les caisses ne peuvent pas être poussée mais bien tirées
+     * @param x
+     * @param y
+     * @return
+     */
+    protected boolean reverseMovePlayer(int x, int y) throws IOException{
+        if(abs(x)+abs(y) != 1){
+            throw new IOException("movePlayer(int x,int y) only takes [(0,1),(0,-1),(1,0)or(-1,0)] as parameters (x,y)"); 
+        }     //Il n'est pas nécessaire de vérifier si on tombe dans un cas outOfRange car le joueur ne sera jamais en position limite car le plateau est bordé de murs
+              //Par exemple il ne sera jamais nécessaire de vérifier que si x=-1 alors pX ne doit pas valoir 0 pour éviter l'outOfRange car pX ne vaudra jamais 0)
+        
+        //Pas de question de repère conventionnel car tout ce que fait cette fonction est en interne. (0,1) fait bien descendre le player ici
+        //y est déjà dans le bon sens en entrée (précondition). Donc pas de y=-y
+        
+        if("player".equals(tab.get(pY).get(pX).getType())){ //Le joueur ne se trouve pas sur un objectif
+            return reverseMovePlayerFromEmpty(x,y);
+        }
+        else if ("goal".equals(tab.get(pY).get(pX).getType())){
+            return reverseMovePlayerFromGoal(x,y);
+        }
+        else{    //J'ajoute cette close par sécurité, même si elle ne devrait jamais arriver
+            throw new IOException("Error. (pX,pY) wasn't focusing neither the player nor a goal"); 
+        }
+    }
+    
+    protected boolean reverseMovePlayerFromEmpty(int x,int y){
+        int targetPositionX=pX+x; 
+        int targetPositionY=pY+y; 
+        
+        //Cas où on veut aller sur du vide
+        if("emptycase".equals(tab.get(targetPositionY).get(targetPositionX).getType())){
+            
+            int otherTargetPositionX=pX-x; 
+            int otherTargetPositionY=pY-y; 
+            
+             //La case en opposition à cette case vide est vide elle aussi
+            if("emptycase".equals(tab.get(otherTargetPositionY).get(otherTargetPositionX).getType())){
+            Player temp=(Player) tab.get(pY).get(pX);     
+            tab.get(pY).set(pX,tab.get(targetPositionY).get(targetPositionX));  
+            pX=targetPositionX;                                     
+            pY=targetPositionY;
+            tab.get(pY).set(pX, temp);
+            return true;
+            }
+            
+             //La case en opposition à cette case vide est une caisse
+            if("cbox".equals(tab.get(otherTargetPositionY).get(otherTargetPositionX).getType())){
+                Player temp = (Player) tab.get(pY).get(pX);
+                tab.get(pY).set(pX,tab.get(otherTargetPositionY).get(otherTargetPositionX));
+                tab.get(otherTargetPositionY).set(otherTargetPositionX,tab.get(targetPositionY).get(targetPositionX));
+                pX=targetPositionX;
+                pY=targetPositionY;
+                tab.get(pY).set(pX,temp);
+                return true;
+            }
+        }
+     
+        //Cas où on veut aller sur une boite
+        if("cbox".equals(tab.get(targetPositionY).get(targetPositionX).getType())){
+            //Impossible d'aller vers une box en reverse
+            return false;
+        }
+        
+        //Cas où on veut aller sur un goal
+        if("goal".equals(tab.get(targetPositionY).get(targetPositionX).getType())){
+            
+        }
+        
+        return false;
+    }
+    
+    protected boolean reverseMovePlayerFromGoal(int x,int y){
+        return false;
     }
     
     public void printBoard(){      //Cette méthode est uniquement là à des fin de débugage. Elle ne sert pas dans le programme

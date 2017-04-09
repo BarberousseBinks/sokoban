@@ -280,6 +280,8 @@ public class PuzzleGenerator {
             newBoard.setLayout(selectedPlace[1],selectedPlace[0],generatedNewGoal);
         }
         
+        //CAISSES ET CHEMIN FORME ZONE DE RESET 
+        
         newBoard.printBoard();
         return map;
     }

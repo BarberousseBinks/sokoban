@@ -10,6 +10,7 @@ package backend;
  * @author Alfa
  */
 public class ClassicBox extends Box{
+    
     public String getType(){
         //String a=super.getType();
         //a="c"+a;
@@ -26,4 +27,5 @@ public class ClassicBox extends Box{
     public char toChar(){
         return '$';
     }
+    
 }
