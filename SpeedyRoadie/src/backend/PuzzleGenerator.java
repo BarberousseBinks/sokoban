@@ -1,5 +1,6 @@
 package backend;
 
+import java.io.IOException;
 import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.Random;
@@ -11,6 +12,7 @@ import java.util.Random;
 public class PuzzleGenerator {
     
     //L'ensemble de tout les Pattern
+    public static int nbMovePerTry = 3000;    //Le nombre de mouvements qui sera réalisé aléatoirement lorsqu'on déplacera le joueur à reculons
     public static final char[][] SPdata1={{' ',' ',' '},{' ',' ',' '},{' ',' ',' '}};
     public static final SPattern SPattern1=new SPattern(SPdata1,'L','L','L','L','L','L','L','L','L','L','L','L','L','L','L','L');
     public static final char[][] SPdata2={{'#',' ',' '},{' ',' ',' '},{' ',' ',' '}};
@@ -247,7 +249,7 @@ public class PuzzleGenerator {
     }
     
     
-    public static char[][] generateLayout(char[][] map, int nbBox){
+    public static char[][] generateLayout(char[][] map, int nbBox) throws IOException{
         //Initialisation du nouveau Board
         ArrayList<char[]> arraymap = new ArrayList<char[]>();
         for(int i=0;i<map.length;i++){
@@ -280,13 +282,43 @@ public class PuzzleGenerator {
             newBoard.setLayout(selectedPlace[1],selectedPlace[0],generatedNewGoal);
         }
         
+        //Et on va désormais ajouter le joueur
+        selectedPlace=listEmpty.get(rnd.nextInt(listEmpty.size()));
+        listEmpty.remove(selectedPlace);
+        newBoard.setLayout(selectedPlace[1],selectedPlace[0],new Player());
+        
         //CAISSES ET CHEMIN FORME ZONE DE RESET 
+        newBoard.printBoard();
+        
+        int moveChoice;    //0 représente le haut, 1 la droite, 2 le bas, 3 la gauche
+        for(int i=0;i<nbMovePerTry;i++){
+            moveChoice=rnd.nextInt(4);
+            switch (moveChoice) {
+                case 0:
+                    newBoard.reverseMovePlayer(0,-1);
+                    break;
+                case 1:
+                    newBoard.reverseMovePlayer(1,0);
+                    break;
+                case 2:
+                    newBoard.reverseMovePlayer(0,1);
+                    break;
+                case 3:
+                    newBoard.reverseMovePlayer(-1,0);
+                    break;
+                default:
+                    System.out.println("<><>Unexpected<><>");
+                    break;
+            }
+        }
         
         newBoard.printBoard();
+ 
+        
         return map;
     }
     
-    public static char[][] generateBoard(int height, int width, int nbBox){ //EN CONSTRUCTION
+    public static char[][] generateBoard(int height, int width, int nbBox) throws IOException{ //EN CONSTRUCTION
         char[][] map = generateEmptyRoom(height,width,nbBox);
         generateLayout(map, nbBox);
         return map;
