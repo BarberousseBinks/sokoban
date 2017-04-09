@@ -123,6 +123,7 @@ public class Board {
      * @param x
      * @param y
      * @return
+     * @throws java.io.IOException
      */
     protected boolean reverseMovePlayer(int x, int y) throws IOException{
         if(abs(x)+abs(y) != 1){
@@ -154,8 +155,8 @@ public class Board {
             int otherTargetPositionX=pX-x; 
             int otherTargetPositionY=pY-y; 
             
-             //La case en opposition à cette case vide est vide elle aussi
-            if("emptycase".equals(tab.get(otherTargetPositionY).get(otherTargetPositionX).getType())){
+            //La case en opposition à cette case vide est vide elle aussi ou il s'agit d'un mur
+            if("emptycase".equals(tab.get(otherTargetPositionY).get(otherTargetPositionX).getType()) || "wall".equals(tab.get(otherTargetPositionY).get(otherTargetPositionX).getType())){
             Player temp=(Player) tab.get(pY).get(pX);     
             tab.get(pY).set(pX,tab.get(targetPositionY).get(targetPositionX));  
             pX=targetPositionX;                                     
@@ -164,7 +165,7 @@ public class Board {
             return true;
             }
             
-             //La case en opposition à cette case vide est une caisse
+            //La case en opposition à cette case vide est une caisse
             if("cbox".equals(tab.get(otherTargetPositionY).get(otherTargetPositionX).getType())){
                 Player temp = (Player) tab.get(pY).get(pX);
                 tab.get(pY).set(pX,tab.get(otherTargetPositionY).get(otherTargetPositionX));
@@ -173,6 +174,31 @@ public class Board {
                 pY=targetPositionY;
                 tab.get(pY).set(pX,temp);
                 return true;
+            }
+            
+            //La case en opposition à cette case est un goal
+            if("goal".equals(tab.get(otherTargetPositionY).get(otherTargetPositionX).getType())){
+                Goal oppositionTargetGoal = (Goal) tab.get(otherTargetPositionY).get(otherTargetPositionX);
+                
+                //Ce goal (en opposition) est vide
+                if(oppositionTargetGoal.isEmpty()){
+                    Player temp = (Player) tab.get(pY).get(pX);
+                    tab.get(pY).set(pX,tab.get(targetPositionY).get(targetPositionX));
+                    pX=targetPositionX;
+                    pY=targetPositionY;
+                    tab.get(pY).set(pX,temp);
+                    return true;
+                }
+                //Il y a une caisse sur ce goal (en opposition)
+                else{
+                    Player temp = (Player) tab.get(pY).get(pX);
+                    tab.get(pY).set(pX,oppositionTargetGoal.getContent());
+                    oppositionTargetGoal.setContent(tab.get(targetPositionY).get(targetPositionX));
+                    pX=targetPositionX;
+                    pY=targetPositionY;
+                    tab.get(pY).set(pX, temp);
+                    return true;
+                }
             }
         }
      
@@ -185,12 +211,64 @@ public class Board {
         //Cas où on veut aller sur un goal
         if("goal".equals(tab.get(targetPositionY).get(targetPositionX).getType())){
             
+            Goal targetGoal = (Goal) tab.get(targetPositionY).get(targetPositionX);
+            
+            //Ce goal est vide
+            if(targetGoal.isEmpty()){
+                int otherTargetPositionX=pX-x; 
+                int otherTargetPositionY=pY-y; 
+                //La case en opposition est vide ou il s'agit d'un mur
+                if("emptycase".equals(tab.get(otherTargetPositionY).get(otherTargetPositionX).getType()) || "wall".equals(tab.get(otherTargetPositionY).get(otherTargetPositionX).getType())){  
+                    Player temp = (Player) tab.get(pY).get(pX);
+                    tab.get(pY).set(pX,targetGoal.getContent());
+                    targetGoal.setContent(temp);
+                    pX=targetPositionX;
+                    pY=targetPositionY;
+                    return true;
+                }
+                //La case en opposition est une caisse
+                if("cbox".equals(tab.get(otherTargetPositionY).get(otherTargetPositionX).getType())){       
+                    Player temp = (Player) tab.get(pY).get(pX);
+                    tab.get(pY).set(pX,tab.get(otherTargetPositionY).get(otherTargetPositionX));
+                    tab.get(otherTargetPositionY).set(otherTargetPositionX,targetGoal.getContent());
+                    targetGoal.setContent(temp);
+                    pX=targetPositionX;
+                    pY=targetPositionY;
+                    return true;
+                }
+                //La case en opposition est un autre goal
+                if("goal".equals(tab.get(otherTargetPositionY).get(otherTargetPositionX).getType())){
+                    Goal oppositionGoal = (Goal) tab.get(otherTargetPositionY).get(otherTargetPositionX);
+                    if(oppositionGoal.isEmpty()){                               //Ce second goal en opposition est vide
+                        Player temp = (Player) tab.get(pY).get(pX);
+                        tab.get(pY).set(pX,targetGoal.getContent());
+                        targetGoal.setContent(temp);
+                        pX=targetPositionX;
+                        pY=targetPositionY;
+                        return true;
+                    }
+                    else{                                                       //Ce second goal en opposition contient une caisse
+                        Player temp = (Player) tab.get(pY).get(pX);
+                        tab.get(pY).set(pX,oppositionGoal.getContent());
+                        oppositionGoal.setContent(targetGoal.getContent());
+                        targetGoal.setContent(temp);
+                        pX=targetPositionX;
+                        pY=targetPositionY;
+                        return true;
+                    }
+                }
+                
+            }
+            //Il y a une caisse sur ce goal
+            else{
+                return false;
+            }
         }
         
         return false;
     }
     
-    protected boolean reverseMovePlayerFromGoal(int x,int y){
+    protected boolean reverseMovePlayerFromGoal(int x,int y){ //A IMPLEMENTER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         return false;
     }
     
