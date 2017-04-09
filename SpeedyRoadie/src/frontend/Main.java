@@ -1,5 +1,6 @@
 package frontend;
 
+import backend.Board;
 import backend.PuzzleGenerator;
 import backend.SPattern;
 import java.io.IOException;
@@ -52,10 +53,8 @@ public class Main {
        
        
         //char[][] newmap= PuzzleGenerator.generateEmptyRoom(3,4,3);
-        char[][] newmap= PuzzleGenerator.generateBoard(2,2,5);
-        System.out.println("-----------------");
-        System.out.println("-----------------");
-        printTab(newmap);   
+        Board newboard= PuzzleGenerator.generateBoard(2,2,5);
+        newboard.printBoard();   
        
        
        /*

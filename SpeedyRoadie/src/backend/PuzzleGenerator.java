@@ -249,7 +249,7 @@ public class PuzzleGenerator {
     }
     
     
-    public static char[][] generateLayout(char[][] map, int nbBox) throws IOException{
+    public static Board generateLayout(char[][] map, int nbBox) throws IOException{
         //Initialisation du nouveau Board
         ArrayList<char[]> arraymap = new ArrayList<char[]>();
         for(int i=0;i<map.length;i++){
@@ -288,7 +288,8 @@ public class PuzzleGenerator {
         newBoard.setLayout(selectedPlace[1],selectedPlace[0],new Player());
         
         //CAISSES ET CHEMIN FORME ZONE DE RESET 
-        newBoard.printBoard();
+        
+        //newBoard.printBoard();
         
         int moveChoice;    //0 représente le haut, 1 la droite, 2 le bas, 3 la gauche
         for(int i=0;i<nbMovePerTry;i++){
@@ -312,16 +313,16 @@ public class PuzzleGenerator {
             }
         }
         
-        newBoard.printBoard();
+        //newBoard.printBoard();
  
         
-        return map;
+        return newBoard;
     }
     
-    public static char[][] generateBoard(int height, int width, int nbBox) throws IOException{ //EN CONSTRUCTION
+    public static Board generateBoard(int height, int width, int nbBox) throws IOException{ //EN CONSTRUCTION
         char[][] map = generateEmptyRoom(height,width,nbBox);
-        generateLayout(map, nbBox);
-        return map;
+        Board newBoard=generateLayout(map, nbBox);
+        return newBoard;
     }
     
     
