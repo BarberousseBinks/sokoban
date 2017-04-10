@@ -1,8 +1,5 @@
 package frontend;
 
-import backend.Board;
-import backend.PuzzleGenerator;
-import backend.SPattern;
 import java.io.IOException;
 
 /*

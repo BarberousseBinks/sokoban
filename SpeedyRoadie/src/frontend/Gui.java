@@ -11,8 +11,6 @@ import java.io.IOException;
 import javax.swing.*;
 import backend.*;
 import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -233,9 +231,7 @@ public class Gui extends JFrame implements ActionListener{
         else if(source.getClass() == GuiElement.class){
             GuiElement temp;
             temp = (GuiElement)source;
-            System.out.println("Cliqué à "+temp.getPosX()+" "+temp.getPosY());
             this.level.movePlayerMouse(temp.getPosX(), temp.getPosY());
-            this.level.printBoard();
             if(this.level.isGameWon()){
                 this.setContentPane(wowGG());
                 this.setVisible(true);
