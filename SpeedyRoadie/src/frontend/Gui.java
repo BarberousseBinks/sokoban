@@ -16,6 +16,14 @@ import java.awt.Dimension;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  * Classe de l'interface graphique.
@@ -26,6 +34,7 @@ public class Gui extends JFrame implements ActionListener{
     private Game level;
     private JButton randGame;
     private JButton loadLevel;
+    private JButton classicMode;
     private JButton back;
     
     /**
@@ -49,12 +58,19 @@ public class Gui extends JFrame implements ActionListener{
         JPanel buttonContainer = new JPanel();
         setResizable(false);
         this.setSize(600,400);
-        randGame = new JButton("Nouvelle partie aléatoire");
+        
+        randGame = new JButton("Aléatoire");
         randGame.addActionListener(this);
+        
+        classicMode = new JButton("Mode classique");
+        classicMode.addActionListener(this);
+        
         loadLevel = new JButton("Charger un niveau");
         loadLevel.addActionListener(this);
+        
         buttonContainer.add(randGame);
         buttonContainer.add(loadLevel);
+        buttonContainer.add(classicMode);
         panel.add(backgroundPanel, BorderLayout.CENTER);
         panel.add(buttonContainer, BorderLayout.SOUTH);
         return panel;
@@ -64,19 +80,24 @@ public class Gui extends JFrame implements ActionListener{
     // Prend en paramètre un niveau du jeu
     private JPanel guiGame(Game level){
         setResizable(false);
+        
         final JPanel infos = new JPanel();
         infos.setLayout(new FlowLayout());
         final JLabel nbSteps = new JLabel("Nombre de pas: " + level.getNbSteps());
         infos.add(nbSteps);
         final JButton undo = new JButton("Annuler un mouvement");
         infos.add(undo);
+        
         final JPanel gameContent = new JPanel();
         int height = level.getHeight()*50 + 50;
         int width = level.getWidth()*50;
+        
         gameContent.setSize(height, width);
         gameContent.setLayout(new GridLayout(level.getHeight(), level.getWidth()));
+        
         char[][] boardCode = level.getRepr();
         this.setSize(width, height);
+        //Ajout des boutons relatifs au plateau
         for(int i = 0; i < boardCode.length; i++){
             for(int j = 0; j < boardCode[i].length; j++){
                 GuiElement elem = new GuiElement(boardCode[i][j], j ,i);
@@ -84,12 +105,17 @@ public class Gui extends JFrame implements ActionListener{
                 gameContent.add(elem);
             }
         }
+        
         final JPanel guiGame = new JPanel();
+        
         guiGame.setLayout(new BorderLayout());
         guiGame.add(infos, BorderLayout.NORTH);
         guiGame.add(gameContent, BorderLayout.CENTER);
+        
         return guiGame;
     }
+    
+    
     // Méthode Private car uniquement chargée par Gui()
     // Affiche le menu de fin de niveau.
     private JPanel wowGG(){
@@ -98,17 +124,58 @@ public class Gui extends JFrame implements ActionListener{
         return wowGG;
     }
     
+    private JPanel classicMode(){
+        JPanel classicPanel = new JPanel();
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setIgnoringElementContentWhitespace(true);
+        try{
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            //Emplacement du fichier de sauvegarde
+            File saves = new File("gameMaps/saves/save.xml");
+            //Parsing
+            Document xml = builder.parse(saves);
+            Element root = xml.getDocumentElement();
+            
+            NodeList nodes = root.getChildNodes();
+            int nbNodes = nodes.getLength();
+            
+            for(int i = 0; i < nbNodes; i++){
+                Node n = nodes.item(i);
+                System.out.println("* Niveau N°" + (i+1));
+                int nbChilds = n.getChildNodes().getLength();                
+                NodeList childNodes = n.getChildNodes();
+                
+                for(int j = 0; j < nbChilds; j++){
+ 
+                    Node m = childNodes.item(j);
+                    System.out.println("* - " + m.getNodeName() + " - " + m.getTextContent());
+                }
+            }      
+            
+        }
+        catch(ParserConfigurationException | SAXException | IOException e){
+            System.out.println("Erreur du fichier de sauvegarde");
+        }
+        return classicPanel;
+    }
+    
+    //Affiche le contenu du dossier des maps
+    //Permet de charger une partie personnalisée autre que celle du classic mode
     private JPanel levelLoader(String path){
-        SpeedyBackground levelLoader = new SpeedyBackground("gameGraphic/fade.jpg");
+
+        JPanel levelLoader = new JPanel();
         levelLoader.setLayout(new BorderLayout());
+        
         File levelFolder = new File(path);
         File[] levelList = levelFolder.listFiles();
+        
         SpeedyBackground buttonContainer = new SpeedyBackground("gameGraphics/fade.jpg");
         int height = Math.round(levelList.length / 2);
         buttonContainer.setLayout(new GridLayout(height , 2, 5, 5));
         back = new JButton("Retour");
         back.addActionListener(this);
         levelLoader.add(back, BorderLayout.NORTH);
+        
         for (File levelList1 : levelList) {
             if (levelList1.isFile() && levelList1.getName().endsWith(".xsb")) {
                 //XSB est le format par défaut pour les fichiers de jeu
@@ -123,6 +190,7 @@ public class Gui extends JFrame implements ActionListener{
         levelLoader.add(scroller, BorderLayout.CENTER);
         JLabel notice = new JLabel("Pour ajouter vos fichiers xsb, entrez-les dans le dossier "+ path, SwingConstants.CENTER);
         levelLoader.add(notice, BorderLayout.SOUTH);
+        
         this.setResizable(true);
         return levelLoader;
     }
@@ -139,8 +207,7 @@ public class Gui extends JFrame implements ActionListener{
         Object source = e.getSource();
         if(source == randGame){
             try {
-                System.out.println("TO BE IMPLEMENTED ASAP");
-                this.level = new Game("gameMaps/level2.xsb");
+                this.level = new Game(PuzzleGenerator.generateBoard(3,3,3));
                 this.setContentPane(guiGame(this.level));
                 this.setVisible(true);
             } catch (IOException ex) {
@@ -149,6 +216,10 @@ public class Gui extends JFrame implements ActionListener{
         }
         else if(source == loadLevel){
             this.setContentPane(levelLoader("gameMaps/")); //Dossier des niveaux par défaut
+            this.setVisible(true);
+        }
+        else if(source == classicMode){
+            this.setContentPane(classicMode());
             this.setVisible(true);
         }
         else if(source == back){
