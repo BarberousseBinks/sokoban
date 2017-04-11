@@ -1,5 +1,7 @@
 package frontend;
 
+import backend.Board;
+import backend.PuzzleGenerator;
 import java.io.IOException;
 
 /*
@@ -22,8 +24,10 @@ public class Main {
      */
     public static void main(String[] args) throws IOException {
        Gui test = new Gui();
-       
-       
+      /*
+      Board newBoard = PuzzleGenerator.generateBoard(2,3,4);
+      newBoard.printBoard();
+      */
     }   
     
 
