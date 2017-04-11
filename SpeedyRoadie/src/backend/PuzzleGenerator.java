@@ -12,7 +12,7 @@ import java.util.Random;
 public class PuzzleGenerator {
     
     //L'ensemble de tout les Pattern
-    public static int nbMovePerTry = 3000;    //Le nombre de mouvements qui sera réalisé aléatoirement lorsqu'on déplacera le joueur à reculons
+    public static int nbMovePerTry = 2000;    //Le nombre de mouvements qui sera réalisé aléatoirement lorsqu'on déplacera le joueur à reculons
     public static final char[][] SPdata1={{' ',' ',' '},{' ',' ',' '},{' ',' ',' '}};
     public static final SPattern SPattern1=new SPattern(SPdata1,'L','L','L','L','L','L','L','L','L','L','L','L','L','L','L','L');
     public static final char[][] SPdata2={{'#',' ',' '},{' ',' ',' '},{' ',' ',' '}};
