@@ -11,15 +11,14 @@ import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JButton;
+import javax.swing.JLabel;
 
 /**
  *
  * @author Louis Dhanis
  */
-public class GuiBgButton extends JButton{
-    
-    public GuiBgButton(){
+public class GuiLabel extends JLabel{
+    public GuiLabel(String text){
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         ge.getAllFonts();
         
@@ -32,15 +31,8 @@ public class GuiBgButton extends JButton{
         } catch (IOException | FontFormatException ex) {
             Logger.getLogger(GuiBgButton.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //Code inspiré de https://stackoverflow.com/questions/12691832/how-to-put-an-image-on-a-jbutton
-        this.setBackground(Color.blue);
-        this.setForeground(new Color(0xED008C));
-        this.setBorderPainted(false);
-        this.setFocusPainted(false);
-    }
-
-    public GuiBgButton(String text){
-        this();
         this.setText(text);
+        //Code inspiré de https://stackoverflow.com/questions/12691832/how-to-put-an-image-on-a-jbutton
+        this.setForeground(new Color(0xED008C));
     }
 }

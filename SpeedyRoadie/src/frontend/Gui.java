@@ -30,10 +30,10 @@ import org.xml.sax.SAXException;
  */
 public class Gui extends JFrame implements ActionListener{
     private Game level;
-    private JButton randGame;
-    private JButton loadLevel;
-    private JButton classicMode;
-    private JButton back;
+    private GuiBgButton randGame;
+    private GuiBgButton loadLevel;
+    private GuiBgButton classicMode;
+    private GuiBgButton back;
     
     /**
      * Classe de l'interface graphique.
@@ -53,17 +53,17 @@ public class Gui extends JFrame implements ActionListener{
         JPanel panel = new JPanel();
         SpeedyBackground backgroundPanel = new SpeedyBackground("gameGraphics/welcomeBG.jpg");
         panel.setLayout(new BorderLayout());
-        JPanel buttonContainer = new JPanel();
+        SpeedyBackground buttonContainer = new SpeedyBackground("gameGraphics/fade.jpg");
         setResizable(false);
-        this.setSize(600,400);
+        this.setSize(800,600);
         
-        randGame = new JButton("Aléatoire");
+        randGame = new GuiBgButton("Aléatoire");
         randGame.addActionListener(this);
         
-        classicMode = new JButton("Mode classique");
+        classicMode = new GuiBgButton("Mode classique");
         classicMode.addActionListener(this);
         
-        loadLevel = new JButton("Charger un niveau");
+        loadLevel = new GuiBgButton("Charger un niveau");
         loadLevel.addActionListener(this);
         
         buttonContainer.add(randGame);
@@ -81,9 +81,9 @@ public class Gui extends JFrame implements ActionListener{
         
         final JPanel infos = new JPanel();
         infos.setLayout(new FlowLayout());
-        final JLabel nbSteps = new JLabel("Nombre de pas: " + level.getNbSteps());
+        final GuiLabel nbSteps = new GuiLabel("Nombre de pas: " + level.getNbSteps());
         infos.add(nbSteps);
-        final JButton undo = new JButton("Annuler un mouvement");
+        final GuiBgButton undo = new GuiBgButton("Annuler un mouvement");
         infos.add(undo);
         
         final JPanel gameContent = new JPanel();
@@ -118,12 +118,13 @@ public class Gui extends JFrame implements ActionListener{
     // Affiche le menu de fin de niveau.
     private JPanel wowGG(){
         SpeedyBackground wowGG = new SpeedyBackground("gameGraphics/wowBG.jpg");
-        
+        this.setSize(800,600);
         return wowGG;
     }
     
     private JPanel classicMode(){
         JPanel classicPanel = new JPanel();
+        this.setSize(800,600);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setIgnoringElementContentWhitespace(true);
         try{
@@ -170,7 +171,7 @@ public class Gui extends JFrame implements ActionListener{
         SpeedyBackground buttonContainer = new SpeedyBackground("gameGraphics/fade.jpg");
         int height = Math.round(levelList.length / 2);
         buttonContainer.setLayout(new GridLayout(height , 2, 5, 5));
-        back = new JButton("Retour");
+        back = new GuiBgButton("Retour");
         back.addActionListener(this);
         levelLoader.add(back, BorderLayout.NORTH);
         
@@ -186,9 +187,9 @@ public class Gui extends JFrame implements ActionListener{
         }
         JScrollPane scroller = new JScrollPane(buttonContainer);
         levelLoader.add(scroller, BorderLayout.CENTER);
-        JLabel notice = new JLabel("Pour ajouter vos fichiers xsb, entrez-les dans le dossier "+ path, SwingConstants.CENTER);
+        GuiLabel notice = new GuiLabel("Pour ajouter vos fichiers xsb, entrez-les dans le dossier "+ path);
         levelLoader.add(notice, BorderLayout.SOUTH);
-        
+        this.setSize(800,600);
         this.setResizable(true);
         return levelLoader;
     }

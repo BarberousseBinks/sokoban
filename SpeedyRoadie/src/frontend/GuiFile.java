@@ -11,7 +11,7 @@ import javax.swing.SwingConstants;
  *
  * @author Louis Dhanis
  */
-public class GuiFile extends JButton{
+public class GuiFile extends GuiBgButton{
     private final String path;
     
     /**
@@ -29,6 +29,7 @@ public class GuiFile extends JButton{
      * @param path
      */
     public GuiFile(String path){
+        super();
         this.path = path;
         this.setText(path);
         this.setHorizontalTextPosition(SwingConstants.CENTER);
