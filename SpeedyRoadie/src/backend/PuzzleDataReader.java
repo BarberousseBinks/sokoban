@@ -33,13 +33,40 @@ public class PuzzleDataReader {
             char[] tabline;
 
             String line=in.readLine();
-
+            int longmax=0;
             while(line!=null){
                 tabline=line.toCharArray();
+                if(tabline.length>longmax){
+                    longmax=tabline.length;   
+                }
                 tab.add(tabline);
                 line=in.readLine();
             }
             in.close();
+            
+            //Reste a rendre toute ligne de la même taille pour éviter l'out of range
+            char[] tempLengthAdapted;
+            
+            for(int i=0;i<tab.size();i++){
+                if(tab.get(i).length < longmax){
+                    tempLengthAdapted=new char[longmax];
+                    for(int j=0;j<longmax;j++){   
+                        if(j<tab.get(i).length)   //On récupère les infos de la ligne
+                            tempLengthAdapted[j]=tab.get(i)[j];
+                        else                      //Puis on complète de blancs
+                            tempLengthAdapted[j]='#';
+                    }
+                 tab.set(i, tempLengthAdapted);
+                }
+            }
+            System.out.println("-----"+longmax+"------");
+            for(int i=0;i<tab.size();i++){
+                System.out.println(tab.get(i).length);
+            }
+            
             return tab;
         }
+    
+    
+    
 }
