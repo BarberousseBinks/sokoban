@@ -67,6 +67,18 @@ public class PuzzleDataReader {
             return tab;
         }
     
+    /**
+     * Met à jour la sauvegarde du niveau lvl (du mode classique) en ajoutant la move newMove
+     * Signification des valeurs de newMove: 0 représente le haut, 1 la droite, 2 le bas, 3 la gauche
+     * @param newMove
+     * @param lvl
+     */
+    public static void updateClassicSave(int newMove, int lvl){
+        if(newMove < 0 || newMove > 3){
+            throw new IllegalArgumentException("newMove must take the value of 0, 1, 2 or 3");
+        }
+        
+    }
     
     
 }
