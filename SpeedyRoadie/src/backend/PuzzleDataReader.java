@@ -156,10 +156,33 @@ public class PuzzleDataReader {
         return movesPlayed;
     }
     
+    /**
+     * Renvoit une instance de Game du niveau lvl avec les moves enregistrée par lvl
+     * @param lvl
+     * @return
+     * @throws IOException
+     */
     public static Game getSavedGame(int lvl) throws IOException{
         Game newGame=new Game("gameMaps\\"+String.valueOf(lvl)+".xsb");
+        ArrayList<Integer> movesPlayed=getMovesSaved(lvl);
+        for(int i=0;i<movesPlayed.size();i++){
+            if(movesPlayed.get(i)==0){
+                newGame.movePlayer(0,1);
+            }
+            else if(movesPlayed.get(i)==1){
+                newGame.movePlayer(1,0);
+            }
+            else if(movesPlayed.get(i)==2){
+                newGame.movePlayer(0, -1);
+            }
+            else if(movesPlayed.get(i)==3){
+                newGame.movePlayer(-1,0);
+            }
+            else{
+                throw new IOException("the .mov file contains other informations than 0, 1, 2 and 3");
+            }
+        }
         return newGame;
-        
     }
     
     
