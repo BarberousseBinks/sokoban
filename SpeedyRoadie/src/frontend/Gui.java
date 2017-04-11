@@ -11,6 +11,7 @@ import java.io.IOException;
 import javax.swing.*;
 import backend.*;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -77,7 +78,7 @@ public class Gui extends JFrame implements ActionListener{
     // Affiche le JPanel du jeu
     // Prend en paramètre un niveau du jeu
     private JPanel guiGame(Game level){
-        setResizable(false);
+        setResizable(true);
         
         final JPanel infos = new JPanel();
         infos.setLayout(new FlowLayout());
@@ -87,14 +88,14 @@ public class Gui extends JFrame implements ActionListener{
         infos.add(undo);
         
         final JPanel gameContent = new JPanel();
-        int height = level.getHeight()*50 + 50;
+        int height = level.getHeight()*50;
         int width = level.getWidth()*50;
-        
-        gameContent.setSize(height, width);
+
+        gameContent.setSize(width, height);
+        gameContent.setPreferredSize(new Dimension(width, height));
         gameContent.setLayout(new GridLayout(level.getHeight(), level.getWidth()));
         
         char[][] boardCode = level.getRepr();
-        this.setSize(width, height);
         //Ajout des boutons relatifs au plateau
         for(int i = 0; i < boardCode.length; i++){
             for(int j = 0; j < boardCode[i].length; j++){
@@ -103,13 +104,14 @@ public class Gui extends JFrame implements ActionListener{
                 gameContent.add(elem);
             }
         }
-        
+        final SpeedyBackground wrapperPanel = new SpeedyBackground("gameGraphics/fade.jpg");
+        wrapperPanel.setLayout(new FlowLayout());
         final JPanel guiGame = new JPanel();
-        
+        guiGame.setSize(height + 100, width + 100);
         guiGame.setLayout(new BorderLayout());
         guiGame.add(infos, BorderLayout.NORTH);
-        guiGame.add(gameContent, BorderLayout.CENTER);
-        
+        wrapperPanel.add(gameContent);
+        guiGame.add(wrapperPanel, BorderLayout.CENTER);
         return guiGame;
     }
     
