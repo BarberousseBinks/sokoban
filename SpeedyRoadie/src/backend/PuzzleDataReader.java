@@ -9,6 +9,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 /**
@@ -70,13 +72,93 @@ public class PuzzleDataReader {
     /**
      * Met à jour la sauvegarde du niveau lvl (du mode classique) en ajoutant la move newMove
      * Signification des valeurs de newMove: 0 représente le haut, 1 la droite, 2 le bas, 3 la gauche
+     * Cette méthode commencera une nouvelle sauvegarde si le fichier sauvegarde est vide
+     * Exception non controllée si lvl ne réfère pas à un niveau existant
      * @param newMove
      * @param lvl
      */
-    public static void updateClassicSave(int newMove, int lvl){
+    public static void updateSave(int newMove, int lvl) throws FileNotFoundException, IOException{
         if(newMove < 0 || newMove > 3){
             throw new IllegalArgumentException("newMove must take the value of 0, 1, 2 or 3");
         }
+            
+        BufferedReader in = new BufferedReader(new FileReader("gameMaps\\saves\\classic\\"+String.valueOf(lvl)+".mov"));
+
+        int tabline;
+        ArrayList<Integer> tabMoves=new ArrayList<Integer>();
+        String line=in.readLine();
+        while(line!=null){
+            tabline=Integer.parseInt(line);
+            tabMoves.add(tabline);
+            line=in.readLine();
+        }
+        in.close();
+            
+           
+        PrintWriter writer = new PrintWriter("gameMaps\\saves\\classic\\"+String.valueOf(lvl)+".mov", "UTF-8");
+        for(int i=0;i<tabMoves.size();i++){
+            writer.println(tabMoves.get(i));
+        }
+        writer.println(String.valueOf(newMove));
+        writer.close();
+            
+            
+    }
+    
+    /**
+     * Réinitialise la sauvegarde du niveau lvl
+     * @param lvl
+     * @throws FileNotFoundException
+     */
+    public static void resetLevelSave(int lvl) throws FileNotFoundException{
+        try{
+            PrintWriter writer = new PrintWriter("gameMaps\\saves\\classic\\"+String.valueOf(lvl)+".mov", "UTF-8");
+             writer.print("");
+        }
+        catch(Exception e){
+            System.out.println("bug");
+        }
+       
+    }
+    
+    /**
+     * Renvoit "true" si le niveau lvl a une sauvegarde non vide, "false" si cette sauvegarde est vide (ou inexistante)
+     * @param lvl
+     * @return
+     */
+    public static boolean hasSave(int lvl){
+        try{
+            BufferedReader in = new BufferedReader(new FileReader("gameMaps\\saves\\classic\\"+String.valueOf(lvl)+".mov"));
+            String line=in.readLine();
+            if(line.length()!=0){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        catch(Exception e){
+            return false;
+        }
+    }
+    
+    
+    public static ArrayList<Integer> getMovesSaved(int lvl) throws FileNotFoundException, IOException{
+        BufferedReader in = new BufferedReader(new FileReader("gameMaps\\saves\\classic\\"+String.valueOf(lvl)+".mov"));
+
+        ArrayList<Integer> movesPlayed=new ArrayList<Integer>();
+        String line=in.readLine();
+            while(line!=null){
+                movesPlayed.add(Integer.parseInt(line));
+                line=in.readLine();
+            }
+            in.close();
+        return movesPlayed;
+    }
+    
+    public static Game getSavedGame(int lvl) throws IOException{
+        Game newGame=new Game("gameMaps\\"+String.valueOf(lvl)+".xsb");
+        return newGame;
         
     }
     

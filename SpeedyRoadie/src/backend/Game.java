@@ -69,6 +69,9 @@ public class Game {
         nbSteps=0;
     }
     
+    
+    
+    
     /**
      *
      * @return Le nombre de pas réalisé dans cette partie
