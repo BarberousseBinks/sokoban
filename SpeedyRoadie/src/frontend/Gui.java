@@ -12,6 +12,8 @@ import javax.swing.*;
 import backend.*;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,7 +31,7 @@ import org.xml.sax.SAXException;
  * Dans ce fichier, on retrouve toute l'implémentation graphique du projet
  * @author Louis Dhanis
  */
-public class Gui extends JFrame implements ActionListener{
+public class Gui extends JFrame implements ActionListener, KeyListener{
     private Game level;
     private GuiBgButton randGame;
     private GuiBgButton loadLevel;
@@ -47,6 +49,7 @@ public class Gui extends JFrame implements ActionListener{
         this.setContentPane(guiWelcome());
         this.setVisible(true);
         this.setLayout(new BorderLayout());
+        addKeyListener(this);
     }
     // Méthode Private car uniquement chargée par Gui()
     // Affiche le menu d'accueil
@@ -78,51 +81,51 @@ public class Gui extends JFrame implements ActionListener{
     // Affiche le JPanel du jeu
     // Prend en paramètre un niveau du jeu
     private JPanel guiGame(Game level){
-        setResizable(true);
-        
-        final SpeedyBackground infos = new SpeedyBackground("gameGraphics/steelTexture.jpg");
-        infos.setLayout(new FlowLayout());
-        final GuiLabel nbSteps = new GuiLabel("Nombre de pas: " + level.getNbSteps());
-        infos.add(nbSteps);
-        final GuiBgButton undo = new GuiBgButton("Annuler un mouvement");
-        infos.add(undo);
-        
-        final JPanel gameContent = new JPanel();
-        int height = level.getHeight()*50;
-        int width = level.getWidth()*50;
-
-        gameContent.setSize(width, height);
-        gameContent.setPreferredSize(new Dimension(width, height));
-        gameContent.setLayout(new GridLayout(level.getHeight(), level.getWidth()));
-        
-        char[][] boardCode = level.getRepr();
-        //Ajout des boutons relatifs au plateau
-        for(int i = 0; i < boardCode.length; i++){
-            for(int j = 0; j < boardCode[i].length; j++){
-                GuiElement elem = new GuiElement(boardCode[i][j], j ,i);
-                elem.addActionListener(this);
-                gameContent.add(elem);
-            }
+        if(this.level.isGameWon()){
+            SpeedyBackground wowGG = new SpeedyBackground("gameGraphics/wowBG.jpg");
+            this.setSize(800,600);
+            return wowGG;
         }
-        final SpeedyBackground wrapperPanel = new SpeedyBackground("gameGraphics/fade.jpg");
-        wrapperPanel.setLayout(new FlowLayout());
-        final JPanel guiGame = new JPanel();
-        guiGame.setSize(height + 100, width + 100);
-        guiGame.setLayout(new BorderLayout());
-        guiGame.add(infos, BorderLayout.NORTH);
-        wrapperPanel.add(gameContent);
-        guiGame.add(wrapperPanel, BorderLayout.CENTER);
-        return guiGame;
+        else{
+            setResizable(true);
+            requestFocus();
+            final SpeedyBackground infos = new SpeedyBackground("gameGraphics/steelTexture.jpg");
+            infos.setLayout(new FlowLayout());
+            final GuiLabel nbSteps = new GuiLabel("Nombre de pas: " + level.getNbSteps());
+            infos.add(nbSteps);
+            final GuiBgButton undo = new GuiBgButton("Annuler un mouvement");
+            infos.add(undo);
+
+            final JPanel gameContent = new JPanel();
+            int height = level.getHeight()*50;
+            int width = level.getWidth()*50;
+
+            gameContent.setSize(width, height);
+            gameContent.setPreferredSize(new Dimension(width, height));
+            gameContent.setLayout(new GridLayout(level.getHeight(), level.getWidth()));
+
+            char[][] boardCode = level.getRepr();
+            //Ajout des boutons relatifs au plateau
+            for(int i = 0; i < boardCode.length; i++){
+                for(int j = 0; j < boardCode[i].length; j++){
+                    GuiElement elem = new GuiElement(boardCode[i][j], j ,i);
+                    elem.addActionListener(this);
+                    gameContent.add(elem);
+                }
+            }
+            final SpeedyBackground wrapperPanel = new SpeedyBackground("gameGraphics/fade.jpg");
+            wrapperPanel.setLayout(new FlowLayout());
+            final JPanel guiGame = new JPanel();
+            guiGame.setSize(height + 100, width + 100);
+            guiGame.setLayout(new BorderLayout());
+            guiGame.add(infos, BorderLayout.NORTH);
+            wrapperPanel.add(gameContent);
+            guiGame.add(wrapperPanel, BorderLayout.CENTER);
+            return guiGame;
+        }
     }
     
-    
-    // Méthode Private car uniquement chargée par Gui()
-    // Affiche le menu de fin de niveau.
-    private JPanel wowGG(){
-        SpeedyBackground wowGG = new SpeedyBackground("gameGraphics/wowBG.jpg");
-        this.setSize(800,600);
-        return wowGG;
-    }
+
     
     private JPanel classicMode(){
         JPanel classicPanel = new JPanel();
@@ -249,14 +252,8 @@ public class Gui extends JFrame implements ActionListener{
             GuiElement temp;
             temp = (GuiElement)source;
             this.level.movePlayerMouse(temp.getPosX(), temp.getPosY());
-            if(this.level.isGameWon()){
-                this.setContentPane(wowGG());
-                this.setVisible(true);
-            }
-            else{
-                this.setContentPane(guiGame(this.level));
-                this.setVisible(true);
-            }
+            this.setContentPane(guiGame(this.level));
+            this.setVisible(true);
         }
         else if(source.getClass() == GuiFile.class) {
             GuiFile temp;
@@ -274,5 +271,35 @@ public class Gui extends JFrame implements ActionListener{
     public static void infoBox(String infoMessage, String titleBar)
     {
         JOptionPane.showMessageDialog(null, infoMessage, titleBar, JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    @Override
+    public void keyTyped(KeyEvent ke) {
+        System.out.println("KeyTyped");
+    }
+
+    @Override
+    public void keyPressed(KeyEvent ke) {
+        switch(ke.getKeyCode()){
+            case 38:
+                this.level.movePlayer(0,1);
+                break;
+            case 40:
+                this.level.movePlayer(0,-1);
+                break;
+            case 39:
+                this.level.movePlayer(1,0);
+                break;
+            case 37:
+                this.level.movePlayer(-1,0);
+                break;
+        }
+        this.setContentPane(guiGame(this.level));
+        this.setVisible(true);
+    }
+
+    @Override
+    public void keyReleased(KeyEvent ke) {
+        System.out.println("KeyReleased");
     }
 }
