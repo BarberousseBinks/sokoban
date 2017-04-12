@@ -61,10 +61,10 @@ public class PuzzleDataReader {
                  tab.set(i, tempLengthAdapted);
                 }
             }
-            //System.out.println("-----"+longmax+"------");
+            /*System.out.println("-----"+longmax+"------");
             for(int i=0;i<tab.size();i++){
                 System.out.println(tab.get(i).length);
-            }
+            }*/
             
             return tab;
         }
@@ -163,7 +163,7 @@ public class PuzzleDataReader {
      * @throws IOException
      */
     public static Game getSavedGame(int lvl) throws IOException{
-        Game newGame=new Game("ClassicMode\\"+String.valueOf(lvl)+".xsb");
+        Game newGame=new Game("ClassicMode\\maps\\"+String.valueOf(lvl)+".xsb");
         ArrayList<Integer> movesPlayed=getMovesSaved(lvl);
         for(int i=0;i<movesPlayed.size();i++){
             if(movesPlayed.get(i)==0){
