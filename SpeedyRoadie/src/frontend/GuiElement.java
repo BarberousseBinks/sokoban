@@ -59,6 +59,26 @@ public class GuiElement extends JButton{
         this.setSize(new Dimension(50,50));
         
         switch(content){
+            case '*':
+                try{
+                    Image img = ImageIO.read(getClass().getResource("sprites/DEATHROADIE.gif"));
+                    img = img.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_SMOOTH);
+                    this.setIcon(new ImageIcon(img));
+                } 
+                catch (IOException ex) {
+                    System.out.println("Erreur lors de la lecture du Sprite");
+                }
+                break;
+            case '!':
+                try{
+                    Image img = ImageIO.read(getClass().getResource("sprites/boxongoal.gif"));
+                    img = img.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_SMOOTH);
+                    this.setIcon(new ImageIcon(img));
+                } 
+                catch (IOException ex) {
+                    System.out.println("Erreur lors de la lecture du Sprite");
+                }
+                break;
             case '@':
                 //Code inspiré de https://stackoverflow.com/questions/12691832/how-to-put-an-image-on-a-jbutton
                 try{
