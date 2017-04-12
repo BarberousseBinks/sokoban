@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * Classe comprenant les outils nécessaire pour tout ce qui concerne la lecture et l'écriture des fichier relatifs à notre Sokoban
  * @author Alfa
  */
-public class PuzzleDataReader {
+public class PuzzleDataManager {
     
     /**
      * Renvoit une représentation du niveau sous forme de liste de char à partir d'un fichier contenant cette représentation. 

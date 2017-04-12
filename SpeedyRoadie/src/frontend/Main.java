@@ -2,7 +2,7 @@ package frontend;
 
 import backend.Board;
 import backend.Game;
-import backend.PuzzleDataReader;
+import backend.PuzzleDataManager;
 import backend.PuzzleGenerator;
 import java.io.IOException;
 import java.util.ArrayList;

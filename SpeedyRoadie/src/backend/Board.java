@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import static java.lang.Math.abs;
 import java.util.ArrayList;
+import static java.lang.Math.abs;
 
 /**
  * Cette classe contient tout ce qu'il faut pour générer un board (avec l'aide de PuzzleDataReader si c'est à partir d'un chemin) et pour y déplacer le joueur
@@ -21,7 +22,7 @@ public class Board {
     
     
     public Board(String cheminTxtLab) throws FileNotFoundException, IOException{  //construire le jeu à partir d'un fichier .txt (constructeur)
-        generateBoard(PuzzleDataReader.ReadPuzzleData(cheminTxtLab));
+        generateBoard(PuzzleDataManager.ReadPuzzleData(cheminTxtLab));
     }
     
     /**
@@ -30,7 +31,7 @@ public class Board {
      * @param cheminTxtLab le chemin d'accès au fichier
      */
     public void generateBoard(String cheminTxtLab) throws FileNtFoundException,IOException{  //construire le jeu à partir d'un fichier .txt
-        generateBoard(PuzzleDataReader.ReadPuzzleData(cheminTxtLab));
+        generateBoard(PuzzleDataManager.ReadPuzzleData(cheminTxtLab));
     }
     
     /**
