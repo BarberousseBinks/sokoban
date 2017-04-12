@@ -61,7 +61,7 @@ public class PuzzleDataReader {
                  tab.set(i, tempLengthAdapted);
                 }
             }
-            System.out.println("-----"+longmax+"------");
+            //System.out.println("-----"+longmax+"------");
             for(int i=0;i<tab.size();i++){
                 System.out.println(tab.get(i).length);
             }
@@ -82,7 +82,7 @@ public class PuzzleDataReader {
             throw new IllegalArgumentException("newMove must take the value of 0, 1, 2 or 3");
         }
             
-        BufferedReader in = new BufferedReader(new FileReader("gameMaps\\saves\\classic\\"+String.valueOf(lvl)+".mov"));
+        BufferedReader in = new BufferedReader(new FileReader("ClassicMode\\saves\\"+String.valueOf(lvl)+".mov"));
 
         int tabline;
         ArrayList<Integer> tabMoves=new ArrayList<Integer>();
@@ -95,7 +95,7 @@ public class PuzzleDataReader {
         in.close();
             
            
-        PrintWriter writer = new PrintWriter("gameMaps\\saves\\classic\\"+String.valueOf(lvl)+".mov", "UTF-8");
+        PrintWriter writer = new PrintWriter("ClassicMode\\saves\\"+String.valueOf(lvl)+".mov", "UTF-8");
         for(int i=0;i<tabMoves.size();i++){
             writer.println(tabMoves.get(i));
         }
@@ -112,7 +112,7 @@ public class PuzzleDataReader {
      */
     public static void resetLevelSave(int lvl) throws FileNotFoundException{
         try{
-            PrintWriter writer = new PrintWriter("gameMaps\\saves\\classic\\"+String.valueOf(lvl)+".mov", "UTF-8");
+            PrintWriter writer = new PrintWriter("ClassicMode\\saves\\"+String.valueOf(lvl)+".mov", "UTF-8");
              writer.print("");
         }
         catch(Exception e){
@@ -128,7 +128,7 @@ public class PuzzleDataReader {
      */
     public static boolean hasSave(int lvl){
         try{
-            BufferedReader in = new BufferedReader(new FileReader("gameMaps\\saves\\classic\\"+String.valueOf(lvl)+".mov"));
+            BufferedReader in = new BufferedReader(new FileReader("ClassicMode\\saves\\"+String.valueOf(lvl)+".mov"));
             String line=in.readLine();
             if(line.length()!=0){
                 return true;
@@ -144,7 +144,7 @@ public class PuzzleDataReader {
     
     
     public static ArrayList<Integer> getMovesSaved(int lvl) throws FileNotFoundException, IOException{
-        BufferedReader in = new BufferedReader(new FileReader("gameMaps\\saves\\classic\\"+String.valueOf(lvl)+".mov"));
+        BufferedReader in = new BufferedReader(new FileReader("ClassicMode\\saves\\"+String.valueOf(lvl)+".mov"));
 
         ArrayList<Integer> movesPlayed=new ArrayList<Integer>();
         String line=in.readLine();
@@ -163,7 +163,7 @@ public class PuzzleDataReader {
      * @throws IOException
      */
     public static Game getSavedGame(int lvl) throws IOException{
-        Game newGame=new Game("gameMaps\\"+String.valueOf(lvl)+".xsb");
+        Game newGame=new Game("ClassicMode\\"+String.valueOf(lvl)+".xsb");
         ArrayList<Integer> movesPlayed=getMovesSaved(lvl);
         for(int i=0;i<movesPlayed.size();i++){
             if(movesPlayed.get(i)==0){
