@@ -52,7 +52,7 @@ public class Gui extends JFrame implements ActionListener{
     // Affiche le menu d'accueil
     private JPanel guiWelcome() throws IOException {
         JPanel panel = new JPanel();
-        SpeedyBackground backgroundPanel = new SpeedyBackground("gameGraphics/welcomeBG.jpg");
+        SpeedyBackground backgroundPanel = new SpeedyBackground("gameGraphics/newGif.gif");
         panel.setLayout(new BorderLayout());
         SpeedyBackground buttonContainer = new SpeedyBackground("gameGraphics/steelTexture.jpg");
         setResizable(false);
