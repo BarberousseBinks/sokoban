@@ -33,8 +33,8 @@ public class GuiBgButton extends JButton{
             Logger.getLogger(GuiBgButton.class.getName()).log(Level.SEVERE, null, ex);
         }
         //Code inspiré de https://stackoverflow.com/questions/12691832/how-to-put-an-image-on-a-jbutton
-        this.setBackground(Color.blue);
-        this.setForeground(new Color(0xED008C));
+        this.setBackground(Color.black);
+        this.setForeground(Color.red);
         this.setBorderPainted(false);
         this.setFocusPainted(false);
     }

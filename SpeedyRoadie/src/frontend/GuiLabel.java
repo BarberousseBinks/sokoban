@@ -33,6 +33,6 @@ public class GuiLabel extends JLabel{
         }
         this.setText(text);
         //Code inspiré de https://stackoverflow.com/questions/12691832/how-to-put-an-image-on-a-jbutton
-        this.setForeground(new Color(0xED008C));
+        this.setForeground(Color.BLACK);
     }
 }

@@ -54,7 +54,7 @@ public class Gui extends JFrame implements ActionListener{
         JPanel panel = new JPanel();
         SpeedyBackground backgroundPanel = new SpeedyBackground("gameGraphics/welcomeBG.jpg");
         panel.setLayout(new BorderLayout());
-        SpeedyBackground buttonContainer = new SpeedyBackground("gameGraphics/fade.jpg");
+        SpeedyBackground buttonContainer = new SpeedyBackground("gameGraphics/steelTexture.jpg");
         setResizable(false);
         this.setSize(800,600);
         
@@ -80,7 +80,7 @@ public class Gui extends JFrame implements ActionListener{
     private JPanel guiGame(Game level){
         setResizable(true);
         
-        final JPanel infos = new JPanel();
+        final SpeedyBackground infos = new SpeedyBackground("gameGraphics/steelTexture.jpg");
         infos.setLayout(new FlowLayout());
         final GuiLabel nbSteps = new GuiLabel("Nombre de pas: " + level.getNbSteps());
         infos.add(nbSteps);
@@ -170,7 +170,7 @@ public class Gui extends JFrame implements ActionListener{
         File levelFolder = new File(path);
         File[] levelList = levelFolder.listFiles();
         
-        SpeedyBackground buttonContainer = new SpeedyBackground("gameGraphics/fade.jpg");
+        SpeedyBackground buttonContainer = new SpeedyBackground("gameGraphics/steelTexture.jpg");
         int height = Math.round(levelList.length / 2);
         buttonContainer.setLayout(new GridLayout(height , 2, 5, 5));
         back = new GuiBgButton("Retour");
@@ -216,8 +216,22 @@ public class Gui extends JFrame implements ActionListener{
             }
         }
         else if(source == loadLevel){
-            this.setContentPane(levelLoader("gameMaps/")); //Dossier des niveaux par défaut
-            this.setVisible(true);
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+            int result = fileChooser.showOpenDialog(this.getContentPane());
+            if (result == JFileChooser.APPROVE_OPTION) {
+
+                File selectedFile = fileChooser.getSelectedFile();
+                System.out.println(selectedFile.getPath());
+
+                try {
+                    this.level = new Game(selectedFile.getPath());
+                    this.setContentPane(guiGame(this.level));
+                    this.setVisible(true);
+                } catch (Exception ex) {
+                    infoBox("Une erreur est survenue avec ce fichier XSB, veuillez vérifier s'il comporte des caractères autres que [#,@,.,$,!]", "Erreur, fichier XSB incorrect");
+                }
+            }
         }
         else if(source == classicMode){
             this.setContentPane(classicMode());
