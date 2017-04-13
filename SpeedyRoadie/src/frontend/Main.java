@@ -26,9 +26,8 @@ public class Main {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-        //  Gui test = new Gui();
+          Gui test = new Gui();
         
-        PuzzleDataManager.classicResetSave(1);
     }   
     
 
