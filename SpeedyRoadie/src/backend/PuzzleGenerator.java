@@ -4,6 +4,9 @@ import java.io.IOException;
 import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.Random;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
 
 /**
  * Classe comportant tout ce qui est nécessaire à la création de puzzle aléatoire pour notre Sokoban
@@ -13,6 +16,7 @@ public class PuzzleGenerator {
     
     //L'ensemble de tout les Pattern
     public static int nbMovePerTry = 2000;    //Le nombre de mouvements qui sera réalisé aléatoirement lorsqu'on déplacera le joueur à reculons
+    public static int nbTryLayout = 50;
     public static final char[][] SPdata1={{' ',' ',' '},{' ',' ',' '},{' ',' ',' '}};
     public static final SPattern SPattern1=new SPattern(SPdata1,'L','L','L','L','L','L','L','L','L','L','L','L','L','L','L','L');
     public static final char[][] SPdata2={{'#',' ',' '},{' ',' ',' '},{' ',' ',' '}};
@@ -249,7 +253,7 @@ public class PuzzleGenerator {
     }
     
     
-    public static Board generateLayout(char[][] map, int nbBox) throws IOException{
+    public static Object[] generateLayout(char[][] map, int nbBox) throws IOException{
         //Initialisation du nouveau Board
         ArrayList<char[]> arraymap = new ArrayList<char[]>();
         for(int i=0;i<map.length;i++){
@@ -271,6 +275,7 @@ public class PuzzleGenerator {
             }
         }
         
+        Layoutable lastBoxDragged=null;  //Je garde le pointeur en Layoutable et non en ClassicBox pour être sur de ne pas avoir de problemes avec obj1.equals(obj2) (pour plus tard, avec les reverseMovePlayer)
         //Maintenant que l'on a la liste des cases vides, on va y ajouter des objectifs avec des caisses dessus
         Random rnd = new Random();
         Goal generatedNewGoal;
@@ -279,8 +284,11 @@ public class PuzzleGenerator {
             selectedPlace= listEmpty.get(rnd.nextInt(listEmpty.size()));
             listEmpty.remove(selectedPlace);    //Cette case ne va bientot plus être empty
             generatedNewGoal=new Goal(new ClassicBox());
+            lastBoxDragged=generatedNewGoal.getContent(); //Juste question d'avoir une boite dans cette variable
             newBoard.setLayout(selectedPlace[1],selectedPlace[0],generatedNewGoal);
         }
+        
+        
         
         //Et on va désormais ajouter le joueur
         selectedPlace=listEmpty.get(rnd.nextInt(listEmpty.size()));
@@ -290,38 +298,199 @@ public class PuzzleGenerator {
         //CAISSES ET CHEMIN FORME ZONE DE RESET 
         
         //newBoard.printBoard();
+        int range=0;
+        int lastDragDirection=-1;
         
         int moveChoice;    //0 représente le haut, 1 la droite, 2 le bas, 3 la gauche
         for(int i=0;i<nbMovePerTry;i++){
             moveChoice=rnd.nextInt(4);
             switch (moveChoice) {
                 case 0:
-                    newBoard.reverseMovePlayer(0,-1);
+                    if(newBoard.reverseMovePlayer(0,-1)){ //Si on s'est effectivement déplacé
+                        //Goal sur la case précédente
+                        if("goal".equals(newBoard.getLayoutable(newBoard.getPX(),newBoard.getPY()+1).getType()) ){
+                            Goal prevCaseGoal=(Goal)newBoard.getLayoutable(newBoard.getPX(),newBoard.getPY()+1);
+                            if( lastBoxDragged.equals(prevCaseGoal.getContent())){ //Goal avec la lastDraggedBox dessus, qui a donc été tirée
+                                if(lastDragDirection != 0){    //lastDraggedBox a été tirée dans une nouvelle direction
+                                    range=range+1;
+                                    lastDragDirection=0;
+                                }
+                            }
+                            else{              //Il n'y a pas la lastDraggerBox sur ce goal
+                                if("cbox".equals(prevCaseGoal.getContent().getType())){ //On a tout de même tiré une autre caisse
+                                    lastDragDirection=0;
+                                    range=range+1;
+                                    lastBoxDragged=prevCaseGoal.getContent();
+                                }
+                            }
+                        }
+                        
+                        //La case précédente ne contient pas un goal
+                        else{
+                            if(lastBoxDragged.equals(newBoard.getLayoutable(newBoard.getPX(),newBoard.getPY()+1))  ){ //Et on a déplacé la même caisse que précédemment
+                                if(lastDragDirection != 0){    //Dans une autre direction 
+                                   range=range+1;
+                                   lastDragDirection=0;
+                                }
+                            }          
+                            else{                                                                                   //On ne vient pas de tirer la dernière caisse tirée
+                                if("cbox".equals(newBoard.getLayoutable(newBoard.getPX(),newBoard.getPY()+1).getType())){ //Mais on vient tout de même de tirer une caisse
+                                    lastDragDirection=0;
+                                    range=range+1;
+                                    lastBoxDragged=newBoard.getLayoutable(newBoard.getPX(),newBoard.getPY()+1);
+                                }
+                            }
+                        }
+                    }
                     break;
-                case 1:
-                    newBoard.reverseMovePlayer(1,0);
+                case 1:                    
+                    if(newBoard.reverseMovePlayer(1,0)){ //Si on s'est effectivement déplacé
+                        //Goal sur la case précédente
+                        if("goal".equals(newBoard.getLayoutable(newBoard.getPX()-1,newBoard.getPY()).getType()) ){
+                            Goal prevCaseGoal=(Goal)newBoard.getLayoutable(newBoard.getPX()-1,newBoard.getPY());
+                            if( lastBoxDragged.equals(prevCaseGoal.getContent())){ //Goal avec la lastDraggedBox dessus, qui a donc été tirée
+                                if(lastDragDirection != 1){    //lastDraggedBox a été tirée dans une nouvelle direction
+                                    range=range+1;
+                                    lastDragDirection=1;
+                                }
+                            }
+                            else{              //Il n'y a pas la lastDraggerBox sur ce goal
+                                if("cbox".equals(prevCaseGoal.getContent().getType())){ //On a tout de même tiré une autre caisse
+                                    lastDragDirection=1;
+                                    range=range+1;
+                                    lastBoxDragged=prevCaseGoal.getContent();
+                                }
+                            }
+                        }
+                        
+                        //La case précédente ne contient pas un goal
+                        else{
+                            if(lastBoxDragged.equals(newBoard.getLayoutable(newBoard.getPX()-1,newBoard.getPY()))  ){ //Et on a déplacé la même caisse que précédemment
+                                if(lastDragDirection != 1){    //Dans une autre direction 
+                                   range=range+1;
+                                   lastDragDirection=1;
+                                }
+                            }          
+                            else{                                                                                   //On ne vient pas de tirer la dernière caisse tirée
+                                if("cbox".equals(newBoard.getLayoutable(newBoard.getPX()-1,newBoard.getPY()).getType())){ //Mais on vient tout de même de tirer une caisse
+                                    lastDragDirection=1;
+                                    range=range+1;
+                                    lastBoxDragged=newBoard.getLayoutable(newBoard.getPX()-1,newBoard.getPY());
+                                }
+                            }
+                        }
+                    }
                     break;
                 case 2:
-                    newBoard.reverseMovePlayer(0,1);
+                    if(newBoard.reverseMovePlayer(0,1)){ //Si on s'est effectivement déplacé
+                        //Goal sur la case précédente
+                        if("goal".equals(newBoard.getLayoutable(newBoard.getPX(),newBoard.getPY()-1).getType()) ){
+                            Goal prevCaseGoal=(Goal)newBoard.getLayoutable(newBoard.getPX(),newBoard.getPY()-1);
+                            if( lastBoxDragged.equals(prevCaseGoal.getContent())){ //Goal avec la lastDraggedBox dessus, qui a donc été tirée
+                                if(lastDragDirection != 2){    //lastDraggedBox a été tirée dans une nouvelle direction
+                                    range=range+1;
+                                    lastDragDirection=2;
+                                }
+                            }
+                            else{              //Il n'y a pas la lastDraggerBox sur ce goal
+                                if("cbox".equals(prevCaseGoal.getContent().getType())){ //On a tout de même tiré une autre caisse
+                                    lastDragDirection=2;
+                                    range=range+1;
+                                    lastBoxDragged=prevCaseGoal.getContent();
+                                }
+                            }
+                        }
+                        
+                        //La case précédente ne contient pas un goal
+                        else{
+                            if(lastBoxDragged.equals(newBoard.getLayoutable(newBoard.getPX(),newBoard.getPY()-1))  ){ //Et on a déplacé la même caisse que précédemment
+                                if(lastDragDirection != 2){    //Dans une autre direction 
+                                   range=range+1;
+                                   lastDragDirection=2;
+                                }
+                            }          
+                            else{                                                                                   //On ne vient pas de tirer la dernière caisse tirée
+                                if("cbox".equals(newBoard.getLayoutable(newBoard.getPX(),newBoard.getPY()-1).getType())){ //Mais on vient tout de même de tirer une caisse
+                                    lastDragDirection=2;
+                                    range=range+1;
+                                    lastBoxDragged=newBoard.getLayoutable(newBoard.getPX(),newBoard.getPY()-1);
+                                }
+                            }
+                        }
+                    }
                     break;
                 case 3:
-                    newBoard.reverseMovePlayer(-1,0);
+                    if(newBoard.reverseMovePlayer(-1,0)){ //Si on s'est effectivement déplacé
+                        //Goal sur la case précédente
+                        if("goal".equals(newBoard.getLayoutable(newBoard.getPX()+1,newBoard.getPY()).getType()) ){
+                            Goal prevCaseGoal=(Goal)newBoard.getLayoutable(newBoard.getPX()+1,newBoard.getPY());
+                            if( lastBoxDragged.equals(prevCaseGoal.getContent())){ //Goal avec la lastDraggedBox dessus, qui a donc été tirée
+                                if(lastDragDirection != 3){    //lastDraggedBox a été tirée dans une nouvelle direction
+                                    range=range+1;
+                                    lastDragDirection=3;
+                                }
+                            }
+                            else{              //Il n'y a pas la lastDraggerBox sur ce goal
+                                if("cbox".equals(prevCaseGoal.getContent().getType())){ //On a tout de même tiré une autre caisse
+                                    lastDragDirection=3;
+                                    range=range+1;
+                                    lastBoxDragged=prevCaseGoal.getContent();
+                                }
+                            }
+                        }
+                        
+                        //La case précédente ne contient pas un goal
+                        else{
+                            if(lastBoxDragged.equals(newBoard.getLayoutable(newBoard.getPX()+1,newBoard.getPY()))  ){ //Et on a déplacé la même caisse que précédemment
+                                if(lastDragDirection != 3){    //Dans une autre direction 
+                                   range=range+1;
+                                   lastDragDirection=3;
+                                }
+                            }          
+                            else{                                                                                   //On ne vient pas de tirer la dernière caisse tirée
+                                if("cbox".equals(newBoard.getLayoutable(newBoard.getPX()+1,newBoard.getPY()).getType())){ //Mais on vient tout de même de tirer une caisse
+                                    lastDragDirection=3;
+                                    range=range+1;
+                                    lastBoxDragged=newBoard.getLayoutable(newBoard.getPX()+1,newBoard.getPY());
+                                }
+                            }
+                        }
+                    }
                     break;
                 default:
-                    System.out.println("<><>Unexpected<><>");
+             //       throw new IOException("Unexpected Error: moveChoice must be 0/1/2/3");
                     break;
             }
         }
         
-        //newBoard.printBoard();
- 
+        Object[] result={newBoard,range};
         
-        return newBoard;
+       // return newBoard;
+       return result;
     }
     
-    public static Board generateBoard(int height, int width, int nbBox) throws IOException{ //EN CONSTRUCTION
+    public static Board generateBoard(int height, int width, int nbBox) throws IOException{ 
         char[][] map = generateEmptyRoom(height,width,nbBox);
-        Board newBoard=generateLayout(map, nbBox);
+       
+        Board newBoard;
+        int range;
+        Object[] generatedLayoutTab;
+        
+        generatedLayoutTab = generateLayout(map, nbBox);
+        newBoard=(Board) generatedLayoutTab[0];
+        range=(int) generatedLayoutTab[1];
+        
+        Object[] tempGeneratedLayoutTab;
+        
+        
+        for(int k=0;k<nbTryLayout-1;k++){    
+            tempGeneratedLayoutTab = generateLayout(map, nbBox);
+            if((int) tempGeneratedLayoutTab[1]>range){
+                newBoard=(Board) tempGeneratedLayoutTab[0];
+                range=(int) tempGeneratedLayoutTab[1];
+            }
+        }
+        System.out.println(range);
         return newBoard;
     }
     

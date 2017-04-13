@@ -604,9 +604,9 @@ public class Board {
         return false;
     }
         
-    private void winMethod(){
+/*    private void winMethod(){
         System.out.println("GG EASY");
-    }
+    }*/
     
     /**
      * Vérifie si la partie est gagnée, et lance la procédure de réussite si c'est le cas
@@ -622,7 +622,7 @@ public class Board {
         }
         
         if(check){
-            winMethod();
+           // winMethod();
             return true;
         }     
         return false;
@@ -659,6 +659,25 @@ public class Board {
      */
     public int getHeight(){
         return tab.size();
+    }
+    
+    public int getPX(){
+        return pX;
+    }
+    
+    public int getPY(){
+        return pY;
+    }
+    
+    
+    /**
+     * Renvoit le Layoutable en position (x,y)
+     * @param x
+     * @param y
+     * @return
+     */
+    protected Layoutable getLayoutable(int x, int y){
+        return tab.get(y).get(x);
     }
     
 }
