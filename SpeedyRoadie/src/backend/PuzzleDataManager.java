@@ -76,13 +76,19 @@ public class PuzzleDataManager {
      * Exception non controllée si lvl ne réfère pas à un niveau existant
      * @param newMove
      * @param lvl
+     * @throws java.io.FileNotFoundException
      */
-    public static void updateSave(int newMove, int lvl) throws FileNotFoundException, IOException{
+    public static void classicUpdateSave(int newMove, int lvl) throws FileNotFoundException, IOException{   
+        String path = "ClassicMode\\saves\\"+String.valueOf(lvl)+".mov";
+        updateSave(newMove,path);           
+    }
+    
+    public static void updateSave(int newMove, String path) throws FileNotFoundException, IOException{
         if(newMove < 0 || newMove > 3){
             throw new IllegalArgumentException("newMove must take the value of 0, 1, 2 or 3");
         }
-            
-        BufferedReader in = new BufferedReader(new FileReader("ClassicMode\\saves\\"+String.valueOf(lvl)+".mov"));
+        
+        BufferedReader in = new BufferedReader(new FileReader(path));
 
         int tabline;
         ArrayList<Integer> tabMoves=new ArrayList<Integer>();
@@ -95,14 +101,12 @@ public class PuzzleDataManager {
         in.close();
             
            
-        PrintWriter writer = new PrintWriter("ClassicMode\\saves\\"+String.valueOf(lvl)+".mov", "UTF-8");
+        PrintWriter writer = new PrintWriter(path, "UTF-8");
         for(int i=0;i<tabMoves.size();i++){
             writer.println(tabMoves.get(i));
         }
         writer.println(String.valueOf(newMove));
         writer.close();
-            
-            
     }
     
     /**
@@ -110,25 +114,38 @@ public class PuzzleDataManager {
      * @param lvl
      * @throws FileNotFoundException
      */
-    public static void resetLevelSave(int lvl) throws FileNotFoundException{
+    public static void classicResetSave(int lvl) throws FileNotFoundException{
+        
+        String path="ClassicMode\\saves\\"+String.valueOf(lvl)+".mov";
+        resetSave(path);    
+    }
+    
+    public static void resetSave(String path){
         try{
-            PrintWriter writer = new PrintWriter("ClassicMode\\saves\\"+String.valueOf(lvl)+".mov", "UTF-8");
+            PrintWriter writer = new PrintWriter(path, "UTF-8");
              writer.print("");
         }
         catch(Exception e){
             System.out.println("bug");
         }
-       
     }
+    
+    
     
     /**
      * Renvoit "true" si le niveau lvl a une sauvegarde non vide, "false" si cette sauvegarde est vide (ou inexistante)
      * @param lvl
      * @return
      */
-    public static boolean hasSave(int lvl){
+    public static boolean classicHasSave(int lvl){
+        
+        String path="ClassicMode\\saves\\"+String.valueOf(lvl)+".mov";
+        return hasSave(path);
+    }
+    
+    public static boolean hasSave(String path){
         try{
-            BufferedReader in = new BufferedReader(new FileReader("ClassicMode\\saves\\"+String.valueOf(lvl)+".mov"));
+            BufferedReader in = new BufferedReader(new FileReader(path));
             String line=in.readLine();
             if(line.length()!=0){
                 return true;
@@ -143,8 +160,13 @@ public class PuzzleDataManager {
     }
     
     
-    public static ArrayList<Integer> getMovesSaved(int lvl) throws FileNotFoundException, IOException{
-        BufferedReader in = new BufferedReader(new FileReader("ClassicMode\\saves\\"+String.valueOf(lvl)+".mov"));
+    public static ArrayList<Integer> classicGetMovesSaved(int lvl) throws FileNotFoundException, IOException{
+        String path="ClassicMode\\saves\\"+String.valueOf(lvl)+".mov";
+        return getMovesSaved(path);
+    }
+    
+    public static ArrayList<Integer> getMovesSaved(String path) throws FileNotFoundException, IOException{
+        BufferedReader in = new BufferedReader(new FileReader(path));
 
         ArrayList<Integer> movesPlayed=new ArrayList<Integer>();
         String line=in.readLine();
@@ -162,9 +184,34 @@ public class PuzzleDataManager {
      * @return
      * @throws IOException
      */
-    public static Game getSavedGame(int lvl) throws IOException{
+    public static Game classicGetSavedGame(int lvl) throws IOException{
+
+        
         Game newGame=new Game("ClassicMode\\maps\\"+String.valueOf(lvl)+".xsb");
-        ArrayList<Integer> movesPlayed=getMovesSaved(lvl);
+        ArrayList<Integer> movesPlayed=classicGetMovesSaved(lvl);
+        for(int i=0;i<movesPlayed.size();i++){
+            if(movesPlayed.get(i)==0){
+                newGame.movePlayer(0,1);
+            }
+            else if(movesPlayed.get(i)==1){
+                newGame.movePlayer(1,0);
+            }
+            else if(movesPlayed.get(i)==2){
+                newGame.movePlayer(0, -1);
+            }
+            else if(movesPlayed.get(i)==3){
+                newGame.movePlayer(-1,0);
+            }
+            else{
+                throw new IOException("the .mov file contains other informations than 0, 1, 2 and 3");
+            }
+        }
+        return newGame;
+    }
+    
+    public static Game getSavedGame(String path) throws IOException{
+        Game newGame=new Game(path);
+        ArrayList<Integer> movesPlayed=getMovesSaved(path);
         for(int i=0;i<movesPlayed.size();i++){
             if(movesPlayed.get(i)==0){
                 newGame.movePlayer(0,1);
