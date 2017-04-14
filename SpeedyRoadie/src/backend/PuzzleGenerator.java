@@ -490,7 +490,6 @@ public class PuzzleGenerator {
                 range=(int) tempGeneratedLayoutTab[1];
             }
         }
-        System.out.println(range);
         return newBoard;
     }
     

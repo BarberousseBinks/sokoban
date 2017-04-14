@@ -1,34 +1,26 @@
-package frontend;
-
-import backend.Board;
-import backend.Game;
-import backend.PuzzleDataManager;
-import backend.PuzzleGenerator;
-import java.io.IOException;
-import java.util.ArrayList;
-
 /*
- * SpeedyRoadie est le nom que l'on a donné à notre Sokoban
+ * SpeedyRoadie est le nom que l'on a donn� � notre Sokoban
  * Je vous souhaite un bon jeu!
  */
+package frontend;
+
+import backend.Game;
+import backend.PuzzleGenerator;
+import java.io.IOException;
+import javax.swing.JFrame;
 
 /**
- * Classe principale du jeu. 
- * C'est ici que la partie interface graphique et la partie algorithmique vont s'assembler pour donner un programme fonctionnel
+ *
  * @author Louis Dhanis
  */
 public class Main {
-        
-    
+
     /**
-     * Point d'entrée du programme.
-     * @param args
-     * @throws IOException
+     * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException {
-          Gui test = new Gui();
-          //coucou
-    }   
+        // TODO code application logic here
+        GuiFrame game = new GuiFrame();
+    }
     
-
 }

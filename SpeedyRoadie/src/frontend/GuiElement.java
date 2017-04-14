@@ -23,7 +23,23 @@ public class GuiElement extends JButton{
      */
     protected int x;
     protected int y;
+    private final int height = 50;
+    private final int width = 50;
+    private char content;
     
+    @Override
+    public int getHeight(){
+        return this.height;
+    }
+    
+    @Override
+    public int getWidth(){
+        return this.width;
+    }
+    
+    public char getContent(){
+        return this.content;
+    }
     /**
      * Renvoie la coordonnée en x du bouton sur la map.
      * @return
@@ -40,24 +56,8 @@ public class GuiElement extends JButton{
         return this.y;
     }
     
-    /**
-     * Constructeur de l'objet GuiElement (qui est un bouton)
-     * Prend en paramètre le contenu de l'élément (son identifiant char sur le board)
-     * Prend en paramètre les coordonnées absolues sur le board.
-     * 
-     * @param content
-     * @param x
-     * @param y
-     */
-    public GuiElement(char content, int x, int y){
-        this.x = x; 
-        this.y = y;
-        this.setBorderPainted(false);
-        this.setFocusPainted(false);
-        this.setContentAreaFilled(false);
-        this.setBackground(null);
-        this.setSize(new Dimension(50,50));
-        
+    public void setContent(char content){
+        this.content = content;
         switch(content){
             case '*':
                 try{
@@ -68,7 +68,7 @@ public class GuiElement extends JButton{
                 catch (IOException ex) {
                     System.out.println("Erreur lors de la lecture du Sprite");
                 }
-                break;
+            break;
             case '!':
                 try{
                     Image img = ImageIO.read(getClass().getResource("sprites/boxongoal.gif"));
@@ -78,7 +78,7 @@ public class GuiElement extends JButton{
                 catch (IOException ex) {
                     System.out.println("Erreur lors de la lecture du Sprite");
                 }
-                break;
+            break;
             case '@':
                 //Code inspiré de https://stackoverflow.com/questions/12691832/how-to-put-an-image-on-a-jbutton
                 try{
@@ -89,7 +89,7 @@ public class GuiElement extends JButton{
                 catch (IOException ex) {
                     System.out.println("Erreur lors de la lecture du Sprite");
                 }
-                break;
+            break;
             case '#':
                 try{
                     Image img = ImageIO.read(getClass().getResource("sprites/wall.gif"));
@@ -99,7 +99,7 @@ public class GuiElement extends JButton{
                 catch (IOException ex) {
                     System.out.println("Erreur lors de la lecture du Sprite");
                 }
-                break;
+            break;
             case '$':
                 try{
                     Image img = ImageIO.read(getClass().getResource("sprites/case.gif"));
@@ -109,7 +109,7 @@ public class GuiElement extends JButton{
                 catch (IOException ex) {
                     System.out.println("Erreur lors de la lecture du Sprite");
                 }
-                break;
+            break;
             case ' ':
                 try{
                     Image img = ImageIO.read(getClass().getResource("sprites/ground.gif"));
@@ -119,7 +119,7 @@ public class GuiElement extends JButton{
                 catch (IOException ex) {
                     System.out.println("Erreur lors de la lecture du Sprite");
                 }
-                break;
+            break;
             case '.':
                 try{
                     Image img = ImageIO.read(getClass().getResource("sprites/goal.gif"));
@@ -129,7 +129,29 @@ public class GuiElement extends JButton{
                 catch (IOException ex) {
                     System.out.println("Erreur lors de la lecture du Sprite");
                 }
-                break;
+            break;
         }
+    }
+    
+    /**
+     * Constructeur de l'objet GuiElement (qui est un bouton)
+     * Prend en paramètre le contenu de l'élément (son identifiant char sur le board)
+     * Prend en paramètre les coordonnées absolues sur le board.
+     * 
+     * @param content
+     * @param x
+     * @param y
+     */
+    public GuiElement(char content, int x, int y){
+        setContent(content);
+        this.x = x; 
+        this.y = y;
+        this.content = content;
+        this.setBorderPainted(false);
+        this.setFocusPainted(false);
+        this.setContentAreaFilled(false);
+        this.setBackground(null);
+        this.setSize(new Dimension(50,50));
+
     }
 }
