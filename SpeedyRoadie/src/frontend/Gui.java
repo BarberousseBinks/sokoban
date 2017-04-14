@@ -46,14 +46,12 @@ public class Gui extends JFrame implements ActionListener, KeyListener{
     public Gui() throws IOException{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.level = null;
-        this.setContentPane(guiWelcome());
-        this.setVisible(true);
-        this.setLayout(new BorderLayout());
+        guiWelcome();
         addKeyListener(this);
     }
     // Méthode Private car uniquement chargée par Gui()
     // Affiche le menu d'accueil
-    private JPanel guiWelcome() throws IOException {
+    private void guiWelcome() throws IOException {
         JPanel panel = new JPanel();
         SpeedyBackground backgroundPanel = new SpeedyBackground("gameGraphics/newGif.gif");
         panel.setLayout(new BorderLayout());
@@ -75,16 +73,18 @@ public class Gui extends JFrame implements ActionListener, KeyListener{
         buttonContainer.add(classicMode);
         panel.add(backgroundPanel, BorderLayout.CENTER);
         panel.add(buttonContainer, BorderLayout.SOUTH);
-        return panel;
+        this.setContentPane(panel);
+        this.setVisible(true);
     }
     // Méthode Private car uniquement chargée par Gui()
     // Affiche le JPanel du jeu
     // Prend en paramètre un niveau du jeu
-    private JPanel guiGame(Game level){
+    private void guiGame(Game level){
         if(this.level.isGameWon()){
             SpeedyBackground wowGG = new SpeedyBackground("gameGraphics/wowBG.jpg");
             this.setSize(800,600);
-            return wowGG;
+            this.setContentPane(wowGG);
+            this.setVisible(true);
         }
         else{
             setResizable(true);
@@ -121,13 +121,14 @@ public class Gui extends JFrame implements ActionListener, KeyListener{
             guiGame.add(infos, BorderLayout.NORTH);
             wrapperPanel.add(gameContent);
             guiGame.add(wrapperPanel, BorderLayout.CENTER);
-            return guiGame;
+            this.setContentPane(guiGame);
+            this.setVisible(true);
         }
     }
     
 
     
-    private JPanel classicMode(){
+    private void classicMode(){
         JPanel classicPanel = new JPanel();
         this.setSize(800,600);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -160,12 +161,13 @@ public class Gui extends JFrame implements ActionListener, KeyListener{
         catch(ParserConfigurationException | SAXException | IOException e){
             System.out.println("Erreur du fichier de sauvegarde");
         }
-        return classicPanel;
+        this.setContentPane(classicPanel);
+        this.setVisible(true);
     }
     
     //Affiche le contenu du dossier des maps
     //Permet de charger une partie personnalisée autre que celle du classic mode
-    private JPanel levelLoader(String path){
+    private void levelLoader(String path){
 
         JPanel levelLoader = new JPanel();
         levelLoader.setLayout(new BorderLayout());
@@ -196,7 +198,8 @@ public class Gui extends JFrame implements ActionListener, KeyListener{
         levelLoader.add(notice, BorderLayout.SOUTH);
         this.setSize(800,600);
         this.setResizable(true);
-        return levelLoader;
+        this.setContentPane(levelLoader);
+        this.setVisible(true);
     }
 
     /**
@@ -212,8 +215,7 @@ public class Gui extends JFrame implements ActionListener, KeyListener{
         if(source == randGame){
             try {
                 this.level = new Game(PuzzleGenerator.generateBoard(3,3,3));
-                this.setContentPane(guiGame(this.level));
-                this.setVisible(true);
+                guiGame(this.level);
             } catch (IOException ex) {
                 Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -229,31 +231,27 @@ public class Gui extends JFrame implements ActionListener, KeyListener{
 
                 try {
                     this.level = new Game(selectedFile.getPath());
-                    this.setContentPane(guiGame(this.level));
-                    this.setVisible(true);
+                    guiGame(this.level);
                 } catch (Exception ex) {
                     infoBox("Une erreur est survenue avec ce fichier XSB, veuillez vérifier s'il comporte des caractères autres que [#,@,.,$,!]", "Erreur, fichier XSB incorrect");
                 }
             }
         }
         else if(source == classicMode){
-            this.setContentPane(classicMode());
-            this.setVisible(true);
+            classicMode();
         }
         else if(source == back){
             try {
-                this.setContentPane(guiWelcome());
+                guiWelcome();
             } catch (IOException ex) {
                 Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
             }
-            this.setVisible(true);
         }
         else if(source.getClass() == GuiElement.class){
             GuiElement temp;
             temp = (GuiElement)source;
             this.level.movePlayerMouse(temp.getPosX(), temp.getPosY());
-            this.setContentPane(guiGame(this.level));
-            this.setVisible(true);
+            guiGame(this.level);
         }
         else if(source.getClass() == GuiFile.class) {
             GuiFile temp;
@@ -263,8 +261,7 @@ public class Gui extends JFrame implements ActionListener, KeyListener{
             } catch (Exception ex) {
                 infoBox("Une erreur est survenue avec ce fichier XSB, veuillez vérifier s'il comporte des caractères autres que [#,@,.,$,!]", "Erreur, fichier XSB incorrect");
             }
-            this.setContentPane(guiGame(this.level));
-            this.setVisible(true);
+            guiGame(this.level);
         }
     }
     
@@ -294,8 +291,7 @@ public class Gui extends JFrame implements ActionListener, KeyListener{
                 this.level.movePlayer(-1,0);
                 break;
         }
-        this.setContentPane(guiGame(this.level));
-        this.setVisible(true);
+        guiGame(this.level);
     }
 
     @Override
