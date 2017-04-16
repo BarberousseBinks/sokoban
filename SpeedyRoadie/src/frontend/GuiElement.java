@@ -57,6 +57,7 @@ public class GuiElement extends JButton{
     }
     
     public void setContent(char content){
+        this.setFocusable(false);
         this.content = content;
         switch(content){
             case '*':

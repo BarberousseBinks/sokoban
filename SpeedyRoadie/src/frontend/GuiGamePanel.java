@@ -8,6 +8,8 @@ import backend.Game;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 
@@ -15,13 +17,16 @@ import javax.swing.JPanel;
  *
  * @author Louis Dhanis
  */
-public class GuiGamePanel extends JPanel implements ActionListener{
+public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
     private final ArrayList<ArrayList<GuiElement>> elementArrayList;
     private final int length;
     private final int width;
     private final Game game;
     
     public GuiGamePanel(Game game){
+        this.grabFocus();
+        this.addKeyListener(this);
+        
         //Récupérons le plateau sous forme de tableau de caractère
         //Pour stocker chaque élément dans un ArrayList<ArrayList<GuiElement>>
         //ça sera plus facile pour modifier leur contenu par la suite
@@ -30,6 +35,7 @@ public class GuiGamePanel extends JPanel implements ActionListener{
         //parcourons ce tableau et stockons chaque élément dans l'arrayList d'arrayList
         
         this.elementArrayList = new ArrayList<ArrayList<GuiElement>>();
+        
         width = initBoard.length;
         length = initBoard[0].length;
         
@@ -46,6 +52,9 @@ public class GuiGamePanel extends JPanel implements ActionListener{
                 System.out.println(i+":"+j);
             }
         }
+        
+        
+        
     }
     
     public void updatePanel(){
@@ -73,10 +82,37 @@ public class GuiGamePanel extends JPanel implements ActionListener{
         Object source = ae.getSource();
         if(source.getClass() == GuiElement.class){
             GuiElement temp = (GuiElement)source;
-            System.out.println(temp.toString());
             this.game.movePlayerMouse(temp.getPosX(), temp.getPosY());
             this.updatePanel();
             this.setVisible(true);
         }
+    }
+    
+    @Override
+    public void keyTyped(KeyEvent ke) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent ke) {
+        switch(ke.getKeyCode()){
+            case 38:
+                this.moveKey(0, 1);
+                break;
+            case 40:
+                this.moveKey(0, -1);
+                break;
+            case 37:
+                this.moveKey(-1, 0);
+                break;
+            case 39:
+                this.moveKey(1, 0 );
+                break;
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent ke) {
+
     }
 }
