@@ -25,6 +25,8 @@ public class GuiFrame extends JFrame{
         this.mainFrame.setFocusable(true);
         this.setFocusable(false);
         this.setContentPane(this.mainFrame);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+        this.setUndecorated(true);
         this.setVisible(true);
     }
 

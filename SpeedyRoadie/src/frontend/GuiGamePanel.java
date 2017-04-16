@@ -5,6 +5,8 @@
 package frontend;
 
 import backend.Game;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,15 +24,29 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
     private final int length;
     private final int width;
     private final Game game;
+    private final SpeedyBackground infos;
+    private final JPanel gameContainer;
+    private final SpeedyBackground wrapper;
+    private final GuiLabel steps;
+    private final GuiBgButton exitGame;
     
     public GuiGamePanel(Game game){
+        
+        this.wrapper = new SpeedyBackground("gameGraphics/fade.jpg");
         this.grabFocus();
         this.addKeyListener(this);
         
+        this.setLayout(new BorderLayout());
+        
+        this.infos = new SpeedyBackground("gameGraphics/steelTexture.jpg");
+        this.gameContainer = new JPanel();
         //Récupérons le plateau sous forme de tableau de caractère
         //Pour stocker chaque élément dans un ArrayList<ArrayList<GuiElement>>
         //ça sera plus facile pour modifier leur contenu par la suite
         this.game = game;
+        
+        this.steps = new GuiLabel(""+this.game.getNbSteps());
+        
         char[][] initBoard = game.getRepr();
         //parcourons ce tableau et stockons chaque élément dans l'arrayList d'arrayList
         
@@ -38,21 +54,29 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         
         width = initBoard.length;
         length = initBoard[0].length;
-        
-        System.out.println(width+":"+length);
-        
-        this.setLayout(new GridLayout(width, length));
+        this.exitGame = new GuiBgButton("Exit game...");
+        this.exitGame.addActionListener(this);
+        this.gameContainer.setSize(width*50, length*50);
+        this.setSize(width*50 + 200, length*50 + 200);
+        this.gameContainer.setPreferredSize(new Dimension(width*50, length*50));
+        this.gameContainer.setLayout(new GridLayout(width, length));
         
         for(int i = 0; i < initBoard.length; i++){
             elementArrayList.add(new ArrayList<GuiElement>());
             for(int j = 0; j < initBoard[i].length; j++){
+                
                 elementArrayList.get(i).add(new GuiElement(initBoard[i][j], j, i));
-                this.add(elementArrayList.get(i).get(j));
+                this.gameContainer.add(elementArrayList.get(i).get(j));
                 elementArrayList.get(i).get(j).addActionListener(this);
-                System.out.println(i+":"+j);
+                
             }
         }
         
+        this.wrapper.add(this.gameContainer);
+        this.infos.add(this.steps);
+        this.infos.add(this.exitGame);
+        this.add(this.infos, BorderLayout.NORTH);     
+        this.add(this.wrapper, BorderLayout.CENTER);
         
         
     }
@@ -68,6 +92,8 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
                 }
             }
         }
+        
+        this.steps.setText(""+this.game.getNbSteps());
 
     }   
     
@@ -85,6 +111,9 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
             this.game.movePlayerMouse(temp.getPosX(), temp.getPosY());
             this.updatePanel();
             this.setVisible(true);
+        }
+        else if(source == this.exitGame){
+            System.exit(0);
         }
     }
     
