@@ -29,9 +29,10 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
     private final SpeedyBackground wrapper;
     private final GuiLabel steps;
     private final GuiBgButton exitGame;
+    private final GuiFrame container;
     
-    public GuiGamePanel(Game game){
-        
+    public GuiGamePanel(Game game, GuiFrame container){
+        this.container = container;
         this.wrapper = new SpeedyBackground("gameGraphics/fade.jpg");
         this.grabFocus();
         this.addKeyListener(this);
@@ -94,8 +95,16 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         }
         
         this.steps.setText(""+this.game.getNbSteps());
-
+        
+        if(this.gameWon()){
+            this.container.setContentPane(new JPanel());
+        }
+    
     }   
+    
+    public boolean gameWon(){
+        return this.game.isGameWon();
+    }
     
     public void moveKey(int x, int y){
         this.game.movePlayer(x,y);

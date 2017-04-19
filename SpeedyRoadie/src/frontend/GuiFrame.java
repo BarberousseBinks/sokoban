@@ -6,8 +6,6 @@ package frontend;
 
 import backend.Game;
 import backend.PuzzleGenerator;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.IOException;
 import javax.swing.JFrame;
 
@@ -21,7 +19,7 @@ public class GuiFrame extends JFrame{
     
     public GuiFrame() throws IOException{
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.mainFrame = new GuiGamePanel(new Game(PuzzleGenerator.generateBoard(3,3,4)));
+        this.mainFrame = new GuiGamePanel(new Game(PuzzleGenerator.generateBoard(3,3,4)), this);
         this.mainFrame.setFocusable(true);
         this.setFocusable(false);
         this.setContentPane(this.mainFrame);
