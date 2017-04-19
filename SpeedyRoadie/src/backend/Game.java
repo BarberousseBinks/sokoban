@@ -42,12 +42,13 @@ public class Game {
      * @param y +1 si on avance dans le sens conventionnel des y, -1 inversément, 0 si le déplacement se fait selon l'axe des y
      * @return
      */
-    public boolean movePlayer(int x,int y){
-        if(board.movePlayer(x, y)){
+    public int movePlayer(int x,int y){
+        int result=board.movePlayer(x, y);
+        System.out.println(result);
+        if(result!=-1){
             nbSteps=nbSteps+1;
-            return true;
         }
-        return false;
+        return result;
     }
     
     /**
@@ -56,12 +57,13 @@ public class Game {
      * @param my la coordonnée en y d'une case
      * @return
      */
-    public boolean movePlayerMouse(int mx, int my){  //mx et my étant les valeurs d'une case dans le repère matriciel
-        if(board.movePlayerMouse(mx, my)){        //(avec (0,0) en haut à gauche et (1,0) juste en dessous
+    public int movePlayerMouse(int mx, int my){  //mx et my étant les valeurs d'une case dans le repère matriciel
+        int result=board.movePlayerMouse(mx, my); //(avec (0,0) en haut à gauche et (1,0) juste en dessous
+        System.out.println(result);
+        if(result !=-1){       
             nbSteps=nbSteps+1;
-            return true;
         }
-        return false;
+        return result;
     }
     
     

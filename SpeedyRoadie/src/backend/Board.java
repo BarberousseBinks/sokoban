@@ -373,12 +373,12 @@ public class Board {
      * @param my la coordonnée en y d'une case
      * @return
      */
-    public boolean movePlayerMouse(int mx, int my){  //(mx,my) étant les coordonées de la case qui a été clickée
+    public int movePlayerMouse(int mx, int my){  //(mx,my) étant les coordonées de la case qui a été clickée
         int relativeX=mx-pX;       //déplacement entre (convMX,convMY) et (pX,pY)
         int relativeY=my-pY;
         relativeY=-relativeY; //car on est en valeur matricielle et movePlayer prend comme valeur dans un repère conventionnel
         if(abs(relativeX)+abs(relativeY) != 1){
-            return false;       //Le test est fait même si il est refait dans movePlayer. Ici cela n'engendre pas
+            return -1;       //Le test est fait même si il est refait dans movePlayer. Ici cela n'engendre pas
         }                       //d'exception, c'est juste un mouvement impossible. Dans movePlayer(int x,int y), cela
         else{                   //engendre une exception faisant planter le programme car il y a un problème quelque part (si ça arrive)
             return movePlayer(relativeX,relativeY);
@@ -391,7 +391,7 @@ public class Board {
      * @param y +1 si on avance dans le sens conventionnel des y, -1 inversément, 0 si le déplacement se fait selon l'axe des y
      * @return
      */
-    public boolean movePlayer(int x, int y){  //Fait avancer le joueur du vecteur (x,y)
+    public int movePlayer(int x, int y){  //Fait avancer le joueur du vecteur (x,y)
         if(abs(x)+abs(y) != 1){
             throw new IllegalArgumentException("movePlayer(int x,int y) only takes [(0,1),(0,-1),(1,0)or(-1,0)] as parameters (x,y)"); 
         }     //Il n'est pas nécessaire de vérifier si on tombe dans un cas outOfRange car le joueur ne sera jamais en position limite car le plateau est bordé de murs
@@ -400,10 +400,39 @@ public class Board {
         y=-y; //Pour faire avancer de (x,y) dans un repère conventiel, il faut faire avancer de (x,-y) dans le repère déroulant vers le bas du board ((0,0) est en haut à gauche)
         
         if("player".equals(tab.get(pY).get(pX).getType())){ //Le joueur ne se trouve pas sur un objectif
-            return movePlayerFromEmpty(x,y);
+            if(movePlayerFromEmpty(x,y)){
+                if(x==0){
+                    if(y==-1)
+                        return 0;
+                    else
+                        return 2;
+                }
+                else if(x==1){
+                    return 1;
+                }
+                else
+                    return 3;
+            }
+            else
+                return -1;
         }
         else{
-            return movePlayerFromGoal(x,y);
+            if(movePlayerFromGoal(x,y)){
+                if(x==0){
+                    if(y==-1)
+                        return 0;
+                    else
+                        return 2;
+                }
+                else if(x==1){
+                    return 1;
+                }
+                else
+                    return 3;
+            
+            }
+            else
+                return -1;
         }
     }
     
