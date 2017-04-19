@@ -20,6 +20,7 @@ import javax.swing.JButton;
 public class GuiBgButton extends JButton{
     
     public GuiBgButton(){
+        this.setFocusable(false);
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         ge.getAllFonts();
         

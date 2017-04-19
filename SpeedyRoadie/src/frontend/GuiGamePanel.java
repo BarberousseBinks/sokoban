@@ -12,7 +12,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -29,9 +36,12 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
     private final SpeedyBackground wrapper;
     private final GuiLabel steps;
     private final GuiBgButton exitGame;
+    private final GuiBgButton saveGame;
     private final GuiFrame container;
+    private final ArrayList<Integer> moveHistory;
     
     public GuiGamePanel(Game game, GuiFrame container){
+        this.moveHistory = new ArrayList<Integer>();
         this.container = container;
         this.wrapper = new SpeedyBackground("gameGraphics/fade.jpg");
         this.grabFocus();
@@ -57,6 +67,8 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         length = initBoard[0].length;
         this.exitGame = new GuiBgButton("Exit game...");
         this.exitGame.addActionListener(this);
+        this.saveGame = new GuiBgButton("Save .mov");
+        this.saveGame.addActionListener(this);
         this.gameContainer.setSize(width*50, length*50);
         this.setSize(width*50 + 200, length*50 + 200);
         this.gameContainer.setPreferredSize(new Dimension(width*50, length*50));
@@ -76,10 +88,28 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         this.wrapper.add(this.gameContainer);
         this.infos.add(this.steps);
         this.infos.add(this.exitGame);
+        this.infos.add(this.saveGame);
         this.add(this.infos, BorderLayout.NORTH);     
         this.add(this.wrapper, BorderLayout.CENTER);
         
         
+    }
+    
+    public void saveState(){
+        // Code inspiré de https://stackoverflow.com/questions/356671/jfilechooser-showsavedialog-how-to-set-suggested-file-name
+        // et de https://stackoverflow.com/questions/14589386/how-to-save-file-using-jfilechooser-in-java
+        String sb = moveHistory();
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new File("/home"));
+        chooser.setSelectedFile(new File("sauvegarde.mov"));
+        int retrival = chooser.showSaveDialog(null);
+        if (retrival == JFileChooser.APPROVE_OPTION) {
+            try(FileWriter fw = new FileWriter(chooser.getSelectedFile())) {
+                fw.write(sb);
+            } catch (IOException ex) {
+                Logger.getLogger(GuiGamePanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
     
     public void updatePanel(){
@@ -97,17 +127,32 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         this.steps.setText(""+this.game.getNbSteps());
         
         if(this.gameWon()){
-            this.container.setContentPane(new JPanel());
+            JPanel banane = new JPanel();
+            for (Object move : this.moveHistory) {
+                banane.add(new JLabel(""+move));
+            }
+            this.container.setContentPane(banane);
         }
     
     }   
+    
+    public String moveHistory(){
+        String str = "";
+        for (Object move : this.moveHistory) {
+            str = str + move;
+        }
+        return str;
+    }
     
     public boolean gameWon(){
         return this.game.isGameWon();
     }
     
     public void moveKey(int x, int y){
-        this.game.movePlayer(x,y);
+        int move = this.game.movePlayer(x,y);
+        if(move >= 0){
+            this.moveHistory.add(move);
+        }
         this.updatePanel();
         this.setVisible(true);
     }
@@ -117,12 +162,18 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         Object source = ae.getSource();
         if(source.getClass() == GuiElement.class){
             GuiElement temp = (GuiElement)source;
-            this.game.movePlayerMouse(temp.getPosX(), temp.getPosY());
+            int move = this.game.movePlayerMouse(temp.getPosX(), temp.getPosY());
+            if(move >= 0){
+                this.moveHistory.add(move);
+            }
             this.updatePanel();
             this.setVisible(true);
         }
         else if(source == this.exitGame){
             System.exit(0);
+        }
+        else if(source == this.saveGame){
+            saveState();
         }
     }
     
