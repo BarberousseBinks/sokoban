@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Classe comprenant les outils nécessaire pour tout ce qui concerne la lecture et l'écriture des fichier relatifs à notre Sokoban
@@ -69,6 +71,8 @@ public class PuzzleDataManager {
             return tab;
         }
     
+    
+    
     /**
      * Met à jour la sauvegarde du niveau lvl (du mode classique) en ajoutant la move newMove
      * Signification des valeurs de newMove: 0 représente le haut, 1 la droite, 2 le bas, 3 la gauche
@@ -81,6 +85,17 @@ public class PuzzleDataManager {
     public static void classicUpdateSave(int newMove, int lvl) throws FileNotFoundException, IOException{   
         String path = "ClassicMode\\saves\\"+String.valueOf(lvl)+".mov";
         updateSave(newMove,path);           
+    }
+    
+    public static void PsUpdateSave(int newMove) throws IOException{
+        String path ="CustomMode\\permanSave.mov";
+        updateSave(newMove,path);        
+    }
+    
+    public static void PsBoardUpdate(String PermanSaveBoardXSBPath) throws FileNotFoundException, UnsupportedEncodingException{
+        PrintWriter writer = new PrintWriter("CustomMode\\permanBoardSave.txt", "UTF-8");
+        writer.println(PermanSaveBoardXSBPath);
+        writer.close();
     }
     
     public static void updateSave(int newMove, String path) throws FileNotFoundException, IOException{
@@ -120,6 +135,10 @@ public class PuzzleDataManager {
         resetSave(path);    
     }
     
+    public static void PsBoardReset() throws FileNotFoundException, UnsupportedEncodingException{
+        resetSave("CustomMode\\permanBoardSave.txt");
+    }
+    
     public static void resetSave(String path){
         try{
             PrintWriter writer = new PrintWriter(path, "UTF-8");
@@ -128,6 +147,11 @@ public class PuzzleDataManager {
         catch(Exception e){
             System.out.println("bug");
         }
+    }
+    
+    public static void PsResetSave(){
+        String path="CustomMode\\permanSave.mov";
+        resetSave(path);
     }
     
     
@@ -143,6 +167,20 @@ public class PuzzleDataManager {
         return hasSave(path);
     }
     
+    /**
+     * Renvoit true si la permanSave du mode custom est non vide. Sinon renvoit false.
+     * @return boolean
+     */
+    public static boolean PsHasSave(){  
+        String path="CustomMode\\permanSave.mov";
+        return hasSave(path);
+    }
+    
+    /**
+     * Renvoit true sie le path (en .mov) existe et est non vide
+     * @param path
+     * @return
+     */
     public static boolean hasSave(String path){
         try{
             BufferedReader in = new BufferedReader(new FileReader(path));
@@ -162,6 +200,11 @@ public class PuzzleDataManager {
     
     public static ArrayList<Integer> classicGetMovesSaved(int lvl) throws FileNotFoundException, IOException{
         String path="ClassicMode\\saves\\"+String.valueOf(lvl)+".mov";
+        return getMovesSaved(path);
+    }
+    
+    public static ArrayList<Integer> PsGetMovesSaved() throws IOException{
+        String path="CustomMode\\permanSave.mov";
         return getMovesSaved(path);
     }
     
@@ -209,9 +252,26 @@ public class PuzzleDataManager {
         return newGame;
     }
     
-    public static Game getSavedGame(String path) throws IOException{
-        Game newGame=new Game(path);
-        ArrayList<Integer> movesPlayed=getMovesSaved(path);
+    
+    
+    
+    /*
+    public static Game PsGetSavedGame(){
+        Game newGame=new Game("CustomMode\\permanSave.mov");
+        
+    }
+    */
+    
+    /**
+     * Renvoit la Game avec le plateau de pathXSB et la sauvegarde de pathMOV
+     * @param pathXSB
+     * @param pathMOV
+     * @return
+     * @throws IOException
+     */
+    public static Game getSavedGame(String pathXSB, String pathMOV) throws IOException{ 
+        Game newGame=new Game(pathXSB);
+        ArrayList<Integer> movesPlayed=getMovesSaved(pathMOV);
         for(int i=0;i<movesPlayed.size();i++){
             if(movesPlayed.get(i)==0){
                 newGame.movePlayer(0,1);
@@ -232,6 +292,6 @@ public class PuzzleDataManager {
         return newGame;
     }
     
-    
+   
     
 }
