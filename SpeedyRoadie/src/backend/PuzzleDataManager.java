@@ -197,6 +197,15 @@ public class PuzzleDataManager {
         }
     }
     
+    /**
+     * Renvoit le path associé a la permanSave (le path contenu dans permanBoardSave)
+     * @return
+     */
+    public static String getPsBoardPath() throws FileNotFoundException, IOException{
+        BufferedReader in = new BufferedReader(new FileReader("CustomMode\\permanBoardSave.txt"));
+        String result=in.readLine();
+        return result;
+    }
     
     public static ArrayList<Integer> classicGetMovesSaved(int lvl) throws FileNotFoundException, IOException{
         String path="ClassicMode\\saves\\"+String.valueOf(lvl)+".mov";
@@ -255,12 +264,18 @@ public class PuzzleDataManager {
     
     
     
-    /*
-    public static Game PsGetSavedGame(){
-        Game newGame=new Game("CustomMode\\permanSave.mov");
-        
+    
+    public static Game PsGetSavedGame() throws FileNotFoundException, UnsupportedEncodingException{ //Les exception sont pour le PsBoardReset()
+        try {
+            Game resultGame=getSavedGame(getPsBoardPath(),"CustomMode\\permanSave.mov");
+            return resultGame;            
+        } catch (Exception ex) {
+            PsBoardReset();
+            PsResetSave();
+            return null;
+        }
     }
-    */
+    
     
     /**
      * Renvoit la Game avec le plateau de pathXSB et la sauvegarde de pathMOV
