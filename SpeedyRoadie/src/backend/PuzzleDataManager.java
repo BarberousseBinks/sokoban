@@ -92,6 +92,12 @@ public class PuzzleDataManager {
         updateSave(newMove,path);        
     }
     
+    public static void PsUpdateSave(ArrayList<Integer> moveLis) throws IOException{
+        for(int i=0;i<moveLis.size();i++){
+            PsUpdateSave(moveLis.get(i));
+        }
+    }
+    
     public static void PsBoardUpdate(String PermanSaveBoardXSBPath) throws FileNotFoundException, UnsupportedEncodingException{
         PrintWriter writer = new PrintWriter("CustomMode\\permanBoardSave.txt", "UTF-8");
         writer.println(PermanSaveBoardXSBPath);
