@@ -70,8 +70,8 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         this.saveGame = new GuiBgButton("Save .mov");
         this.saveGame.addActionListener(this);
         this.gameContainer.setSize(width*50, length*50);
-        this.setSize(width*50 + 200, length*50 + 200);
-        this.gameContainer.setPreferredSize(new Dimension(width*50, length*50));
+        this.setSize(length*50 + 200, width*50 + 200);
+        this.gameContainer.setPreferredSize(new Dimension(length*50, width*50));
         this.gameContainer.setLayout(new GridLayout(width, length));
         
         for(int i = 0; i < initBoard.length; i++){
@@ -112,6 +112,24 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         }
     }
     
+    public void playReader(char ch){
+        switch(ch){
+            case '0':
+                this.moveKey(0, 1);
+                break;
+            case '2':
+                this.moveKey(0, -1);
+                break;
+            case '3':
+                this.moveKey(-1, 0);
+                break;
+            case '1':
+                this.moveKey(1, 0 );
+                break;
+                
+        }
+    }
+    
     public void updatePanel(){
         
         char[][] initBoard = this.game.getRepr();
@@ -148,7 +166,7 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         return this.game.isGameWon();
     }
     
-    public void moveKey(int x, int y){
+    private void moveKey(int x, int y){
         int move = this.game.movePlayer(x,y);
         if(move >= 0){
             this.moveHistory.add(move);

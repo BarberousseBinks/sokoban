@@ -62,7 +62,7 @@ public class GuiElement extends JButton{
         switch(content){
             case '*':
                 try{
-                    Image img = ImageIO.read(getClass().getResource("sprites/DEATHROADIE.gif"));
+                    Image img = ImageIO.read(getClass().getResource("misc/DEATHROADIE.gif"));
                     img = img.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_SMOOTH);
                     this.setIcon(new ImageIcon(img));
                 } 
@@ -72,7 +72,7 @@ public class GuiElement extends JButton{
             break;
             case '!':
                 try{
-                    Image img = ImageIO.read(getClass().getResource("sprites/boxongoal.gif"));
+                    Image img = ImageIO.read(getClass().getResource("misc/boxongoal.gif"));
                     img = img.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_SMOOTH);
                     this.setIcon(new ImageIcon(img));
                 } 
@@ -83,7 +83,7 @@ public class GuiElement extends JButton{
             case '@':
                 //Code inspiré de https://stackoverflow.com/questions/12691832/how-to-put-an-image-on-a-jbutton
                 try{
-                    Image img = ImageIO.read(getClass().getResource("sprites/roadie.gif"));
+                    Image img = ImageIO.read(getClass().getResource("misc/roadie.gif"));
                     img = img.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_SMOOTH);
                     this.setIcon(new ImageIcon(img));
                 } 
@@ -93,7 +93,7 @@ public class GuiElement extends JButton{
             break;
             case '#':
                 try{
-                    Image img = ImageIO.read(getClass().getResource("sprites/wall.gif"));
+                    Image img = ImageIO.read(getClass().getResource("misc/wall.gif"));
                     img = img.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_SMOOTH);
                     this.setIcon(new ImageIcon(img));
                 } 
@@ -103,7 +103,7 @@ public class GuiElement extends JButton{
             break;
             case '$':
                 try{
-                    Image img = ImageIO.read(getClass().getResource("sprites/case.gif"));
+                    Image img = ImageIO.read(getClass().getResource("misc/case.gif"));
                     img = img.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_SMOOTH);
                     this.setIcon(new ImageIcon(img));
                 } 
@@ -113,7 +113,7 @@ public class GuiElement extends JButton{
             break;
             case ' ':
                 try{
-                    Image img = ImageIO.read(getClass().getResource("sprites/ground.gif"));
+                    Image img = ImageIO.read(getClass().getResource("misc/ground.gif"));
                     img = img.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_SMOOTH);
                     this.setIcon(new ImageIcon(img));
                 } 
@@ -123,7 +123,7 @@ public class GuiElement extends JButton{
             break;
             case '.':
                 try{
-                    Image img = ImageIO.read(getClass().getResource("sprites/goal.gif"));
+                    Image img = ImageIO.read(getClass().getResource("misc/goal.gif"));
                     img = img.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_SMOOTH);
                     this.setIcon(new ImageIcon(img));
                 } 

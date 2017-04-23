@@ -23,7 +23,7 @@ public class GuiLabel extends JLabel{
         ge.getAllFonts();
         
         try {
-            Font pressStart2P = Font.createFont(Font.TRUETYPE_FONT, getClass().getResource("sprites/font/PressStart2P.ttf").openStream());
+            Font pressStart2P = Font.createFont(Font.TRUETYPE_FONT, getClass().getResource("misc/font/PressStart2P.ttf").openStream());
             GraphicsEnvironment genv = GraphicsEnvironment.getLocalGraphicsEnvironment();
             genv.registerFont(pressStart2P);
             pressStart2P = pressStart2P.deriveFont(20f);
