@@ -29,7 +29,7 @@ public class PuzzleDataManager {
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public static ArrayList<char[]> ReadPuzzleData(String cheminTxtLab) throws FileNotFoundException, IOException{
+    public static ArrayList<char[]> readBoard(String cheminTxtLab) throws FileNotFoundException, IOException{
 
             BufferedReader in = new BufferedReader(new FileReader(cheminTxtLab));
 
@@ -87,18 +87,18 @@ public class PuzzleDataManager {
         updateSave(newMove,path);           
     }
     
-    public static void PsUpdateSave(int newMove) throws IOException{
+    public static void psUpdateSave(int newMove) throws IOException{
         String path ="CustomMode\\permanSave.mov";
         updateSave(newMove,path);        
     }
     
-    public static void PsUpdateSave(ArrayList<Integer> moveLis) throws IOException{
+    public static void psUpdateSave(ArrayList<Integer> moveLis) throws IOException{
         for(int i=0;i<moveLis.size();i++){
-            PsUpdateSave(moveLis.get(i));
+            psUpdateSave(moveLis.get(i));
         }
     }
     
-    public static void PsBoardUpdate(String PermanSaveBoardXSBPath) throws FileNotFoundException, UnsupportedEncodingException{
+    public static void psBoardUpdate(String PermanSaveBoardXSBPath) throws FileNotFoundException, UnsupportedEncodingException{
         PrintWriter writer = new PrintWriter("CustomMode\\permanBoardSave.txt", "UTF-8");
         writer.println(PermanSaveBoardXSBPath);
         writer.close();
@@ -141,7 +141,7 @@ public class PuzzleDataManager {
         resetSave(path);    
     }
     
-    public static void PsBoardReset() throws FileNotFoundException, UnsupportedEncodingException{
+    public static void psBoardReset() throws FileNotFoundException, UnsupportedEncodingException{
         resetSave("CustomMode\\permanBoardSave.txt");
     }
     
@@ -155,7 +155,7 @@ public class PuzzleDataManager {
         }
     }
     
-    public static void PsResetSave(){
+    public static void psResetSave(){
         String path="CustomMode\\permanSave.mov";
         resetSave(path);
     }
@@ -177,7 +177,7 @@ public class PuzzleDataManager {
      * Renvoit true si la permanSave du mode custom est non vide. Sinon renvoit false.
      * @return boolean
      */
-    public static boolean PsHasSave(){  
+    public static boolean psHasSave(){  
         String path="CustomMode\\permanSave.mov";
         return hasSave(path);
     }
@@ -218,7 +218,7 @@ public class PuzzleDataManager {
         return getMovesSaved(path);
     }
     
-    public static ArrayList<Integer> PsGetMovesSaved() throws IOException{
+    public static ArrayList<Integer> psGetMovesSaved() throws IOException{
         String path="CustomMode\\permanSave.mov";
         return getMovesSaved(path);
     }
@@ -271,13 +271,13 @@ public class PuzzleDataManager {
     
     
     
-    public static Game PsGetSavedGame() throws FileNotFoundException, UnsupportedEncodingException{ //Les exception sont pour le PsBoardReset()
+    public static Game psGetSavedGame() throws FileNotFoundException, UnsupportedEncodingException{ //Les exception sont pour le PsBoardReset()
         try {
             Game resultGame=getSavedGame(getPsBoardPath(),"CustomMode\\permanSave.mov");
             return resultGame;            
         } catch (Exception ex) {
-            PsBoardReset();
-            PsResetSave();
+            psBoardReset();
+            psResetSave();
             return null;
         }
     }

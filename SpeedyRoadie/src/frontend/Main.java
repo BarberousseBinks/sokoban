@@ -19,7 +19,7 @@ public class Main {
      */
     public static void main(String[] args) throws IOException, InterruptedException {
         // TODO code application logic here
-        PuzzleDataManager.PsBoardUpdate("Ouioujiji");
+        PuzzleDataManager.psBoardUpdate("Ouioujiji");
         GuiFrame game = new GuiFrame();
     }
     
