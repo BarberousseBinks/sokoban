@@ -1,15 +1,8 @@
 package backend;
 
 import java.io.IOException;
-import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.Random;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.abs;
 import static java.lang.Math.abs;
 
 /**
