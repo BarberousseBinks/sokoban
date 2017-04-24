@@ -104,6 +104,13 @@ public class PuzzleDataManager {
         writer.close();
     }
     
+    public static void updateSave(String path, ArrayList<Integer> moves) throws IOException{
+        resetSave(path);
+        for(int i=0;i<moves.size();i++){
+            updateSave(moves.get(i),path);
+        }
+    }
+    
     public static void updateSave(int newMove, String path) throws FileNotFoundException, IOException{
         if(newMove < 0 || newMove > 3){
             throw new IllegalArgumentException("newMove must take the value of 0, 1, 2 or 3");

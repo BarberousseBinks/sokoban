@@ -7,6 +7,10 @@ import java.util.Random;
 import static java.lang.Math.abs;
 import static java.lang.Math.abs;
 import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
 
 /**
  * Classe comportant tout ce qui est nécessaire à la création de puzzle aléatoire pour notre Sokoban

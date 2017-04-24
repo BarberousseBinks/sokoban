@@ -5,6 +5,7 @@
 package frontend;
 
 import backend.Game;
+import static backend.PuzzleDataManager.getMovesSaved;
 import backend.PuzzleGenerator;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -14,6 +15,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -56,10 +58,11 @@ public class GuiFrame extends JFrame implements ActionListener{
         this.setVisible(true);
     }
     
-    private void readLevel(GuiGamePanel gamePanel) throws InterruptedException{
+    private void readLevel(GuiGamePanel gamePanel, ArrayList<Integer> mov) throws InterruptedException{
         this.setPane(gamePanel, false);
+        ClockListener move = new ClockListener(gamePanel, mov);
         
-        Timer t = new Timer(200, new ClockListener(gamePanel, this.mov));
+        Timer t = new Timer(200, move);
 
         t.start();
         this.mainPanel.setFocusable(true);
@@ -112,11 +115,6 @@ public class GuiFrame extends JFrame implements ActionListener{
         return menu;
     }
     
-    private GuiGamePanel playMov() throws IOException{
-        GuiGamePanel game = new GuiGamePanel(new Game(PuzzleGenerator.generateBoard(3,3,4)), this);
-        return game;
-    }
-    
 
     @Override
     public void actionPerformed(ActionEvent ae) {
@@ -158,13 +156,14 @@ public class GuiFrame extends JFrame implements ActionListener{
                             try (BufferedReader moveHistoryReader = new BufferedReader(new FileReader(saveFile))) {
 				
 				this.mov = getMovesSaved(saveFile.getPath());
-                                if(this.mov.size() == 0){
+                                
+                                if(this.mov.isEmpty()){
                                     this.setPane(new GuiGamePanel(this.level, this), true);
                                 }
 
                                 else{
 
-                                    this.readLevel(new GuiGamePanel(this.level, this));
+                                    this.readLevel(new GuiGamePanel(this.level, this), this.mov);
                                 }
                             }   
                         }
