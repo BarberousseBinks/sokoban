@@ -5,6 +5,7 @@
 package frontend;
 
 import backend.Game;
+import backend.PuzzleDataManager;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -72,7 +73,7 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         this.gameContainer.setSize(width*50, length*50);
         this.setSize(length*50 + 200, width*50 + 200);
         this.gameContainer.setPreferredSize(new Dimension(length*50, width*50));
-        this.gameContainer.setLayout(new GridLayout(width, length));
+        this.gameContainer.setLayout(new GridLayout(width, length));moveHistory
         
         for(int i = 0; i < initBoard.length; i++){
             elementArrayList.add(new ArrayList<GuiElement>());
@@ -88,7 +89,7 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         this.wrapper.add(this.gameContainer);
         this.infos.add(this.steps);
         this.infos.add(this.exitGame);
-        this.infos.add(this.saveGame);
+        this.infos.add(this.saveGame);moveHistory
         this.add(this.infos, BorderLayout.NORTH);     
         this.add(this.wrapper, BorderLayout.CENTER);
         
@@ -103,12 +104,9 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         chooser.setCurrentDirectory(new File("/home"));
         chooser.setSelectedFile(new File("sauvegarde.mov"));
         int retrival = chooser.showSaveDialog(null);
+
         if (retrival == JFileChooser.APPROVE_OPTION) {
-            try(FileWriter fw = new FileWriter(chooser.getSelectedFile())) {
-                fw.write(sb);
-            } catch (IOException ex) {
-                Logger.getLogger(GuiGamePanel.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            createSave(chooser.getPath(), this.moveHistory);
         }
     }
     

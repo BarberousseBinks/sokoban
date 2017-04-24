@@ -35,7 +35,8 @@ public class GuiFrame extends JFrame implements ActionListener{
     private GuiBgButton random = null;
     private GuiBgButton loadGame = null;
     private Game level = null;
-    private String mov = null;
+    private ArrayList<Integer> mov = null;
+
     
     public GuiFrame() throws IOException{
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -55,33 +56,36 @@ public class GuiFrame extends JFrame implements ActionListener{
         this.setVisible(true);
     }
     
-    private void readLevel(GuiGamePanel gamePanel, String movements) throws InterruptedException{
+    private void readLevel(GuiGamePanel gamePanel) throws InterruptedException{
         this.setPane(gamePanel, false);
         
-        Timer t = new Timer(200, new ClockListener(gamePanel, movements));
+        Timer t = new Timer(200, new ClockListener(gamePanel, this.mov));
+
         t.start();
         this.mainPanel.setFocusable(true);
     }
     
     private class ClockListener implements ActionListener {
+
         private final GuiGamePanel gamePanel;
-        private final String movements;
+        private final ArrayList<Integer> movements;
         private int counter = 0;
         
-        private ClockListener(GuiGamePanel gamePanel, String movements){
+        private ClockListener(GuiGamePanel gamePanel, ArrayList<Integer> movements){
             this.gamePanel = gamePanel;
             this.movements = movements;
         }
         
         @Override
         public void actionPerformed(ActionEvent e) {
-            if(counter == movements.length()){
-                System.out.println("finito");
+
+            if(counter == movements.size()){
+                //System.out.println("finito");
                 Timer t = (Timer)e.getSource();
                 t.stop();
             }
             else{
-                gamePanel.playReader(movements.charAt(counter));
+                gamePanel.playReader(movements.get(counter));
                 counter++;
             }
         }
@@ -96,7 +100,7 @@ public class GuiFrame extends JFrame implements ActionListener{
         story = new GuiBgButton("Mode histoire");
         random = new GuiBgButton("Mode aléatoire");
         loadGame = new GuiBgButton("Charger une partie");
-        
+
         story.addActionListener(this);
         random.addActionListener(this);
         loadGame.addActionListener(this);
@@ -124,35 +128,43 @@ public class GuiFrame extends JFrame implements ActionListener{
         else if(source == random){
             
         }
-        else if(source == loadGame){
+        else if(source == loadGame){ 
+
             JFileChooser xsb = new JFileChooser();
             xsb.setFileFilter(new FileNameExtensionFilter("Fichier du niveau (xsb)","xsb"));
             xsb.setDialogTitle("Choisissez un fichier xsb");
             xsb.setCurrentDirectory(new File(System.getProperty("user.home")));
             int xsbResult = xsb.showOpenDialog(this.getContentPane());
+
             if (xsbResult == JFileChooser.APPROVE_OPTION) {
 
                 try {
-                    File levelFile = xsb.getSelectedFile();
+
+                    File levelFile = xsb.getSelectedFile(); //XSB FILE
                     this.level = new Game(levelFile.getPath());
-                    
                     int n = JOptionPane.showConfirmDialog(null,"Voulez-vous charger une sauvegarde?","Charger un .mov",JOptionPane.YES_NO_OPTION);
                     
                     if(n == 0){//oui
-                        JFileChooser mov = new JFileChooser();
+
+                        JFileChooser mov = new JFileChooser(); 
                         mov.setFileFilter(new FileNameExtensionFilter("Fichier de sauvegarde (mov)", "mov"));
                         mov.setDialogTitle("Choisissez un fichier de sauvegarde mov");
                         mov.setCurrentDirectory(new File(System.getProperty("user.home")));
                         int movResult = mov.showOpenDialog(this.getContentPane());
+
                         if (xsbResult == JFileChooser.APPROVE_OPTION){
-                            File saveFile = mov.getSelectedFile();
+                            File saveFile = mov.getSelectedFile();//MOV FILE
+
                             try (BufferedReader moveHistoryReader = new BufferedReader(new FileReader(saveFile))) {
-                                String moveHistory = moveHistoryReader.readLine();
-                                if(moveHistory.length() == 0){
+				
+				this.mov = getMovesSaved(saveFile.getPath());
+                                if(this.mov.size() == 0){
                                     this.setPane(new GuiGamePanel(this.level, this), true);
                                 }
+
                                 else{
-                                    this.readLevel(new GuiGamePanel(this.level, this), moveHistory);
+
+                                    this.readLevel(new GuiGamePanel(this.level, this));
                                 }
                             }   
                         }
