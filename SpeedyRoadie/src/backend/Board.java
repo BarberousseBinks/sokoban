@@ -29,8 +29,8 @@ public class Board {
      * Méthode susceptible de générer une excpetion sur le fichier n'est pas trouvé où qu'il ne correspond pas aux normes de fichier de data sokoban
      * @param cheminTxtLab le chemin d'accès au fichier
      */
-    public void generateBoard(String cheminTxtLab) throws FileNtFoundException,IOException{  //construire le jeu à partir d'un fichier .txt
-        generateBoard(PuzzleDataManager.readBoard(cheminTxtLab));
+    public void generateBoard(String path) throws FileNtFoundException,IOException{  //construire le jeu à partir d'un fichier .txt
+        generateBoard(PuzzleDataManager.readBoard(path));
     }
     
     /**
