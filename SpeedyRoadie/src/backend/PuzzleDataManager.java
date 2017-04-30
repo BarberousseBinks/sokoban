@@ -98,22 +98,22 @@ public class PuzzleDataManager {
         }
     }
     
-    public static void psBoardUpdate(String xsbPath) throws FileNotFoundException, UnsupportedEncodingException, IOException{
+    public static void psSetBoard(String xsbPath) throws FileNotFoundException, UnsupportedEncodingException, IOException{
         ArrayList<char[]> BoardData= readBoard(xsbPath);
-        psBoardUpdate(BoardData);
+        PuzzleDataManager.psSetBoard(BoardData);
     }
     
-    public static void psBoardUpdate(ArrayList<char[]> BoardData) throws FileNotFoundException, UnsupportedEncodingException{
+    public static void psSetBoard(ArrayList<char[]> BoardData) throws FileNotFoundException, UnsupportedEncodingException{
         char[][] charBoardData= new char[BoardData.size()][BoardData.get(0).length];
         for(int i=0;i<BoardData.size();i++){
             for(int j=0;j<BoardData.get(i).length;j++){
                 charBoardData[i][j]=BoardData.get(i)[j];
             }
         }
-        psBoardUpdate(charBoardData);
+        psSetBoard(charBoardData);
     }
     
-    public static void psBoardUpdate(char[][] BoardData) throws FileNotFoundException, UnsupportedEncodingException{
+    public static void psSetBoard(char[][] BoardData) throws FileNotFoundException, UnsupportedEncodingException{
         PrintWriter writer = new PrintWriter("PermanSave\\permanBoardSave.xsb", "UTF-8");
         for(int i=0;i<BoardData.length;i++){
             for(int j=0;j<BoardData[0].length;j++){

@@ -3,6 +3,13 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.abs;
 
 /**
  * Cette classe contient tout ce qu'il faut pour générer un board (avec l'aide de PuzzleDataReader si c'est à partir d'un chemin) et pour y déplacer le joueur
