@@ -5,6 +5,7 @@
 package frontend;
 
 import backend.Game;
+import backend.PuzzleDataManager;
 import static backend.PuzzleDataManager.getMovesSaved;
 import backend.PuzzleGenerator;
 import java.awt.BorderLayout;
@@ -12,8 +13,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,19 +39,34 @@ public class GuiFrame extends JFrame implements ActionListener{
     private GuiBgButton story = null;
     private GuiBgButton random = null;
     private GuiBgButton loadGame = null;
+    private GuiBgButton exitGame = null;
+    private GuiBgButton backToMenu = null;
     private Game level = null;
     private ArrayList<Integer> mov = null;
+    private boolean storyMode = false;
 
     
     public GuiFrame() throws IOException{
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.mainPanel = guiMenu();
-        this.mainPanel.setFocusable(true);
-        this.setFocusable(false);
-        this.setContentPane(this.mainPanel);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
         this.setUndecorated(true);
-        this.setVisible(true);
+        setMenuScreen();
+        if(PuzzleDataManager.psHasSave()){
+            int n = JOptionPane.showConfirmDialog(null,"Voulez-vous continuer la partie en cours?","Partie quittée inopinément",JOptionPane.YES_NO_OPTION);
+            if(n == 0){//oui
+                try {
+                    this.level = PuzzleDataManager.psGetSavedGame();
+                    this.mov = PuzzleDataManager.psGetMovesSaved();
+                    this.readLevel(new GuiGamePanel(this.level, this, this.mov), this.mov);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(GuiFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            else{
+                PuzzleDataManager.psBoardReset();
+                PuzzleDataManager.psResetSave();
+            }
+        }
     }
     
     private void setPane(JPanel panel, boolean focus){
@@ -59,19 +77,22 @@ public class GuiFrame extends JFrame implements ActionListener{
     }
     
     private void readLevel(GuiGamePanel gamePanel, ArrayList<Integer> mov) throws InterruptedException{
-        this.setPane(gamePanel, false);
-        ClockListener move = new ClockListener(gamePanel, mov);
         
-        Timer t = new Timer(200, move);
+        System.out.println("lecture du niveau");
+        
+        this.setPane(gamePanel, false);
+        ClockListener timedMoves = new ClockListener(gamePanel, mov);
+        System.out.println("On ajoute un timer toutes les 0.2 secondes");
+        Timer t = new Timer(200, timedMoves);
 
         t.start();
         this.mainPanel.setFocusable(true);
     }
     
-    private class ClockListener implements ActionListener {
+    private class ClockListener implements ActionListener { // Clock Listener class for timing the reading of the map
 
-        private final GuiGamePanel gamePanel;
-        private final ArrayList<Integer> movements;
+        private final GuiGamePanel gamePanel; //Current game panel
+        private final ArrayList<Integer> movements; //ArrayList from the file
         private int counter = 0;
         
         private ClockListener(GuiGamePanel gamePanel, ArrayList<Integer> movements){
@@ -83,18 +104,44 @@ public class GuiFrame extends JFrame implements ActionListener{
         public void actionPerformed(ActionEvent e) {
 
             if(counter == movements.size()){
-                //System.out.println("finito");
+                System.out.println("On a fini de lire l'ArrayList");
                 Timer t = (Timer)e.getSource();
                 t.stop();
             }
             else{
                 gamePanel.playReader(movements.get(counter));
+                System.out.println("moved: "+movements.get(counter));
                 counter++;
             }
         }
     }
     
-    private SpeedyBackground guiMenu(){
+    public void setWonScreen(int steps){
+        try {
+            PuzzleDataManager.psBoardReset();
+        } catch (FileNotFoundException | UnsupportedEncodingException ex) {
+            Logger.getLogger(GuiFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        PuzzleDataManager.psResetSave();
+        SpeedyBackground menu = new SpeedyBackground("gameGraphics/wowBG.jpg");
+        menu.setLayout(new BorderLayout());
+        SpeedyBackground buttons = new SpeedyBackground("gameGraphics/steel.jpg");
+        menu.add(buttons, BorderLayout.SOUTH);
+        
+        if(storyMode == true){
+            story = new GuiBgButton("Niveau suivant");
+            story.addActionListener(this);       
+            buttons.add(story);
+        }
+        
+        backToMenu = new GuiBgButton("Retour à l'accueil");
+        backToMenu.addActionListener(this);       
+        buttons.add(backToMenu);
+        
+        setPane(menu, true);
+    }
+    
+    private void setMenuScreen(){
         SpeedyBackground menu = new SpeedyBackground("gameGraphics/welcomeBG.jpg");
         menu.setLayout(new BorderLayout());
         SpeedyBackground buttons = new SpeedyBackground("gameGraphics/steel.jpg");
@@ -103,16 +150,20 @@ public class GuiFrame extends JFrame implements ActionListener{
         story = new GuiBgButton("Mode histoire");
         random = new GuiBgButton("Mode aléatoire");
         loadGame = new GuiBgButton("Charger une partie");
+        exitGame = new GuiBgButton("Quitter le jeu");
 
         story.addActionListener(this);
         random.addActionListener(this);
         loadGame.addActionListener(this);
+        exitGame.addActionListener(this);
         
         buttons.add(story);
         buttons.add(random);
         buttons.add(loadGame);
+        buttons.add(exitGame);
         
-        return menu;
+        setPane(menu, true);
+        
     }
     
 
@@ -124,7 +175,28 @@ public class GuiFrame extends JFrame implements ActionListener{
             
         }
         else if(source == random){
-            
+            try {
+                String[] difficulty = { "Facile", "Moyen", "Difficile", "HARDCOOOOORE" };
+                String levelDifficultySelector = (String) JOptionPane.showInputDialog(this, "Veuillez sélectionner un niveau de difficulté", "Partie aléatoire", JOptionPane.QUESTION_MESSAGE, null, difficulty, difficulty[1]);
+                this.mov = new ArrayList<Integer>();
+                switch(levelDifficultySelector){
+                    case "Facile":
+                        this.level = new Game(PuzzleGenerator.generateBoard(4,4,2));
+                        break;
+                    case "Moyen":
+                        this.level = new Game(PuzzleGenerator.generateBoard(4,4,4));
+                        break;
+                    case "Difficile":
+                        this.level = new Game(PuzzleGenerator.generateBoard(5,5,7));
+                        break;
+                    case "HARDCOOOOORE":
+                        this.level = new Game(PuzzleGenerator.generateBoard(5,5,9));
+                        break; 
+                }
+                this.setPane(new GuiGamePanel(this.level, this, this.mov), true);
+            } catch (IOException ex) {
+                Logger.getLogger(GuiFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         else if(source == loadGame){ 
 
@@ -144,38 +216,43 @@ public class GuiFrame extends JFrame implements ActionListener{
                     
                     if(n == 0){//oui
 
-                        JFileChooser mov = new JFileChooser(); 
-                        mov.setFileFilter(new FileNameExtensionFilter("Fichier de sauvegarde (mov)", "mov"));
-                        mov.setDialogTitle("Choisissez un fichier de sauvegarde mov");
-                        mov.setCurrentDirectory(new File(System.getProperty("user.home")));
-                        int movResult = mov.showOpenDialog(this.getContentPane());
+                        JFileChooser movFileChooser = new JFileChooser(); 
+                        movFileChooser.setFileFilter(new FileNameExtensionFilter("Fichier de sauvegarde (mov)", "mov"));
+                        movFileChooser.setDialogTitle("Choisissez un fichier de sauvegarde mov");
+                        movFileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+                        int movResult = movFileChooser.showOpenDialog(this.getContentPane());
 
-                        if (xsbResult == JFileChooser.APPROVE_OPTION){
-                            File saveFile = mov.getSelectedFile();//MOV FILE
+                        if (movResult == JFileChooser.APPROVE_OPTION){
+                            File saveFile = movFileChooser.getSelectedFile();//MOV FILE
+                            
+                            this.mov = getMovesSaved(saveFile.getPath());//Getting ArrayList from file
 
-                            try (BufferedReader moveHistoryReader = new BufferedReader(new FileReader(saveFile))) {
-				
-				this.mov = getMovesSaved(saveFile.getPath());
-                                
-                                if(this.mov.isEmpty()){
-                                    this.setPane(new GuiGamePanel(this.level, this), true);
-                                }
+                            if(this.mov.isEmpty()){
+                                System.out.println("File was empty...");
+                                this.setPane(new GuiGamePanel(this.level, this, this.mov), true);//If ArrayList is empty then let the player play
+                            }
 
-                                else{
-
-                                    this.readLevel(new GuiGamePanel(this.level, this), this.mov);
-                                }
+                            else{
+                                System.out.println("Ok reading "+saveFile.getPath());
+                                this.readLevel(new GuiGamePanel(this.level, this, this.mov), this.mov);//Else let's read the level step by step
                             }   
                         }
                     }
                     else{
-                        this.setPane(new GuiGamePanel(this.level, this), true);
+                        this.setPane(new GuiGamePanel(this.level, this, this.mov), true);
                     } 
                 } catch (IOException | InterruptedException ex) {
                     Logger.getLogger(GuiFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
+        else if(source == exitGame){
+            System.exit(0);
+        }
+        else if(source == backToMenu){
+            setMenuScreen();
+        }
+        
     }
     
     public static void infoBox(String infoMessage, String titleBar)

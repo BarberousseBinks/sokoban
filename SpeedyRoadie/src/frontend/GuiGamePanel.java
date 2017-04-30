@@ -41,8 +41,8 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
     private final GuiFrame container;
     private final ArrayList<Integer> moveHistory;
     
-    public GuiGamePanel(Game game, GuiFrame container){
-        this.moveHistory = new ArrayList<Integer>();
+    public GuiGamePanel(Game game, GuiFrame container, ArrayList<Integer> moves){
+        this.moveHistory = moves;
         this.container = container;
         this.wrapper = new SpeedyBackground("gameGraphics/fade.jpg");
         this.grabFocus();
@@ -50,7 +50,7 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         
         this.setLayout(new BorderLayout());
         
-        this.infos = new SpeedyBackground("gameGraphics/steelTexture.jpg");
+        this.infos = new SpeedyBackground("gameGraphics/steel.jpg");
         this.gameContainer = new JPanel();
         //Récupérons le plateau sous forme de tableau de caractère
         //Pour stocker chaque élément dans un ArrayList<ArrayList<GuiElement>>
@@ -120,16 +120,16 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
     public void playReader(int i){
         switch(i){
             case '0':
-                this.moveKey(0, 1);
+                this.moveKey(0, 1, false);
                 break;
             case '2':
-                this.moveKey(0, -1);
+                this.moveKey(0, -1, false);
                 break;
             case '3':
-                this.moveKey(-1, 0);
+                this.moveKey(-1, 0, false);
                 break;
             case '1':
-                this.moveKey(1, 0 );
+                this.moveKey(1, 0, false);
                 break;
                 
         }
@@ -150,11 +150,7 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         this.steps.setText(""+this.game.getNbSteps());
         
         if(this.gameWon()){
-            JPanel banane = new JPanel();
-            for (Object move : this.moveHistory) {
-                banane.add(new JLabel(""+move));
-            }
-            this.container.setContentPane(banane);
+            this.container.setWonScreen(this.game.getNbSteps());
         }
     
     }   
@@ -171,14 +167,19 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         return this.game.isGameWon();
     }
     
-    private void moveKey(int x, int y){
+    private void moveKey(int x, int y, boolean save){
         int move = this.game.movePlayer(x,y);
-        if(move >= 0){
+        if(move >= 0 && save == true){
             this.moveHistory.add(move);
+            try{
+                PuzzleDataManager.psUpdateSave(this.moveHistory);
+            }
+            catch(Exception e){}
         }
         this.updatePanel();
         this.setVisible(true);
     }
+    
 
     @Override
     public void actionPerformed(ActionEvent ae) {
@@ -209,16 +210,16 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
     public void keyPressed(KeyEvent ke) {
         switch(ke.getKeyCode()){
             case 38:
-                this.moveKey(0, 1);
+                this.moveKey(0, 1, true);
                 break;
             case 40:
-                this.moveKey(0, -1);
+                this.moveKey(0, -1, true);
                 break;
             case 37:
-                this.moveKey(-1, 0);
+                this.moveKey(-1, 0, true);
                 break;
             case 39:
-                this.moveKey(1, 0 );
+                this.moveKey(1, 0, true);
                 break;
         }
     }
