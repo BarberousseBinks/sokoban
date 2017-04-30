@@ -231,11 +231,11 @@ public class PuzzleDataManager {
     }
     
     /**
-     * Renvoit le path associé a la permanSave (le path contenu dans permanBoardSave)
+     * Renvoit l'ArrayList<char[]> associé a la permanSave (le path contenu dans permanBoardSave)
      * @return
      */
-    public static ArrayList<char[]> getPsBoardPath() throws FileNotFoundException, IOException{
-        return readBoard("PermanSave\\permanBoardSave.xsb");
+    public static Board psGetBoard() throws FileNotFoundException, IOException{
+        return new Board("PermanSave\\permanBoardSave.xsb");
     }
     
     public static ArrayList<Integer> classicGetMovesSaved(int lvl) throws FileNotFoundException, IOException{

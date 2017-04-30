@@ -1,6 +1,7 @@
 package backend;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Classe représentant une partie. Bon nombre de ses informations viennent du board. Elle ajoute d'autres information tel que le nombre de pas
@@ -15,6 +16,12 @@ public class Game {
     public Game(Board board) {
         this.board = board;
         nbSteps=0;
+    }
+    
+    public Game(ArrayList<char[]> puzzleData){
+        Board newboard= new Board();
+        newboard.generateBoard(puzzleData);
+        this.board=newboard;
     }
     
     public void printBoard(){

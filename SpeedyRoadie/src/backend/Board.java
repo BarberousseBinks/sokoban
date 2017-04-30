@@ -27,7 +27,7 @@ public class Board {
     }
     
     
-    public Board(String cheminTxtLab) throws FileNotFoundException, IOException{  //construire le jeu à partir d'un fichier .txt (constructeur)
+    public Board(String cheminTxtLab) throws FileNotFoundException, IOException{  //construire le jeu à partir d'un fichier .xsb (constructeur)
         generateBoard(PuzzleDataManager.readBoard(cheminTxtLab));
     }
     
@@ -36,7 +36,7 @@ public class Board {
      * Méthode susceptible de générer une excpetion sur le fichier n'est pas trouvé où qu'il ne correspond pas aux normes de fichier de data sokoban
      * @param cheminTxtLab le chemin d'accès au fichier
      */
-    public void generateBoard(String path) throws FileNtFoundException,IOException{  //construire le jeu à partir d'un fichier .txt
+    public void generateBoard(String path) throws FileNtFoundException,IOException{  //construire le jeu à partir d'un fichier .xsb
         generateBoard(PuzzleDataManager.readBoard(path));
     }
     
@@ -44,7 +44,7 @@ public class Board {
      * Génère le board à l'aide d'un tableau de char le représentant
      * @param puzzleData le tableau de char représentant le puzzle
      */
-    public void generateBoard(ArrayList<char[]> puzzleData){     //construire le jeu à partir d'une ArrayList de tableau de char [#, ,i,b,o]
+    public void generateBoard(ArrayList<char[]> puzzleData){     //construire le jeu à partir d'une ArrayList de tableau de char
         objectives=new ArrayList<Objectif>();
         tab=new ArrayList<ArrayList<Layoutable>>(); 
         
