@@ -24,14 +24,14 @@ public class PuzzleDataManager {
     /**
      * Renvoit une représentation du niveau sous forme de liste de char à partir d'un fichier contenant cette représentation. 
      * Susceptible de générer des exception si le fichier spécifié est introuvable ou si les données qui le compose ne sont pas des caractères
-     * @param cheminTxtLab
+     * @param xsbPath
      * @return char[] représentation du niveau
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public static ArrayList<char[]> readBoard(String cheminTxtLab) throws FileNotFoundException, IOException{
+    public static ArrayList<char[]> readBoard(String xsbPath) throws FileNotFoundException, IOException{
 
-            BufferedReader in = new BufferedReader(new FileReader(cheminTxtLab));
+            BufferedReader in = new BufferedReader(new FileReader(xsbPath));
 
             ArrayList<char[]> tab = new ArrayList<char[]>();
             char[] tabline;
@@ -88,7 +88,7 @@ public class PuzzleDataManager {
     }
     
     public static void psUpdateSave(int newMove) throws IOException{
-        String path ="CustomMode\\permanSave.mov";
+        String path ="PermanSave\\permanSave.mov";
         updateSave(newMove,path);        
     }
     
@@ -98,9 +98,29 @@ public class PuzzleDataManager {
         }
     }
     
-    public static void psBoardUpdate(String PermanSaveBoardXSBPath) throws FileNotFoundException, UnsupportedEncodingException{
-        PrintWriter writer = new PrintWriter("CustomMode\\permanBoardSave.txt", "UTF-8");
-        writer.println(PermanSaveBoardXSBPath);
+    public static void psBoardUpdate(String xsbPath) throws FileNotFoundException, UnsupportedEncodingException, IOException{
+        ArrayList<char[]> BoardData= readBoard(xsbPath);
+        psBoardUpdate(BoardData);
+    }
+    
+    public static void psBoardUpdate(ArrayList<char[]> BoardData) throws FileNotFoundException, UnsupportedEncodingException{
+        char[][] charBoardData= new char[BoardData.size()][BoardData.get(0).length];
+        for(int i=0;i<BoardData.size();i++){
+            for(int j=0;j<BoardData.get(i).length;j++){
+                charBoardData[i][j]=BoardData.get(i)[j];
+            }
+        }
+        psBoardUpdate(charBoardData);
+    }
+    
+    public static void psBoardUpdate(char[][] BoardData) throws FileNotFoundException, UnsupportedEncodingException{
+        PrintWriter writer = new PrintWriter("PermanSave\\permanBoardSave.xsb", "UTF-8");
+        for(int i=0;i<BoardData.length;i++){
+            for(int j=0;j<BoardData[0].length;j++){
+                writer.print(BoardData[i][j]);
+            }
+            writer.println("");
+        }
         writer.close();
     }
     
@@ -149,7 +169,7 @@ public class PuzzleDataManager {
     }
     
     public static void psBoardReset() throws FileNotFoundException, UnsupportedEncodingException{
-        resetSave("CustomMode\\permanBoardSave.txt");
+        resetSave("PermanSave\\permanBoardSave.xsb");
     }
     
     public static void resetSave(String path){
@@ -163,7 +183,7 @@ public class PuzzleDataManager {
     }
     
     public static void psResetSave(){
-        String path="CustomMode\\permanSave.mov";
+        String path="PermanSave\\permanSave.mov";
         resetSave(path);
     }
     
@@ -181,11 +201,11 @@ public class PuzzleDataManager {
     }
     
     /**
-     * Renvoit true si la permanSave du mode custom est non vide. Sinon renvoit false.
+     * Renvoit true si la permanSave est non vide. Sinon renvoit false.
      * @return boolean
      */
     public static boolean psHasSave(){  
-        String path="CustomMode\\permanSave.mov";
+        String path="PermanSave\\permanSave.mov";
         return hasSave(path);
     }
     
@@ -214,10 +234,8 @@ public class PuzzleDataManager {
      * Renvoit le path associé a la permanSave (le path contenu dans permanBoardSave)
      * @return
      */
-    public static String getPsBoardPath() throws FileNotFoundException, IOException{
-        BufferedReader in = new BufferedReader(new FileReader("CustomMode\\permanBoardSave.txt"));
-        String result=in.readLine();
-        return result;
+    public static ArrayList<char[]> getPsBoardPath() throws FileNotFoundException, IOException{
+        return readBoard("PermanSave\\permanBoardSave.xsb");
     }
     
     public static ArrayList<Integer> classicGetMovesSaved(int lvl) throws FileNotFoundException, IOException{
@@ -226,7 +244,7 @@ public class PuzzleDataManager {
     }
     
     public static ArrayList<Integer> psGetMovesSaved() throws IOException{
-        String path="CustomMode\\permanSave.mov";
+        String path="PermanSave\\permanSave.mov";
         return getMovesSaved(path);
     }
     
@@ -274,13 +292,10 @@ public class PuzzleDataManager {
         return newGame;
     }
     
-    
-    
-    
-    
+  
     public static Game psGetSavedGame() throws FileNotFoundException, UnsupportedEncodingException{ //Les exception sont pour le PsBoardReset()
         try {
-            Game resultGame=getSavedGame(getPsBoardPath(),"CustomMode\\permanSave.mov");
+            Game resultGame=getSavedGame("PermanSave\\permanBoardSave.xsb","PermanSave\\permanSave.mov");
             return resultGame;            
         } catch (Exception ex) {
             psBoardReset();

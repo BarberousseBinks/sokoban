@@ -6,6 +6,7 @@ package frontend;
 
 import backend.PuzzleDataManager;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  *
@@ -19,8 +20,13 @@ public class Main {
      */
     public static void main(String[] args) throws IOException, InterruptedException {
         // TODO code application logic here
-        PuzzleDataManager.psBoardUpdate("Ouioujiji");
-        GuiFrame game = new GuiFrame();
+        ArrayList<Integer> a = PuzzleDataManager.psGetMovesSaved();
+        for(int i=0;i<a.size();i++){
+                System.out.print(a.get(i));
+            }
+            System.out.println("");
+        
+        //GuiFrame game = new GuiFrame();
     }
     
 }

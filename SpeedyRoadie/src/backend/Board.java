@@ -80,8 +80,22 @@ public class Board {
             objectives.add(newgoal);
             return newgoal;
         }
+        else if(d=='!'){
+            Goal newgoal=new Goal();
+            objectives.add(newgoal);
+            newgoal.setContent(new ClassicBox());
+            return newgoal;
+        }
+        else if(d=='*'){
+            Goal newgoal=new Goal();
+            objectives.add(newgoal);
+            newgoal.setContent(new Player());
+            pX=x;
+            pY=y;
+            return newgoal;
+        }
         else{
-            throw new IllegalArgumentException("only [#, ,@,$,.] are accepted in the .txt representing a puzzle");
+            throw new IllegalArgumentException("only [#, ,@,$,.,!,*] are accepted in the .xsb representing a puzzle");
         }
     }
     
