@@ -11,14 +11,21 @@ import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JLabel;
+import javax.swing.JButton;
 
 /**
- *
+ * Classe de bouton standardisée
+ * Un GuiStdButton est un bouton esthétiquement différent d'un JButton normal de par son apparence
+ * Cette classe m'évite de refaire 50 fois les modifications sur chaque bouton
  * @author Louis Dhanis
  */
-public class GuiLabel extends JLabel{
-    public GuiLabel(String text){
+public class GuiStdButton extends JButton{
+    
+    /**
+     * Constructeur du GuiStdButton
+     */
+    public GuiStdButton(){
+        this.setFocusable(false);
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
         ge.getAllFonts();
         
@@ -29,10 +36,21 @@ public class GuiLabel extends JLabel{
             pressStart2P = pressStart2P.deriveFont(20f);
             this.setFont(pressStart2P);
         } catch (IOException | FontFormatException ex) {
-            Logger.getLogger(GuiBgButton.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GuiStdButton.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.setText(text);
         //Code inspiré de https://stackoverflow.com/questions/12691832/how-to-put-an-image-on-a-jbutton
-        this.setForeground(Color.BLACK);
+        this.setBackground(Color.black);
+        this.setForeground(Color.red);
+        this.setBorderPainted(false);
+        this.setFocusPainted(false);
+    }
+
+    /**
+     * Permet de redéfinir le texte du GuiStdButton après son instanciation
+     * @param text
+     */
+    public GuiStdButton(String text){
+        this();
+        this.setText(text);
     }
 }

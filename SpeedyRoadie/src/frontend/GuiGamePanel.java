@@ -24,42 +24,48 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 
 /**
- *
+ * Classe de la partie en cours
  * @author Louis Dhanis
  */
 public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
-    private final ArrayList<ArrayList<GuiElement>> elementArrayList;
+    private final ArrayList<ArrayList<GuiElemButton>> elementArrayList;
     private final int length;
     private final int width;
     private final Game game;
-    private final SpeedyBackground infos;
+    private final GuiBgPanel infos;
     private final JPanel gameContainer;
-    private final SpeedyBackground wrapper;
-    private final GuiLabel steps;
-    private final GuiBgButton exitGame;
-    private final GuiBgButton saveGame;
+    private final GuiBgPanel wrapper;
+    private final GuiStdLabel steps;
+    private final GuiStdButton exitGame;
+    private final GuiStdButton saveGame;
     private final GuiFrame container;
     private final ArrayList<Integer> moveHistory;
     
+    /**
+     * Constructeur de la partie
+     * @param game (le niveau à jouer, c'est un objet du type Game)
+     * @see Game
+     * @param container (le JFrame contenant la partie, pour pouvoir le modifier depuis la partie courante)
+     * @param moves (l'arrayList contenant l'historique des mouvements)
+     */
     public GuiGamePanel(Game game, GuiFrame container, ArrayList<Integer> moves){
+        
         this.moveHistory = moves;
         this.container = container;
-        this.wrapper = new SpeedyBackground("gameGraphics/fade.jpg");
+        this.wrapper = new GuiBgPanel("gameGraphics/fade.jpg");
         this.grabFocus();
         this.addKeyListener(this);
-        
         this.setLayout(new BorderLayout());
-        
-        this.infos = new SpeedyBackground("gameGraphics/steel.jpg");
+        this.infos = new GuiBgPanel("gameGraphics/steel.jpg");
         this.gameContainer = new JPanel();
         //Récupérons le plateau sous forme de tableau de caractère
         //Pour stocker chaque élément dans un ArrayList<ArrayList<GuiElement>>
         //ça sera plus facile pour modifier leur contenu par la suite
         this.game = game;
-        
-        this.steps = new GuiLabel(""+this.game.getNbSteps());
+        this.steps = new GuiStdLabel(""+this.game.getNbSteps());
         
         char[][] initBoard = this.game.getRepr();
+        
         try {
             //Stockons ce tableau dans la permanentSave (si l'utilisateur quitte inopinément la partie, le niveau sera stocké dans le dossier PermanentSave)
             PuzzleDataManager.psSetBoard(initBoard);
@@ -68,13 +74,14 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
             Logger.getLogger(GuiGamePanel.class.getName()).log(Level.SEVERE, null, ex);
         }
         //parcourons ce tableau et stockons chaque élément dans l'arrayList d'arrayList
-        this.elementArrayList = new ArrayList<ArrayList<GuiElement>>();
+        this.elementArrayList = new ArrayList<ArrayList<GuiElemButton>>();
         
+        //Paramétrons le JPanel interne
         width = initBoard.length;
         length = initBoard[0].length;
-        this.exitGame = new GuiBgButton("Exit game...");
+        this.exitGame = new GuiStdButton("Exit game...");
         this.exitGame.addActionListener(this);
-        this.saveGame = new GuiBgButton("Save .mov");
+        this.saveGame = new GuiStdButton("Save .mov");
         this.saveGame.addActionListener(this);
         this.gameContainer.setSize(width*50, length*50);
         this.setSize(length*50 + 200, width*50 + 200);
@@ -82,13 +89,12 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         this.gameContainer.setLayout(new GridLayout(width, length));
         
         for(int i = 0; i < initBoard.length; i++){
-            elementArrayList.add(new ArrayList<GuiElement>());
+            elementArrayList.add(new ArrayList<GuiElemButton>());
             for(int j = 0; j < initBoard[i].length; j++){
                 
-                elementArrayList.get(i).add(new GuiElement(initBoard[i][j], j, i));
+                elementArrayList.get(i).add(new GuiElemButton(initBoard[i][j], j, i));
                 this.gameContainer.add(elementArrayList.get(i).get(j));
                 elementArrayList.get(i).get(j).addActionListener(this);
-                
             }
         }
         
@@ -98,10 +104,11 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         this.infos.add(this.saveGame);
         this.add(this.infos, BorderLayout.NORTH);     
         this.add(this.wrapper, BorderLayout.CENTER);
-        
-        
     }
     
+    /**
+     * Permet de sauvegarder la partie au format mov à tout moment de la partie
+     */
     public void saveState(){
         // Code inspiré de https://stackoverflow.com/questions/356671/jfilechooser-showsavedialog-how-to-set-suggested-file-name
         // et de https://stackoverflow.com/questions/14589386/how-to-save-file-using-jfilechooser-in-java
@@ -123,6 +130,10 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         }
     }
     
+    /**
+     * Méthode PlayReader pour jouer un mouvement depuis le JFrame (lecture du .mov pour le "replay" de la partie sauvegardée)
+     * @param i le mouvement à jouer
+     */
     public void playReader(int i){
         switch(i){
             case 0:
@@ -141,11 +152,15 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         }
     }
     
+    /**
+     * Rafraîchir le JPanel
+     * affiche le jeu en son état actuel dans sa représentation en tableau de caractère
+     */
     public void updatePanel(){
         
         char[][] initBoard = this.game.getRepr();
         for(int i = 0; i < initBoard.length; i++){
-            elementArrayList.add(new ArrayList<GuiElement>());
+            elementArrayList.add(new ArrayList<GuiElemButton>());
             for(int j = 0; j < initBoard[i].length; j++){
                 if(initBoard[i][j] != elementArrayList.get(i).get(j).getContent()){
                     elementArrayList.get(i).get(j).setContent(initBoard[i][j]);
@@ -161,6 +176,11 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
     
     }   
     
+    /**
+     * Renvoie l'historique des mouvements sous forme de chaîne de caractère
+     * @deprecated 
+     * @return historique des mouvements
+     */
     public String moveHistory(){
         String str = "";
         for (Object move : this.moveHistory) {
@@ -169,10 +189,20 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         return str;
     }
     
+    /**
+     * Vérifie si la partie est gagnée ou non
+     * @return true si la partie est gagnée, false sinon
+     */
     public boolean gameWon(){
         return this.game.isGameWon();
     }
     
+    /**
+     * Modifie la position du joueur via le KeyListener ou via le déplacement en lecture du MOV
+     * @param x la direction en x
+     * @param y la directon en y
+     * @param save true s'il faut enregistrer le mouvement dans l'arrayList (ce n'est pas le cas si la méthode est appelée pour déplacer via la lecture du MOV)
+     */
     private void moveKey(int x, int y, boolean save){
         int move = this.game.movePlayer(x,y);
         if(move >= 0 && save == true){
@@ -186,12 +216,15 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         this.setVisible(true);
     }
     
-
+    /**
+     *
+     * @param ae
+     */
     @Override
     public void actionPerformed(ActionEvent ae) {
         Object source = ae.getSource();
-        if(source.getClass() == GuiElement.class){
-            GuiElement temp = (GuiElement)source;
+        if(source.getClass() == GuiElemButton.class){
+            GuiElemButton temp = (GuiElemButton)source;
             int move = this.game.movePlayerMouse(temp.getPosX(), temp.getPosY());
             if(move >= 0){
                 this.moveHistory.add(move);
@@ -211,7 +244,6 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
     public void keyTyped(KeyEvent ke) {
 
     }
-
     @Override
     public void keyPressed(KeyEvent ke) {
         switch(ke.getKeyCode()){
@@ -229,7 +261,6 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
                 break;
         }
     }
-
     @Override
     public void keyReleased(KeyEvent ke) {
 

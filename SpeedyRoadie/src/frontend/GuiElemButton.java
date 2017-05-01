@@ -11,38 +11,50 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 /**
- *
+ * Classe représentant les éléments (boutons cliquables du plateau de jeu)
+ * 
  * @author Louis Dhanis
  */
-public class GuiElement extends JButton{
+public class GuiElemButton extends JButton{
 
     /**
      * x,y sont les coordonnées du bouton.
      * Cela permet de déplacer facilement le joueur.
      * En stockant les coordonnées de l'élément dans la classe du bouton, je n'ai qu'à appeler ces variables locales lors de l'utilisation des méthodes programmées dans la partie backend
      */
-    protected int x;
-    protected int y;
+    protected int x, y;
     private final int height = 50;
     private final int width = 50;
     private char content;
     
+    /**
+     * Retourne la hauteur (standardisée à 50px) du bouton
+     * @return height
+     */
     @Override
     public int getHeight(){
         return this.height;
     }
     
+    /**
+     * Retourne la largeur (standardisée à 50px) du bouton
+     * @return width
+     */
     @Override
     public int getWidth(){
         return this.width;
     }
     
+    /**
+     * Retourne le caractère représentant l'élément dans un plateau XSB
+     * @return content
+     */
     public char getContent(){
         return this.content;
     }
     /**
      * Renvoie la coordonnée en x du bouton sur la map.
-     * @return
+     * @return xPos
      */
     public int getPosX(){
         return this.x;
@@ -50,12 +62,16 @@ public class GuiElement extends JButton{
 
     /**
      * Renvoie la coordonnée en y du bouton sur la map.
-     * @return
+     * @return yPos
      */
     public int getPosY(){
         return this.y;
     }
     
+    /**
+     * Modifie le caractère représentant l'élément dans le plateau XSB
+     * @param content
+     */
     public void setContent(char content){
         this.setFocusable(false);
         this.content = content;
@@ -143,7 +159,7 @@ public class GuiElement extends JButton{
      * @param x
      * @param y
      */
-    public GuiElement(char content, int x, int y){
+    public GuiElemButton(char content, int x, int y){
         setContent(content);
         this.x = x; 
         this.y = y;
