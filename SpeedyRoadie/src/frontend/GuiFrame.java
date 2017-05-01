@@ -41,6 +41,7 @@ public class GuiFrame extends JFrame implements ActionListener{
     private GuiStdButton saveMov = null;
     
     private Game level = null;
+    private StoryMode storyChain;
     private ArrayList<Integer> mov = null;
     private int gameMode = -1; 
     //GAME MODES:
@@ -101,11 +102,13 @@ public class GuiFrame extends JFrame implements ActionListener{
      * @throws InterruptedException 
      */
     private void readLevel(GuiGamePanel gamePanel, ArrayList<Integer> mov) throws InterruptedException{
-        
+        gamePanel.userEditable = false;
         System.out.println("Live level reading");
         int delay = 150;
         double del = delay/1000;
+        
         this.setPane(gamePanel, false);
+        System.out.println("EDITABLE:   - "+gamePanel.isUserEditable());
         ClockListener timedMoves = new ClockListener(gamePanel, mov);
         System.out.println("One step each "+del+" seconds");
         Timer t = new Timer(delay, timedMoves);
@@ -113,6 +116,7 @@ public class GuiFrame extends JFrame implements ActionListener{
         t.start();
         this.mainPanel.setFocusable(true);
         this.mainPanel.grabFocus();
+
     }
     
     /**
@@ -134,6 +138,7 @@ public class GuiFrame extends JFrame implements ActionListener{
 
             if(counter == movements.size()){
                 System.out.println(".MOV read successfully");
+                gamePanel.userEditable = true;
                 Timer t = (Timer)e.getSource();
                 t.stop();
             }

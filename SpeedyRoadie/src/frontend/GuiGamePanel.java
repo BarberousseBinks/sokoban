@@ -29,6 +29,7 @@ import javax.swing.JPanel;
  */
 public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
     private final ArrayList<ArrayList<GuiElemButton>> elementArrayList;
+    public boolean userEditable = true;
     private final int length;
     private final int width;
     private final Game game;
@@ -49,7 +50,6 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
      * @param moves (l'arrayList contenant l'historique des mouvements)
      */
     public GuiGamePanel(Game game, GuiFrame container, ArrayList<Integer> moves){
-        
         this.moveHistory = moves;
         this.container = container;
         this.wrapper = new GuiBgPanel("gameGraphics/fade.jpg");
@@ -106,13 +106,21 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         this.add(this.wrapper, BorderLayout.CENTER);
     }
     
+    public void setUserEditable(boolean edit){
+        this.userEditable = edit;
+    }
+    
+    public boolean isUserEditable(){
+        return this.userEditable;
+    }
+    
     /**
      * Permet de sauvegarder la partie au format mov à tout moment de la partie
      */
     public void saveState(){
         // Code inspiré de https://stackoverflow.com/questions/356671/jfilechooser-showsavedialog-how-to-set-suggested-file-name
         // et de https://stackoverflow.com/questions/14589386/how-to-save-file-using-jfilechooser-in-java
-        String sb = moveHistory();
+        //String sb = moveHistory();
         JFileChooser chooser = new JFileChooser();
         chooser.setCurrentDirectory(new File("/home"));
         chooser.setSelectedFile(new File("sauvegarde.mov"));
@@ -223,7 +231,8 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
     @Override
     public void actionPerformed(ActionEvent ae) {
         Object source = ae.getSource();
-        if(source.getClass() == GuiElemButton.class){
+        System.out.println(this.userEditable);
+        if(source.getClass() == GuiElemButton.class && this.userEditable){
             GuiElemButton temp = (GuiElemButton)source;
             int move = this.game.movePlayerMouse(temp.getPosX(), temp.getPosY());
             if(move >= 0){
@@ -246,19 +255,22 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
     }
     @Override
     public void keyPressed(KeyEvent ke) {
-        switch(ke.getKeyCode()){
-            case 38:
-                this.moveKey(0, 1, true);
-                break;
-            case 40:
-                this.moveKey(0, -1, true);
-                break;
-            case 37:
-                this.moveKey(-1, 0, true);
-                break;
-            case 39:
-                this.moveKey(1, 0, true);
-                break;
+        System.out.println(this.userEditable);
+        if(this.userEditable){
+            switch(ke.getKeyCode()){
+                case 38:
+                    this.moveKey(0, 1, true);
+                    break;
+                case 40:
+                    this.moveKey(0, -1, true);
+                    break;
+                case 37:
+                    this.moveKey(-1, 0, true);
+                    break;
+                case 39:
+                    this.moveKey(1, 0, true);
+                    break;
+            }
         }
     }
     @Override
