@@ -20,7 +20,6 @@ public class Main {
      * @throws java.lang.InterruptedException
      */
     public static void main(String[] args) throws IOException, InterruptedException {
-        // TODO code application logic here
         GuiFrame game = new GuiFrame();
     }
     

@@ -6,8 +6,10 @@
 package backend;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -135,7 +137,7 @@ public class PuzzleDataManager {
         if(newMove < 0 || newMove > 3){
             throw new IllegalArgumentException("newMove must take the value of 0, 1, 2 or 3");
         }
-        
+        /*
         BufferedReader in = new BufferedReader(new FileReader(path));
 
         int tabline;
@@ -155,6 +157,16 @@ public class PuzzleDataManager {
         }
         writer.println(String.valueOf(newMove));
         writer.close();
+        */
+        try(FileWriter fw = new FileWriter(path, true);
+        BufferedWriter bw = new BufferedWriter(fw);
+        PrintWriter out = new PrintWriter(bw))
+        {
+       // out.println("");
+        out.println(Integer.toString(newMove));
+        } catch (IOException e) {
+            throw new IOException("Unexpected error while updating save");
+        }
     }
     
     /**
