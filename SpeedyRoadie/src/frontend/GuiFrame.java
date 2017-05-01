@@ -61,10 +61,10 @@ public class GuiFrame extends JFrame implements ActionListener{
      * @throws IOException
      */
     public GuiFrame() throws IOException{
-        
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
         this.setUndecorated(true);
+        
         setMenuScreen();
         
         //Opens a litle frame if there's a game which was not finished
@@ -96,8 +96,12 @@ public class GuiFrame extends JFrame implements ActionListener{
      */
     private void setPane(JPanel panel, boolean focus){
         this.mainPanel = panel;
-        this.mainPanel.setFocusable(focus);
         this.setContentPane(this.mainPanel);
+        this.mainPanel.setFocusable(focus);
+        if(focus){
+            this.mainPanel.requestFocus();
+            this.mainPanel.requestFocusInWindow();
+        }
         this.setVisible(true);
     }
     /**
@@ -215,6 +219,7 @@ public class GuiFrame extends JFrame implements ActionListener{
         JPanel blankContainer = new JPanel();
         
         playLevel = new GuiStdButton("Commencer le niveau");
+        playLevel.addActionListener(this);
         
         LevelNode tempNode = storyChain.getNode();
         
@@ -231,7 +236,7 @@ public class GuiFrame extends JFrame implements ActionListener{
         container.add(menu, BorderLayout.CENTER);
         container.add(playLevel, BorderLayout.SOUTH);
         
-        setPane(container, false);
+        setPane(container, true);
     }
     
     public void showStoryLevels(){
@@ -254,7 +259,7 @@ public class GuiFrame extends JFrame implements ActionListener{
         }
         
         menu.add(buttons);
-        setPane(menu, false);
+        setPane(menu, true);
     }
     /**
      * Permet de récuperer les actions jouées par les boutons
@@ -267,6 +272,11 @@ public class GuiFrame extends JFrame implements ActionListener{
         if(source == story){ //GAMEMODE 0
             this.gameMode = 0;
             showStoryLevels();
+        }
+        else if(source == playLevel){
+            this.gameMode = 0;
+            this.level = currentLevel.getLevel();
+            setPane(new GuiGamePanel(this.level, this, this.mov), true);
         }
         else if(source == random){ //GAMEMODE 1 - Marche à suivre pour le mode aléatoire
             try {
@@ -354,6 +364,7 @@ public class GuiFrame extends JFrame implements ActionListener{
         }
         else if(source == backToMenu){
             setMenuScreen();
+            this.mov = new ArrayList<>();
         }
         else if(source.getClass() == GuiLevelSelectorBtn.class){
             
@@ -369,6 +380,7 @@ public class GuiFrame extends JFrame implements ActionListener{
             
             readStory();
         }
+
         
     }
     
