@@ -16,9 +16,20 @@ public class LevelNode {
     private final Game current;
     private LevelNode next = null;
     public String text;
+    public int steps;
+    public int id;
     
-    LevelNode(Game current){
+    LevelNode(Game current, String text, int steps, int id){
         this.current = current;
+        this.text = text;
+        this.steps = steps;
+        this.id = id;
+    }
+    
+    @Override
+    public String toString(){
+        String descr = "LEVEL "+id+" - "+text;
+        return descr;
     }
     
     /**
@@ -47,9 +58,9 @@ public class LevelNode {
     
     /**
      * Renvoie true s'il existe un noeud après celui-ci
-     * @return isNextNode
+     * @return hasNextNode
      */
-    public boolean isNextNode(){
+    public boolean hasNextNode(){
         if(this.next == null){
             return false;
         }

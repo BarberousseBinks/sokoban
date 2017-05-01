@@ -33,9 +33,9 @@ public class StoryMode {
      * Constructeur prenant le premier niveau en paramètre
      * @param level (premier niveau courrant)
      */
-    StoryMode(Game level){
+    StoryMode(LevelNode node){
         this();
-        this.node = new LevelNode(level);
+        this.node = node;
     }
     
     /**
@@ -46,29 +46,53 @@ public class StoryMode {
         return this.node.getLevel();
     }
     
+    public LevelNode getNode(){
+        return this.node;
+    }
+    
+    public LevelNode getLastNode(){
+        if(this.node == null){
+            return null;
+        }
+        else{
+            LevelNode temp = this.node;
+            while(temp.hasNextNode()){
+                temp = temp.getNextNode();
+            }
+            return temp;
+        }
+    }
+    
+    public boolean isNull(){
+        if(this.node == null){
+            return true;
+        }
+        return false;
+    }
+    
     /**
      * Place le curseur de la liste chaînée sur le niveau suivant
      */
-    public void goNextLevel(){
+    public void goNextNode(){
         LevelNode temp = this.node;
         this.node = temp.getNextNode();
     }
     
     /**
      * Ajoute un niveau au mode histoire (utile pour l'initialisation)
-     * @param level (le niveau à ajouter)
+     * @param node
      */
-    public void addLevel(Game level){
+    public void addLevel(LevelNode node){
         if(this.node == null){
-            this.node = new LevelNode(level);
+            this.node = node;
         }
         else{
             LevelNode parser = this.node;
-            while(parser.isNextNode()){
+            while(parser.hasNextNode()){
                 LevelNode temp = parser;
                 parser = temp.getNextNode();
             }
-            parser.setNextNode(new LevelNode(level));
+            parser.setNextNode(node);
         }
     }
     
@@ -82,28 +106,25 @@ public class StoryMode {
             //optional, but recommended
             //read this - http://stackoverflow.com/questions/13786607/normalization-in-dom-parsing-with-java-how-does-it-work
             doc.getDocumentElement().normalize();
-
             System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
-
             NodeList nList = doc.getElementsByTagName("level");
-
             System.out.println("----------------------------");
-
             for (int temp = 0; temp < nList.getLength(); temp++) {
 
                 Node nNode = nList.item(temp);
-
                 System.out.println("\nCurrent Element :" + nNode.getNodeName());
-
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 
                     Element eElement = (Element) nNode;
+                        
+                    String text = eElement.getElementsByTagName("text").item(0).getTextContent();
+                    int nbSteps = Integer.parseInt(eElement.getElementsByTagName("nbsteps").item(0).getTextContent());
+                    int id = Integer.parseInt(eElement.getAttribute("id"));
+                    String path = "ClassicMode/maps/"+id+".xsb";
 
-                    System.out.println("Level id : " + eElement.getAttribute("id"));
-                    System.out.println("Text : " + eElement.getElementsByTagName("text").item(0).getTextContent());
-                    System.out.println("Finished : " + eElement.getElementsByTagName("finished").item(0).getTextContent());
-                    System.out.println("Nbsteps : " + eElement.getElementsByTagName("nbsteps").item(0).getTextContent());
-
+                    this.addLevel(new LevelNode(new Game(path),text,nbSteps,id));
+                    System.out.println(this.getLastNode().toString());
+                    
                 }
             }
         } 

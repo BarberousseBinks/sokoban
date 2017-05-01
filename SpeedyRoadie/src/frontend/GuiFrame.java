@@ -9,6 +9,7 @@ import backend.PuzzleDataManager;
 import static backend.PuzzleDataManager.getMovesSaved;
 import backend.PuzzleGenerator;
 import java.awt.BorderLayout;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -20,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -38,11 +40,12 @@ public class GuiFrame extends JFrame implements ActionListener{
     private GuiStdButton loadGame = null;
     private GuiStdButton exitGame = null;
     private GuiStdButton backToMenu = null;
-    private GuiStdButton saveMov = null;
+    private GuiStdButton playLevel;
     
+    private LevelNode currentLevel = null;
+    private final StoryMode storyChain;
     private Game level = null;
-    private StoryMode storyChain;
-    private ArrayList<Integer> mov = null;
+    public ArrayList<Integer> mov = new ArrayList<>();
     private int gameMode = -1; 
     //GAME MODES:
     // **INIT : -1
@@ -82,6 +85,9 @@ public class GuiFrame extends JFrame implements ActionListener{
                 PuzzleDataManager.psResetSave();
             }
         }
+        
+        storyChain = new StoryMode(); //initialisation de la chaîne des niveaux
+        storyChain.initStory(); //ParserXML
     }
     /**
      * Définit le JPanel à mettre en contentPane de notre JFrame (visible)
@@ -104,7 +110,7 @@ public class GuiFrame extends JFrame implements ActionListener{
     private void readLevel(GuiGamePanel gamePanel, ArrayList<Integer> mov) throws InterruptedException{
         gamePanel.userEditable = false;
         System.out.println("Live level reading");
-        int delay = 150;
+        int delay = 250;
         double del = delay/1000;
         
         this.setPane(gamePanel, false);
@@ -168,12 +174,6 @@ public class GuiFrame extends JFrame implements ActionListener{
         GuiBgPanel buttons = new GuiBgPanel("gameGraphics/steel.jpg");
         menu.add(buttons, BorderLayout.SOUTH);
         
-        if(gameMode == 0){ //If gameMode is Story Mode
-            story = new GuiStdButton("Niveau suivant");
-            story.addActionListener(this);       
-            buttons.add(story);
-        }
-        
         backToMenu = new GuiStdButton("Retour à l'accueil");
         backToMenu.addActionListener(this);       
         buttons.add(backToMenu);
@@ -208,6 +208,54 @@ public class GuiFrame extends JFrame implements ActionListener{
         
     }
     
+    public void readStory(){
+        JPanel container = new JPanel();
+        container.setLayout(new BorderLayout());
+        GuiBgPanel menu = new GuiBgPanel("gameGraphics/fade.jpg");
+        JPanel blankContainer = new JPanel();
+        
+        playLevel = new GuiStdButton("Commencer le niveau");
+        
+        LevelNode tempNode = storyChain.getNode();
+        
+        final String html1 = "<html><body style='width: ";
+        final String html2 = "px'>";
+        
+        GuiStdLabel text = new GuiStdLabel(html1 + " 350 " + html2 + tempNode.text);
+        
+        blankContainer.add(text);
+        
+        menu.setLayout(new GridBagLayout());
+        menu.add(blankContainer);
+        
+        container.add(menu, BorderLayout.CENTER);
+        container.add(playLevel, BorderLayout.SOUTH);
+        
+        setPane(container, false);
+    }
+    
+    public void showStoryLevels(){
+        GuiBgPanel menu = new GuiBgPanel("gameGraphics/background.jpg");
+        GuiBgPanel buttons = new GuiBgPanel("gameGraphics/steel.jpg");
+        LevelNode tempNode = storyChain.getNode();
+        
+        boolean isLast = false;
+        while(!isLast){
+            
+            GuiLevelSelectorBtn tempButton = new GuiLevelSelectorBtn(""+tempNode.id, tempNode.id);
+            tempButton.addActionListener(this);
+            
+            buttons.add(tempButton);
+            tempNode = tempNode.getNextNode();
+            
+            if(tempNode == null){
+                isLast = true;
+            }
+        }
+        
+        menu.add(buttons);
+        setPane(menu, false);
+    }
     /**
      * Permet de récuperer les actions jouées par les boutons
      * @param ae
@@ -218,8 +266,7 @@ public class GuiFrame extends JFrame implements ActionListener{
         
         if(source == story){ //GAMEMODE 0
             this.gameMode = 0;
-            storyChain = new StoryMode(); //initialisation de la chaîne des niveaux
-            storyChain.initStory(); //ParserXML
+            showStoryLevels();
         }
         else if(source == random){ //GAMEMODE 1 - Marche à suivre pour le mode aléatoire
             try {
@@ -307,6 +354,20 @@ public class GuiFrame extends JFrame implements ActionListener{
         }
         else if(source == backToMenu){
             setMenuScreen();
+        }
+        else if(source.getClass() == GuiLevelSelectorBtn.class){
+            
+            GuiLevelSelectorBtn btn = (GuiLevelSelectorBtn) source;
+            
+            int id = btn.node;
+            
+            while(storyChain.getNode().id < id){
+                storyChain.goNextNode();
+            }
+            
+            currentLevel = storyChain.getNode();
+            
+            readStory();
         }
         
     }
