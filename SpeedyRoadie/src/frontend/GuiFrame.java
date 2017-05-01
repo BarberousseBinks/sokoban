@@ -226,6 +226,7 @@ public class GuiFrame extends JFrame implements ActionListener{
                             File saveFile = movFileChooser.getSelectedFile();//MOV FILE
                             
                             this.mov = getMovesSaved(saveFile.getPath());//Getting ArrayList from file
+                            System.out.println(saveFile.getPath());
 
                             if(this.mov.isEmpty()){
                                 System.out.println("File was empty...");

@@ -57,9 +57,9 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         //ça sera plus facile pour modifier leur contenu par la suite
         this.game = game;
         
-        this.steps = new GuiLabel(""+this.game.getNbSteps());
+        this.steps = new GuiLabel(""+this.moveHistory.size());
         
-        char[][] initBoard = game.getRepr();
+        char[][] initBoard = this.game.getRepr();
         //parcourons ce tableau et stockons chaque élément dans l'arrayList d'arrayList
         
         this.elementArrayList = new ArrayList<ArrayList<GuiElement>>();
