@@ -47,6 +47,7 @@ public class GuiFrame extends JFrame implements ActionListener{
 
     
     public GuiFrame() throws IOException{
+        
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
         this.setUndecorated(true);
@@ -55,7 +56,7 @@ public class GuiFrame extends JFrame implements ActionListener{
             int n = JOptionPane.showConfirmDialog(null,"Voulez-vous continuer la partie en cours?","Partie quittée inopinément",JOptionPane.YES_NO_OPTION);
             if(n == 0){//oui
                 try {
-                    this.level = PuzzleDataManager.psGetSavedGame();
+                    this.level = new Game("PermanSave/permanBoardSave.xsb");
                     this.mov = PuzzleDataManager.psGetMovesSaved();
                     this.readLevel(new GuiGamePanel(this.level, this, this.mov), this.mov);
                 } catch (InterruptedException ex) {
@@ -78,15 +79,16 @@ public class GuiFrame extends JFrame implements ActionListener{
     
     private void readLevel(GuiGamePanel gamePanel, ArrayList<Integer> mov) throws InterruptedException{
         
-        System.out.println("lecture du niveau");
+        System.out.println("Live level reading");
         
         this.setPane(gamePanel, false);
         ClockListener timedMoves = new ClockListener(gamePanel, mov);
-        System.out.println("On ajoute un timer toutes les 0.2 secondes");
+        System.out.println("One step each 0.2 seconds");
         Timer t = new Timer(200, timedMoves);
 
         t.start();
         this.mainPanel.setFocusable(true);
+        this.mainPanel.grabFocus();
     }
     
     private class ClockListener implements ActionListener { // Clock Listener class for timing the reading of the map
@@ -104,13 +106,13 @@ public class GuiFrame extends JFrame implements ActionListener{
         public void actionPerformed(ActionEvent e) {
 
             if(counter == movements.size()){
-                System.out.println("On a fini de lire l'ArrayList");
+                System.out.println(".MOV read successfully");
                 Timer t = (Timer)e.getSource();
                 t.stop();
             }
             else{
                 gamePanel.playReader(movements.get(counter));
-                System.out.println("moved: "+movements.get(counter));
+                System.out.println(".MOV read: "+movements.get(counter));
                 counter++;
             }
         }
@@ -181,16 +183,16 @@ public class GuiFrame extends JFrame implements ActionListener{
                 this.mov = new ArrayList<Integer>();
                 switch(levelDifficultySelector){
                     case "Facile":
-                        this.level = new Game(PuzzleGenerator.generateBoard(4,4,2));
+                        this.level = new Game(PuzzleGenerator.generateBoard(4,4,5));
                         break;
                     case "Moyen":
-                        this.level = new Game(PuzzleGenerator.generateBoard(4,4,4));
+                        this.level = new Game(PuzzleGenerator.generateBoard(4,4,7));
                         break;
                     case "Difficile":
-                        this.level = new Game(PuzzleGenerator.generateBoard(5,5,7));
+                        this.level = new Game(PuzzleGenerator.generateBoard(5,5,10));
                         break;
                     case "HARDCOOOOORE":
-                        this.level = new Game(PuzzleGenerator.generateBoard(5,5,9));
+                        this.level = new Game(PuzzleGenerator.generateBoard(5,5,15));
                         break; 
                 }
                 this.setPane(new GuiGamePanel(this.level, this, this.mov), true);

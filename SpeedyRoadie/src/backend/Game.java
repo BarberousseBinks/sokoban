@@ -51,7 +51,7 @@ public class Game {
      */
     public int movePlayer(int x,int y){
         int result=board.movePlayer(x, y);
-        System.out.println(result);
+        System.out.println("moving: "+result);
         if(result!=-1){
             nbSteps=nbSteps+1;
         }

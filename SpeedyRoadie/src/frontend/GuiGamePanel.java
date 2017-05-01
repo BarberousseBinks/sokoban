@@ -14,13 +14,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 /**
@@ -57,11 +57,17 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         //ça sera plus facile pour modifier leur contenu par la suite
         this.game = game;
         
-        this.steps = new GuiLabel(""+this.moveHistory.size());
+        this.steps = new GuiLabel(""+this.game.getNbSteps());
         
         char[][] initBoard = this.game.getRepr();
+        try {
+            //Stockons ce tableau dans la permanentSave (si l'utilisateur quitte inopinément la partie, le niveau sera stocké dans le dossier PermanentSave)
+            PuzzleDataManager.psSetBoard(initBoard);
+            
+        } catch (FileNotFoundException | UnsupportedEncodingException ex) {
+            Logger.getLogger(GuiGamePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
         //parcourons ce tableau et stockons chaque élément dans l'arrayList d'arrayList
-        
         this.elementArrayList = new ArrayList<ArrayList<GuiElement>>();
         
         width = initBoard.length;
@@ -119,16 +125,16 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
     
     public void playReader(int i){
         switch(i){
-            case '0':
+            case 0:
                 this.moveKey(0, 1, false);
                 break;
-            case '2':
+            case 2:
                 this.moveKey(0, -1, false);
                 break;
-            case '3':
+            case 3:
                 this.moveKey(-1, 0, false);
                 break;
-            case '1':
+            case 1:
                 this.moveKey(1, 0, false);
                 break;
                 
@@ -172,7 +178,7 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         if(move >= 0 && save == true){
             this.moveHistory.add(move);
             try{
-                PuzzleDataManager.psUpdateSave(this.moveHistory);
+                PuzzleDataManager.psUpdateSave(move);
             }
             catch(Exception e){}
         }
