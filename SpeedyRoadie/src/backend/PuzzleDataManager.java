@@ -282,7 +282,7 @@ public class PuzzleDataManager {
     public static Game classicGetSavedGame(int lvl) throws IOException{
 
         
-        Game newGame=new Game("ClassicMode\\maps\\"+String.valueOf(lvl)+".xsb");
+        Game newGame=new Game("ClassicMode\\maps\\"+Integer.toString(lvl)+".xsb");
         ArrayList<Integer> movesPlayed=classicGetMovesSaved(lvl);
         for(int i=0;i<movesPlayed.size();i++){
             if(movesPlayed.get(i)==0){
