@@ -181,12 +181,15 @@ public class GuiFrame extends JFrame implements ActionListener{
         
         backToMenu = new GuiStdButton("Retour à l'accueil");
         backToMenu.addActionListener(this);  
+        buttons.add(backToMenu);
         if(this.gameMode == 0){
             nextLevel = new GuiLevelSelectorBtn("Niveau suivant...", this.currentLevel.id+1);
             nextLevel.addActionListener(this);
             buttons.add(nextLevel);
+        }else if(this.gameMode == 1){
+            
         }
-        buttons.add(backToMenu);
+        
         
         setPane(menu, true);
     }

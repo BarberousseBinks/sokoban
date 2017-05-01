@@ -8,6 +8,7 @@ import backend.Game;
 import backend.PuzzleDataManager;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -97,7 +98,7 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
                 elementArrayList.get(i).get(j).addActionListener(this);
             }
         }
-        
+        this.wrapper.setLayout(new GridBagLayout());
         this.wrapper.add(this.gameContainer);
         this.infos.add(this.steps);
         this.infos.add(this.exitGame);
