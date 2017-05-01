@@ -40,6 +40,7 @@ public class GuiFrame extends JFrame implements ActionListener{
     private GuiStdButton loadGame = null;
     private GuiStdButton exitGame = null;
     private GuiStdButton backToMenu = null;
+    private GuiLevelSelectorBtn nextLevel;
     private GuiStdButton playLevel;
     
     private LevelNode currentLevel = null;
@@ -179,7 +180,12 @@ public class GuiFrame extends JFrame implements ActionListener{
         menu.add(buttons, BorderLayout.SOUTH);
         
         backToMenu = new GuiStdButton("Retour à l'accueil");
-        backToMenu.addActionListener(this);       
+        backToMenu.addActionListener(this);  
+        if(this.gameMode == 0){
+            nextLevel = new GuiLevelSelectorBtn("Niveau suivant...", this.currentLevel.id+1);
+            nextLevel.addActionListener(this);
+            buttons.add(nextLevel);
+        }
         buttons.add(backToMenu);
         
         setPane(menu, true);
@@ -377,7 +383,6 @@ public class GuiFrame extends JFrame implements ActionListener{
             }
             
             currentLevel = storyChain.getNode();
-            
             readStory();
         }
 
