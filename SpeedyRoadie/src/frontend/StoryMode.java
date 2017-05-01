@@ -5,6 +5,13 @@
 package frontend;
 
 import backend.Game;
+import java.io.File;
+import java.io.IOException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.*;
+import org.xml.sax.SAXException;
 
 /**
  * Classe représentant le mode Histoire du jeu
@@ -52,12 +59,55 @@ public class StoryMode {
      * @param level (le niveau à ajouter)
      */
     public void addLevel(Game level){
-        LevelNode parser = this.node;
-        while(parser.isNextNode()){
-            LevelNode temp = parser;
-            parser = temp.getNextNode();
+        if(this.node == null){
+            this.node = new LevelNode(level);
         }
-        parser.setNextNode(new LevelNode(level));
+        else{
+            LevelNode parser = this.node;
+            while(parser.isNextNode()){
+                LevelNode temp = parser;
+                parser = temp.getNextNode();
+            }
+            parser.setNextNode(new LevelNode(level));
+        }
+    }
+    
+    public void initStory(){ //Code adapté de https://www.mkyong.com/java/how-to-read-xml-file-in-java-dom-parser/
+        try {
+            File fXmlFile = new File("ClassicMode/sauvegarde.xml");
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(fXmlFile);
+
+            //optional, but recommended
+            //read this - http://stackoverflow.com/questions/13786607/normalization-in-dom-parsing-with-java-how-does-it-work
+            doc.getDocumentElement().normalize();
+
+            System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
+
+            NodeList nList = doc.getElementsByTagName("level");
+
+            System.out.println("----------------------------");
+
+            for (int temp = 0; temp < nList.getLength(); temp++) {
+
+                Node nNode = nList.item(temp);
+
+                System.out.println("\nCurrent Element :" + nNode.getNodeName());
+
+                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+
+                    Element eElement = (Element) nNode;
+
+                    System.out.println("Level id : " + eElement.getAttribute("id"));
+                    System.out.println("Text : " + eElement.getElementsByTagName("text").item(0).getTextContent());
+                    System.out.println("Finished : " + eElement.getElementsByTagName("finished").item(0).getTextContent());
+                    System.out.println("Nbsteps : " + eElement.getElementsByTagName("nbsteps").item(0).getTextContent());
+
+                }
+            }
+        } 
+        catch (ParserConfigurationException | SAXException | IOException | DOMException e) {}
     }
     
 }

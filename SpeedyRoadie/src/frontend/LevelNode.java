@@ -15,6 +15,7 @@ import backend.Game;
 public class LevelNode {
     private final Game current;
     private LevelNode next = null;
+    public String text;
     
     LevelNode(Game current){
         this.current = current;

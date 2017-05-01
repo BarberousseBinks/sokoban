@@ -218,7 +218,8 @@ public class GuiFrame extends JFrame implements ActionListener{
         
         if(source == story){ //GAMEMODE 0
             this.gameMode = 0;
-            
+            storyChain = new StoryMode(); //initialisation de la chaîne des niveaux
+            storyChain.initStory(); //ParserXML
         }
         else if(source == random){ //GAMEMODE 1 - Marche à suivre pour le mode aléatoire
             try {

@@ -2,23 +2,53 @@
 
 <story>
   <level id="1">
+    <text>Bla bla bla premier niveau de SPEEDYROADIE</text>
+    <finished>false</finished>
+    <nbsteps>0</nbsteps>
   </level>
   <level id="2">
+    <text>Oh un deuxième niveau</text>
+    <finished>false</finished>
+    <nbsteps>0</nbsteps>
   </level>
   <level id="3">
+    <text>Et un troisième maintenant</text>
+    <finished>false</finished>
+    <nbsteps>0</nbsteps>
   </level>
   <level id="4">
+    <text>Pouf, un quatrième</text>
+    <finished>false</finished>
+    <nbsteps>0</nbsteps>
   </level>
   <level id="5">
+    <text>et Pif, un cinquième</text>
+    <finished>false</finished>
+    <nbsteps>0</nbsteps>
   </level>
   <level id="6">
+    <text>Chtoink le niveau six</text>
+    <finished>false</finished>
+    <nbsteps>0</nbsteps>
   </level>
   <level id="7">
+    <text>badaboum 7!</text>
+    <finished>false</finished>
+    <nbsteps>0</nbsteps>
   </level>
   <level id="8">
+    <text>J'ai plus d'onomatopées pour le niveau 8 par contre...</text>
+    <finished>false</finished>
+    <nbsteps>0</nbsteps>
   </level>
   <level id="9">
+    <text>Le niveau 9 </text>
+    <finished>false</finished>
+    <nbsteps>0</nbsteps>
   </level>
   <level id="10">
+    <text>Le niveau 10.</text>
+    <finished>false</finished>
+    <nbsteps>0</nbsteps>
   </level>
 </story>
