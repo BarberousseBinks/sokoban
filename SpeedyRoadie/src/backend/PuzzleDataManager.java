@@ -85,12 +85,12 @@ public class PuzzleDataManager {
      * @throws java.io.FileNotFoundException
      */
     public static void classicUpdateSave(int newMove, int lvl) throws FileNotFoundException, IOException{   
-        String path = "ClassicMode\\saves\\"+String.valueOf(lvl)+".mov";
+        String path = "ClassicMode/saves/"+String.valueOf(lvl)+".mov";
         updateSave(newMove,path);           
     }
     
     public static void psUpdateSave(int newMove) throws IOException{
-        String path ="PermanSave\\permanSave.mov";
+        String path ="PermanSave/permanSave.mov";
         updateSave(newMove,path);        
     }
     
@@ -116,7 +116,7 @@ public class PuzzleDataManager {
     }
     
     public static void psSetBoard(char[][] BoardData) throws FileNotFoundException, UnsupportedEncodingException{
-        PrintWriter writer = new PrintWriter("PermanSave\\permanBoardSave.xsb", "UTF-8");
+        PrintWriter writer = new PrintWriter("PermanSave/permanBoardSave.xsb", "UTF-8");
         for(int i=0;i<BoardData.length;i++){
             for(int j=0;j<BoardData[0].length;j++){
                 writer.print(BoardData[i][j]);
@@ -176,12 +176,12 @@ public class PuzzleDataManager {
      */
     public static void classicResetSave(int lvl) throws FileNotFoundException{
         
-        String path="ClassicMode\\saves\\"+String.valueOf(lvl)+".mov";
+        String path="ClassicMode/saves/"+String.valueOf(lvl)+".mov";
         resetSave(path);    
     }
     
     public static void psBoardReset() throws FileNotFoundException, UnsupportedEncodingException{
-        resetSave("PermanSave\\permanBoardSave.xsb");
+        resetSave("PermanSave/permanBoardSave.xsb");
     }
     
     public static void resetSave(String path){
@@ -195,7 +195,7 @@ public class PuzzleDataManager {
     }
     
     public static void psResetSave(){
-        String path="PermanSave\\permanSave.mov";
+        String path="PermanSave/permanSave.mov";
         resetSave(path);
     }
     
@@ -208,7 +208,7 @@ public class PuzzleDataManager {
      */
     public static boolean classicHasSave(int lvl){
         
-        String path="ClassicMode\\saves\\"+String.valueOf(lvl)+".mov";
+        String path="ClassicMode/saves/"+String.valueOf(lvl)+".mov";
         return hasSave(path);
     }
     
@@ -217,7 +217,7 @@ public class PuzzleDataManager {
      * @return boolean
      */
     public static boolean psHasSave(){  
-        String path="PermanSave\\permanSave.mov";
+        String path="PermanSave/permanSave.mov";
         return hasSave(path);
     }
     
@@ -247,16 +247,16 @@ public class PuzzleDataManager {
      * @return
      */
     public static Board psGetBoard() throws FileNotFoundException, IOException{
-        return new Board("PermanSave\\permanBoardSave.xsb");
+        return new Board("PermanSave/permanBoardSave.xsb");
     }
     
     public static ArrayList<Integer> classicGetMovesSaved(int lvl) throws FileNotFoundException, IOException{
-        String path="ClassicMode\\saves\\"+String.valueOf(lvl)+".mov";
+        String path="ClassicMode/saves/"+String.valueOf(lvl)+".mov";
         return getMovesSaved(path);
     }
     
     public static ArrayList<Integer> psGetMovesSaved() throws IOException{
-        String path="PermanSave\\permanSave.mov";
+        String path="PermanSave/permanSave.mov";
         return getMovesSaved(path);
     }
     
@@ -282,7 +282,7 @@ public class PuzzleDataManager {
     public static Game classicGetSavedGame(int lvl) throws IOException{
 
         
-        Game newGame=new Game("ClassicMode\\maps\\"+Integer.toString(lvl)+".xsb");
+        Game newGame=new Game("ClassicMode/maps/"+Integer.toString(lvl)+".xsb");
         ArrayList<Integer> movesPlayed=classicGetMovesSaved(lvl);
         for(int i=0;i<movesPlayed.size();i++){
             if(movesPlayed.get(i)==0){
@@ -307,7 +307,7 @@ public class PuzzleDataManager {
   
     public static Game psGetSavedGame() throws FileNotFoundException, UnsupportedEncodingException{ //Les exception sont pour le PsBoardReset()
         try {
-            Game resultGame=getSavedGame("PermanSave\\permanBoardSave.xsb","PermanSave\\permanSave.mov");
+            Game resultGame=getSavedGame("PermanSave/permanBoardSave.xsb","PermanSave/permanSave.mov");
             return resultGame;            
         } catch (Exception ex) {
             psBoardReset();

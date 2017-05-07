@@ -33,13 +33,14 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
     public boolean userEditable = true;
     private final int length;
     private final int width;
-    private final Game game;
+    private Game game;
     private final GuiBgPanel infos;
     private final JPanel gameContainer;
     private final GuiBgPanel wrapper;
     private final GuiStdLabel steps;
     private final GuiStdButton exitGame;
     private final GuiStdButton saveGame;
+    private final GuiStdButton resetGame;
     private final GuiFrame container;
     private final ArrayList<Integer> moveHistory;
     
@@ -68,11 +69,10 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         char[][] initBoard = this.game.getRepr();
         
         try {
-            //Stockons ce tableau dans la permanentSave (si l'utilisateur quitte inopinément la partie, le niveau sera stocké dans le dossier PermanentSave)
-            PuzzleDataManager.psSetBoard(initBoard);
+            PuzzleDataManager.psSetBoard(this.game.getRepr()); //On enregistre la permanentSave, si jamais on quite la partie
             
         } catch (FileNotFoundException | UnsupportedEncodingException ex) {
-            Logger.getLogger(GuiGamePanel.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("ERREUR DE SAUVEGARDE DU FICHIER PERMANENT SAVE");
         }
         //parcourons ce tableau et stockons chaque élément dans l'arrayList d'arrayList
         this.elementArrayList = new ArrayList<ArrayList<GuiElemButton>>();
@@ -80,6 +80,8 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         //Paramétrons le JPanel interne
         width = initBoard.length;
         length = initBoard[0].length;
+        this.resetGame = new GuiStdButton("Reset game");
+        this.resetGame.addActionListener(this);
         this.exitGame = new GuiStdButton("Exit game...");
         this.exitGame.addActionListener(this);
         this.saveGame = new GuiStdButton("Save .mov");
@@ -103,6 +105,7 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         this.infos.add(this.steps);
         this.infos.add(this.exitGame);
         this.infos.add(this.saveGame);
+        this.infos.add(this.resetGame);
         this.add(this.infos, BorderLayout.NORTH);     
         this.add(this.wrapper, BorderLayout.CENTER);
     }
@@ -113,6 +116,16 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
     
     public boolean isUserEditable(){
         return this.userEditable;
+    }
+    
+    public void reloadGame(){
+        this.moveHistory.clear();
+        try {
+            this.game = new Game("PermanSave/permanBoardSave.xsb");
+        } catch (IOException ex) {
+            Logger.getLogger(GuiGamePanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        updatePanel();
     }
     
     /**
@@ -247,6 +260,9 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         }
         else if(source == this.saveGame){
             saveState();
+        }
+        else if(source == this.resetGame){
+            reloadGame();
         }
     }
     

@@ -18,12 +18,14 @@ public class LevelNode {
     public String text;
     public int steps;
     public int id;
+    public boolean doable;
     
-    LevelNode(Game current, String text, int steps, int id){
+    LevelNode(Game current, String text, int steps, int id, boolean doable){
         this.current = current;
         this.text = text;
         this.steps = steps;
         this.id = id;
+        this.doable = doable;
     }
     
     @Override

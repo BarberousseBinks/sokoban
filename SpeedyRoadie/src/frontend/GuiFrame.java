@@ -65,7 +65,7 @@ public class GuiFrame extends JFrame implements ActionListener{
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
         this.setUndecorated(true);
-        
+        storyChain = new StoryMode(); //initialisation de la chaîne des niveaux
         setMenuScreen();
         
         //Opens a litle frame if there's a game which was not finished
@@ -87,8 +87,7 @@ public class GuiFrame extends JFrame implements ActionListener{
             }
         }
         
-        storyChain = new StoryMode(); //initialisation de la chaîne des niveaux
-        storyChain.initStory(); //ParserXML
+
     }
     /**
      * Définit le JPanel à mettre en contentPane de notre JFrame (visible)
@@ -183,7 +182,8 @@ public class GuiFrame extends JFrame implements ActionListener{
         backToMenu.addActionListener(this);  
         buttons.add(backToMenu);
         if(this.gameMode == 0){
-            nextLevel = new GuiLevelSelectorBtn("Niveau suivant...", this.currentLevel.id+1);
+            this.storyChain.updateSave();
+            nextLevel = new GuiLevelSelectorBtn("Niveau suivant...", this.currentLevel.id+1, true);
             nextLevel.addActionListener(this);
             buttons.add(nextLevel);
         }else if(this.gameMode == 1){
@@ -201,6 +201,8 @@ public class GuiFrame extends JFrame implements ActionListener{
         menu.setLayout(new BorderLayout());
         GuiBgPanel buttons = new GuiBgPanel("gameGraphics/steel.jpg");
         menu.add(buttons, BorderLayout.SOUTH);
+        
+        this.storyChain.initStory();
         
         story = new GuiStdButton("Mode histoire"); //GAMEMODE 0
         random = new GuiStdButton("Mode aléatoire");//GAMEMODE 1
@@ -232,10 +234,7 @@ public class GuiFrame extends JFrame implements ActionListener{
         
         LevelNode tempNode = storyChain.getNode();
         
-        final String html1 = "<html><body style='width: ";
-        final String html2 = "px'>";
-        
-        GuiStdLabel text = new GuiStdLabel(html1 + " 350 " + html2 + tempNode.text);
+        GuiStdLabel text = new GuiStdLabel("<html> <body style='width: 350 px'>"+ tempNode.text);
         
         blankContainer.add(text);
         
@@ -256,7 +255,7 @@ public class GuiFrame extends JFrame implements ActionListener{
         boolean isLast = false;
         while(!isLast){
             
-            GuiLevelSelectorBtn tempButton = new GuiLevelSelectorBtn(""+tempNode.id, tempNode.id);
+            GuiLevelSelectorBtn tempButton = new GuiLevelSelectorBtn(""+tempNode.id, tempNode.id, tempNode.doable);
             tempButton.addActionListener(this);
             
             buttons.add(tempButton);
