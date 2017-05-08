@@ -126,7 +126,7 @@ public class StoryMode {
                 String text = eElement.getElementsByTagName("text").item(0).getTextContent();
                 int nbSteps = Integer.parseInt(eElement.getElementsByTagName("nbsteps").item(0).getTextContent());
                 int id = Integer.parseInt(eElement.getAttribute("id"));
-                String doable = eElement.getElementsByTagName("finished").item(0).getTextContent();
+                String doable = eElement.getElementsByTagName("doable").item(0).getTextContent();
                 boolean consDoable;
                 
                 if("true".equals(doable)){
@@ -137,13 +137,12 @@ public class StoryMode {
                 String path = "ClassicMode/maps/"+id+".xsb";
 
                 this.addLevel(new LevelNode(new Game(path),text,nbSteps,id, consDoable));
-                System.out.println(this.getLastNode().toString());
             }
         } 
         catch (ParserConfigurationException | SAXException | IOException | DOMException e) {}
     }
     
-    public void updateSave() {
+    public void updateSave(int steps) {
         try {
 
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -153,7 +152,9 @@ public class StoryMode {
             Element racine = doc.getDocumentElement();
             NodeList levelList = doc.getElementsByTagName("level");
             Element niveau = (Element) levelList.item(this.node.id);
-            niveau.getElementsByTagName("finished").item(0).setTextContent("true");
+            niveau.getElementsByTagName("doable").item(0).setTextContent("true");
+            String strSteps = ""+steps;
+            niveau.getElementsByTagName("nbsteps").item(0).setTextContent(strSteps);
             
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
             Result output = new StreamResult(this.xmlSave);
