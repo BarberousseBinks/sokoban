@@ -54,11 +54,11 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
     public GuiGamePanel(Game game, GuiFrame container, ArrayList<Integer> moves){
         this.moveHistory = moves;
         this.container = container;
-        this.wrapper = new GuiBgPanel("gameGraphics/fade.jpg");
+        this.wrapper = new GuiBgPanel("src/frontend/misc/grph/fade.jpg");
         this.grabFocus();
         this.addKeyListener(this);
         this.setLayout(new BorderLayout());
-        this.infos = new GuiBgPanel("gameGraphics/steel.jpg");
+        this.infos = new GuiBgPanel("src/frontend/misc/grph/steel.jpg");
         this.gameContainer = new JPanel();
         //Récupérons le plateau sous forme de tableau de caractère
         //Pour stocker chaque élément dans un ArrayList<ArrayList<GuiElement>>

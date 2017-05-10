@@ -173,9 +173,9 @@ public class GuiFrame extends JFrame implements ActionListener{
             Logger.getLogger(GuiFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
         PuzzleDataManager.psResetSave();
-        GuiBgPanel menu = new GuiBgPanel("gameGraphics/wowBG.jpg");
+        GuiBgPanel menu = new GuiBgPanel("src/frontend/misc/grph/wowBG.jpg");
         menu.setLayout(new BorderLayout());
-        GuiBgPanel buttons = new GuiBgPanel("gameGraphics/steel.jpg");
+        GuiBgPanel buttons = new GuiBgPanel("src/frontend/misc/grph/steel.jpg");
         menu.add(buttons, BorderLayout.SOUTH);
         
         backToMenu = new GuiStdButton("Retour à l'accueil");
@@ -186,6 +186,7 @@ public class GuiFrame extends JFrame implements ActionListener{
             nextLevel = new GuiLevelSelectorBtn("Niveau suivant...", this.currentLevel.id+1, true);
             nextLevel.addActionListener(this);
             buttons.add(nextLevel);
+            
         }else if(this.gameMode == 1){
             
         }
@@ -197,9 +198,9 @@ public class GuiFrame extends JFrame implements ActionListener{
      * affiche le menu d'accueil du jeu
      */
     public void setMenuScreen(){
-        GuiBgPanel menu = new GuiBgPanel("gameGraphics/welcomeBG.jpg");
+        GuiBgPanel menu = new GuiBgPanel("src/frontend/misc/grph/welcomeBG.jpg");
         menu.setLayout(new BorderLayout());
-        GuiBgPanel buttons = new GuiBgPanel("gameGraphics/steel.jpg");
+        GuiBgPanel buttons = new GuiBgPanel("src/frontend/misc/grph/steel.jpg");
         menu.add(buttons, BorderLayout.SOUTH);
         
         this.storyChain.initStory();
@@ -226,7 +227,7 @@ public class GuiFrame extends JFrame implements ActionListener{
     public void readStory(){
         JPanel container = new JPanel();
         container.setLayout(new BorderLayout());
-        GuiBgPanel menu = new GuiBgPanel("gameGraphics/fade.jpg");
+        GuiBgPanel menu = new GuiBgPanel("src/frontend/misc/grph/fade.jpg");
         JPanel blankContainer = new JPanel();
         
         playLevel = new GuiStdButton("Commencer le niveau");
@@ -248,8 +249,8 @@ public class GuiFrame extends JFrame implements ActionListener{
     }
     
     public void showStoryLevels(){
-        GuiBgPanel menu = new GuiBgPanel("gameGraphics/background.jpg");
-        GuiBgPanel buttons = new GuiBgPanel("gameGraphics/steel.jpg");
+        GuiBgPanel menu = new GuiBgPanel("src/frontend/misc/grph/background.jpg");
+        GuiBgPanel buttons = new GuiBgPanel("src/frontend/misc/grph/steel.jpg");
         LevelNode tempNode = storyChain.getNode();
         
         boolean isLast = false;
