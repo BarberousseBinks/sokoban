@@ -378,7 +378,7 @@ public class PuzzleDataManager {
      * @return
      * @throws IOException
      */
-    public static void xsbSaveGame(String inputXSB, String inputMOV, String outputPath){
+    public static void xsbSaveGame(String inputXSB, String inputMOV, String outputPath) throws IOException{
         xsbSaveGame(getSavedGame(inputXSB, inputMOV),outputPath);
     }
    
