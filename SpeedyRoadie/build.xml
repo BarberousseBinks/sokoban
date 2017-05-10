@@ -17,7 +17,15 @@
         
     </target>
     <target name="run" depends="build">
-        <java classname="frontend.Main" fork="true" classpath="run/"/>
+        <java classname="frontend.Main" fork="true" classpath="run/">
+			<arg line="${xsb}"/>
+			<arg line="${mov}"/>
+		</java>
     </target>
+    
+    <target name="input-runargs" unless="xsb" description="commande pour charger un xsb et un mov">
+		<input addProperty="xsb" message="chemin du fichier XSB"/>
+		<input addProperty="mov" message="chemin du fichier MOV"/>
+	</target>
 
 </project>
