@@ -6,7 +6,7 @@
         <delete dir="run/backend/"/>
         <delete dir="run/frontend/"/>
     </target>
-    <target name="build">
+    <target name="build" depends="clean">
         <mkdir dir="run/backend/"/>
         <mkdir dir="run/frontend/"/>
         <mkdir dir="run/frontend/misc/"/>
@@ -17,15 +17,8 @@
         
     </target>
     <target name="run" depends="build">
-        <java classname="frontend.Main" fork="true" classpath="run/">
-			<arg line="${xsb}"/>
-			<arg line="${mov}"/>
-		</java>
+        <java classname="frontend.Main" fork="true" classpath="run/"/>
     </target>
     
-    <target name="input-runargs" unless="xsb" description="commande pour charger un xsb et un mov">
-		<input addProperty="xsb" message="chemin du fichier XSB"/>
-		<input addProperty="mov" message="chemin du fichier MOV"/>
-	</target>
 
 </project>
