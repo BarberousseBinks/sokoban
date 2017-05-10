@@ -25,7 +25,11 @@ public class Main {
 			GuiFrame game = new GuiFrame();
 		}
 		else if(args.length == 3){
-			
+			try{
+				PuzzleDataManager.xsbSaveGame(args[0], args[1], args[2]);
+			}
+			catch(IOException e){
+			}
 		}	
 		else{
 			String argChain = "";
