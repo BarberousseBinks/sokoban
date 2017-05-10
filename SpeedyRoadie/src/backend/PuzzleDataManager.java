@@ -346,7 +346,41 @@ public class PuzzleDataManager {
         }
         return newGame;
     }
-    
+
+    /**
+     * Crée une sauvegarde de la partie game à l'emplacement path (qui doit donc se terminer par .xsb). 
+     * Cette sauvegarde sera uniquement représentée dans un fichier xsb (les nombre de pas par rapport à une situation initiale sera donc perdu)
+     * @param pathXSB
+     * @param pathMOV
+     * @return
+     * @throws IOException
+     */
+    public static void xsbSaveGame(Game game, String path) throws IOException{
+        char[][] reprGame = game.getRepr();
+        String line="";
+        PrintWriter writer = new PrintWriter(path);
+        for(int i=0;i<reprGame.length;i++){
+            for(int j=0;j<reprGame[i].length;j++){
+                line=line+Character.toString(reprGame[i][j]);
+            }
+            writer.println(line);
+            line="";
+        }
+        writer.close();
+    }
+
+    /**
+     * Crée une sauvegarde de la partie initiée à partir de la map se trouvant en inputXSB avec la sauvegarde des mouvement se trouvant en inputMOV. 
+     * Ce sauvegarde sera crée à l'emplacement outputPath (qui doit donc se terminer par .xsb). 
+     * Cette sauvegarde sera uniquement représentée dans un fichier xsb (les nombre de pas par rapport à une situation initiale sera donc perdu)
+     * @param pathXSB
+     * @param pathMOV
+     * @return
+     * @throws IOException
+     */
+    public static void xsbSaveGame(String inputXSB, String inputMOV, String outputPath){
+        xsbSaveGame(getSavedGame(inputXSB, inputMOV),outputPath);
+    }
    
     
 }
