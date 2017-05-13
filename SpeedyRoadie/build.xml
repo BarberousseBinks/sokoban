@@ -1,24 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project name="SpeedyRoadie" default="default" basedir=".">
+	
     <description>Builds, tests, and runs the project SpeedyRoadie.</description>
+    
+    
     <target name="clean">
         <delete dir="run/backend/"/>
         <delete dir="run/frontend/"/>
     </target>
+    
+    
     <target name="build" depends="clean">
         <mkdir dir="run/backend/"/>
         <mkdir dir="run/frontend/"/>
         <mkdir dir="run/frontend/misc/"/>
         <copy todir="run/frontend/misc/">
-            <fileset dir="src/frontend/misc"/>
+            <fileset dir="code/frontend/misc"/>
         </copy>
-        <javac srcdir="src/" destdir="run/" classpath="run/lib/junit-4.12.jar"/>
-        
+        <javac srcdir="code/" destdir="run/" classpath="run/lib/junit-4.12.jar"/>
     </target>
-    <target name="run" depends="build">
+    
+    
+    <target name="run">
         <java classname="frontend.Main" fork="true" classpath="run/"/>
     </target>
     
-
+    
+    <target name="test">
+		<mkdir dir="run/tests/reports/"/>
+		<junit printsummary="yes" showoutput="yes" fork="yes">
+			
+			<classpath>
+				<pathelement path="run/lib/junit-4.12.jar"/>
+				<pathelement path="run/backend/"/>
+			</classpath>
+			
+			<formatter type="plain"/>
+			
+			<batchtest todir="run/tests/reports/">
+				<fileset dir="run/tests/">
+					<include name="**/*Test*.java"/>
+				</fileset>
+			</batchtest>
+			
+		</junit>
+    </target>
+    
+    
+    <target name="reset">
+		<delete file="ClassicMode/sauvegarde.xml"/>
+		<copy file="ClassicMode/reset.xml" tofile="ClassicMode/sauvegarde.xml"/>
+    </target>
+    
+    
 </project>
