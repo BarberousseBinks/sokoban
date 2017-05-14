@@ -53,7 +53,6 @@ public class GuiFrame extends JFrame implements ActionListener{
     // *STORY MODE: 0
     // *RANDOM MODE: 1
     // *CUSTOM MODE: 2
-    // ***FESTIVAL: 3 (to be implemented)
     
     /**
      * GuiFrame
@@ -62,48 +61,65 @@ public class GuiFrame extends JFrame implements ActionListener{
      * @throws IOException
      */
     public GuiFrame() throws IOException{
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
-        this.setUndecorated(true);
+		
+		
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Pour quitter l'exécution du programme avec la croix en haut à droite
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH); 	//Pour mettre en plein écran
+        this.setUndecorated(true); //Pour retirer les bordures et les menus contextuels (sous Windows ça fait un vrai mode fullscreen)
         storyChain = new StoryMode(); //initialisation de la chaîne des niveaux
         setMenuScreen();
         
-        //Opens a litle frame if there's a game which was not finished
+        //Si on a quitté le jeu alors qu'un niveau était en cours d'exécution, on affiche une petite fenêtre pour savoir si le joueur veut continuer son niveau
         
-        if(PuzzleDataManager.psHasSave()){
-            int n = JOptionPane.showConfirmDialog(null,"Voulez-vous continuer la partie en cours?","Partie quittée inopinément",JOptionPane.YES_NO_OPTION);
-            if(n == 0){//YES
+        if(PuzzleDataManager.psHasSave()){ //Méthodes de Corentin pour savoir si une partie en cours est existante
+			
+            int n = JOptionPane.showConfirmDialog(null,"Voulez-vous continuer la partie en cours?","Partie quittée inopinément",JOptionPane.YES_NO_OPTION); // On affiche un JOptionPane. L'entier "n" contiendra la réponse de l'utilisateur
+            
+            if(n == 0){//Si le joueur veut continuer la partie
+				
                 try {
-                    this.level = new Game("PermanSave/permanBoardSave.xsb");
-                    this.mov = PuzzleDataManager.psGetMovesSaved();
-                    this.readLevel(new GuiGamePanel(this.level, this, this.mov), this.mov);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(GuiFrame.class.getName()).log(Level.SEVERE, null, ex);
+					
+                    this.level = new Game("PermanSave/permanBoardSave.xsb"); //On charge la map sauvegardée dans la permanentSave
+                    this.mov = PuzzleDataManager.psGetMovesSaved(); //On charge le .mov qui lui est assoscié sous forme d'ArrayList grâce à la méthode de Corentin
+                    this.readLevel(new GuiGamePanel(this.level, this, this.mov), this.mov); //On lit l'avancement en mode cinématique
+                    
+                } 
+                catch (InterruptedException ex) {
+					
+                    Logger.getLogger(GuiFrame.class.getName()).log(Level.SEVERE, null, ex); //S'il y a une erreur au niveau de la lecture du niveau on catch une exception
+                    
                 }
             }
-            else{//ELSE
-                PuzzleDataManager.psBoardReset();
-                PuzzleDataManager.psResetSave();
+            else{//Sinon 
+				
+                PuzzleDataManager.psBoardReset(); //On reset le board de la PermanentSave
+                PuzzleDataManager.psResetSave(); //On reset le .mov de la PermanentSave
+                
             }
         }
-        
-
     }
+    
     /**
      * Définit le JPanel à mettre en contentPane de notre JFrame (visible)
      * @param panel le JPanel à mettre en contentPane
      * @param focus s'il requiert le focus ou non
      */
     private void setPane(JPanel panel, boolean focus){
-        this.mainPanel = panel;
+		
+        this.mainPanel = panel; 
         this.setContentPane(this.mainPanel);
         this.mainPanel.setFocusable(focus);
+        
         if(focus){
+			
             this.mainPanel.requestFocus();
             this.mainPanel.requestFocusInWindow();
+            
         }
+        
         this.setVisible(true);
     }
+    
     /**
      * Méthode de lecture progressive du niveau
      * Rejoue tous les pas joués dans l'arrayList fourni en paramètre
@@ -111,18 +127,15 @@ public class GuiFrame extends JFrame implements ActionListener{
      * @param mov l'historique des mouvements à rejouer
      * @throws InterruptedException 
      */
+     
     private void readLevel(GuiGamePanel gamePanel, ArrayList<Integer> mov) throws InterruptedException{
+		
         gamePanel.userEditable = false;
-        System.out.println("Live level reading");
         int delay = 250;
         double del = delay/1000;
-        
         this.setPane(gamePanel, false);
-        System.out.println("EDITABLE:   - "+gamePanel.isUserEditable());
         ClockListener timedMoves = new ClockListener(gamePanel, mov);
-        System.out.println("One step each "+del+" seconds");
         Timer t = new Timer(delay, timedMoves);
-
         t.start();
         this.mainPanel.setFocusable(true);
         this.mainPanel.grabFocus();
@@ -131,6 +144,8 @@ public class GuiFrame extends JFrame implements ActionListener{
     
     /**
      * Action Listener qui rejoue les mouvements
+     * @param gamePanel le panel de la partie (pour y faire les déplacements)
+     * @param movements l'arrayList de mouvements à effectuer
      */
     private class ClockListener implements ActionListener { // Clock Listener class for timing the reading of the map
 
@@ -139,23 +154,29 @@ public class GuiFrame extends JFrame implements ActionListener{
         private int counter = 0;
         
         private ClockListener(GuiGamePanel gamePanel, ArrayList<Integer> movements){
+			
             this.gamePanel = gamePanel;
             this.movements = movements;
+            
         }
         
         @Override
         public void actionPerformed(ActionEvent e) {
 
             if(counter == movements.size()){
+				
                 System.out.println(".MOV read successfully");
                 gamePanel.userEditable = true;
                 Timer t = (Timer)e.getSource();
                 t.stop();
+                
             }
             else{
+				
                 gamePanel.playReader(movements.get(counter));
                 System.out.println(".MOV read: "+movements.get(counter));
                 counter++;
+                
             }
         }
     }
@@ -167,11 +188,18 @@ public class GuiFrame extends JFrame implements ActionListener{
      * @param steps
      */
     public void setWonScreen(int steps){
+		
         try {
+			
             PuzzleDataManager.psBoardReset();
-        } catch (FileNotFoundException | UnsupportedEncodingException ex) {
+            
+        } 
+        catch (FileNotFoundException | UnsupportedEncodingException ex) {
+			
             Logger.getLogger(GuiFrame.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
+        
         PuzzleDataManager.psResetSave();
         GuiBgPanel menu = new GuiBgPanel("run/frontend/misc/grph/wowBG.jpg");
         menu.setLayout(new BorderLayout());
@@ -181,13 +209,16 @@ public class GuiFrame extends JFrame implements ActionListener{
         backToMenu = new GuiStdButton("Retour à l'accueil");
         backToMenu.addActionListener(this);  
         buttons.add(backToMenu);
+        
         if(this.gameMode == 0){
+			
             this.storyChain.updateSave(steps);
             nextLevel = new GuiLevelSelectorBtn("Niveau suivant...", this.currentLevel.id+1, true);
             nextLevel.addActionListener(this);
             buttons.add(nextLevel);
             
-        }else if(this.gameMode == 1){
+        }
+        else if(this.gameMode == 1){
             
         }
         
@@ -198,33 +229,39 @@ public class GuiFrame extends JFrame implements ActionListener{
      * affiche le menu d'accueil du jeu
      */
     public void setMenuScreen(){
+		
         GuiBgPanel menu = new GuiBgPanel("run/frontend/misc/grph/welcomeBG.jpg");
         menu.setLayout(new BorderLayout());
         GuiBgPanel buttons = new GuiBgPanel("run/frontend/misc/grph/steel.jpg");
         menu.add(buttons, BorderLayout.SOUTH);
-        
         this.storyChain.initStory();
-        
+        //On initialise les boutons enregistrés en variable de classe. Plus facile pour y affecter des actions
         story = new GuiStdButton("Mode histoire"); //GAMEMODE 0
         random = new GuiStdButton("Mode aléatoire");//GAMEMODE 1
         loadGame = new GuiStdButton("Charger une partie");//GAMEMODE 2
         exitGame = new GuiStdButton("Quitter le jeu");
-
+        //On leur ajoute l'actionListener
         story.addActionListener(this);
         random.addActionListener(this);
         loadGame.addActionListener(this);
         exitGame.addActionListener(this);
-        
+        //On les ajoute au JPANEL
         buttons.add(story);
         buttons.add(random);
         buttons.add(loadGame);
         buttons.add(exitGame);
-        
+        //On rend le menu visible sur le Frame
         setPane(menu, true);
         
     }
     
+    /**
+     * Affiche le texte lié à un niveau. Le niveau en question est un LevelNode
+     * Ce LevelNode est enregistré en variable de classe
+     */
+    
     public void readStory(){
+		
         JPanel container = new JPanel();
         container.setLayout(new BorderLayout());
         GuiBgPanel menu = new GuiBgPanel("run/frontend/misc/grph/fade.jpg");
@@ -248,6 +285,10 @@ public class GuiFrame extends JFrame implements ActionListener{
         setPane(container, true);
     }
     
+    /**
+     * Affiche les niveaux du mode Classic
+     */
+     
     public void showStoryLevels(){
         GuiBgPanel menu = new GuiBgPanel("run/frontend/misc/grph/background.jpg");
         GuiBgPanel buttons = new GuiBgPanel("run/frontend/misc/grph/steel.jpg");

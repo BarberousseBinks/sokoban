@@ -120,6 +120,7 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
     
     public void reloadGame(){
         this.moveHistory.clear();
+        PuzzleDataManager.psResetSave();
         try {
             this.game = new Game("PermanSave/permanBoardSave.xsb");
         } catch (IOException ex) {
