@@ -15,7 +15,7 @@ public interface Layoutable {
      *
      * @return le type de l'object (goal, mur,..)
      */
-    String getType();  //renvoit "goal", "player", "box" ou "emptycase"
+    String getType();  //renvoit "goal", "player", "cbox" ou "emptycase"
     
     char toChar();
     

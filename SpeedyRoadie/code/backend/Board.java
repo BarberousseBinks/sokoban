@@ -13,7 +13,7 @@ import static java.lang.Math.abs;
 
 /**
  * Cette classe contient tout ce qu'il faut pour générer un board (avec l'aide de PuzzleDataReader si c'est à partir d'un chemin) et pour y déplacer le joueur
- * @author Alfa
+ * @author Corentin Dachy
  */
 public class Board {
     private ArrayList<ArrayList<Layoutable>> tab;
@@ -26,7 +26,10 @@ public class Board {
         objectives=new ArrayList<Objectif>();
     }
     
-    
+    /**
+     * Constructeur: construit une instance de Game avec un chemin (.xsb) représentant le plateau. Les paramètres tab et objectives seront remplit en fonction des information de ce plateau
+     * @param cheminTxtLab le chemin d'accès au fichier
+     */
     public Board(String cheminTxtLab) throws FileNotFoundException, IOException{  //construire le jeu à partir d'un fichier .xsb (constructeur)
         generateBoard(PuzzleDataManager.readBoard(cheminTxtLab));
     }
