@@ -290,7 +290,7 @@ public class GuiFrame extends JFrame implements ActionListener{
      */
      
     public void showStoryLevels(){
-        GuiBgPanel menu = new GuiBgPanel("run/frontend/misc/grph/background.jpg");
+        GuiBgPanel menu = new GuiBgPanel("run/frontend/misc/grph/welcomeBG.jpg");
         GuiBgPanel buttons = new GuiBgPanel("run/frontend/misc/grph/steel.jpg");
         LevelNode tempNode = storyChain.getNode();
         

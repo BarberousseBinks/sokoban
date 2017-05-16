@@ -54,7 +54,7 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
     public GuiGamePanel(Game game, GuiFrame container, ArrayList<Integer> moves){
         this.moveHistory = moves;
         this.container = container;
-        this.wrapper = new GuiBgPanel("run/frontend/misc/grph/fade.jpg");
+        this.wrapper = new GuiBgPanel("run/frontend/misc/grph/background.jpg");
         this.grabFocus();
         this.addKeyListener(this);
         this.setLayout(new BorderLayout());
@@ -80,11 +80,11 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         //Paramétrons le JPanel interne
         width = initBoard.length;
         length = initBoard[0].length;
-        this.resetGame = new GuiStdButton("Reset game");
+        this.resetGame = new GuiStdButton("Réinitialiser");
         this.resetGame.addActionListener(this);
-        this.exitGame = new GuiStdButton("Exit game...");
+        this.exitGame = new GuiStdButton("Quitter le jeu");
         this.exitGame.addActionListener(this);
-        this.saveGame = new GuiStdButton("Save .mov");
+        this.saveGame = new GuiStdButton("Sauvegarder en .mov");
         this.saveGame.addActionListener(this);
         this.gameContainer.setSize(width*50, length*50);
         this.setSize(length*50 + 200, width*50 + 200);
