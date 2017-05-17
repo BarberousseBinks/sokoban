@@ -18,7 +18,7 @@
         <copy todir="run/frontend/misc/">
             <fileset dir="code/frontend/misc"/>
         </copy>
-        <javac srcdir="code/" destdir="run/" classpath="run/lib/junit-4.12.jar"/>
+        <javac includeantruntime="false" srcdir="code/" destdir="run/" classpath="run/lib/junit-4.12.jar"/>
     </target>
     
     
@@ -53,5 +53,29 @@
 		<copy file="ClassicMode/reset.xml" tofile="ClassicMode/sauvegarde.xml"/>
     </target>
     
+    <target name="javadoc" depends="cleandoc">
+		<mkdir dir="run/doc"/>
+
+		<javadoc sourcepath="code/" destdir="run/doc" >
+			<fileset dir="code/" defaultexcludes="yes">
+				<include name="**/*.java" />
+			</fileset>
+		</javadoc>
+
+<!--		<javadoc sourcepath="code/" destdir="run/doc/pdf" 		
+				doclet="com.aurigalogic.doclet.core.Doclet"
+				docletpath="run/lib/AurigaDoclet.jar"
+				additionalparam="-format pdf">
+			<classpath refid="aurigadoclet.class.path" />
+			<fileset dir="code/" defaultexcludes="yes">
+				<include name="**/*.java" />
+			</fileset>
+		</javadoc>
+-->
+	</target> 
+    
+    <target name="cleandoc">
+		<delete dir="run/doc/"/>
+    </target>
     
 </project>

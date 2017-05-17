@@ -13,14 +13,14 @@ import javax.swing.JPanel;
 
 /**
  * Classe de JPanel sur lesquels on applique une image de fond facilement.
- * M'évite de faire la modification du fond sur le JPanel pour chaque JPanel de la GUI
+ * M'evite de faire la modification du fond sur le JPanel pour chaque JPanel de la GUI
  * @author Louis Dhanis
  */
 class GuiBgPanel extends JPanel{
     private Image background = null;
         /**
          * Constructeur du GuiBgPanel
-         * @param path (chemin vers l'image à mettre en fond)
+         * @param path (chemin vers l'image a mettre en fond du JPanel)
          */
         public GuiBgPanel(String path){
         try {                

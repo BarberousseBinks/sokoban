@@ -14,16 +14,14 @@ import java.util.logging.Logger;
 import javax.swing.JLabel;
 
 /**
- * Classe de Label standardisée avec la charte graphique de la GUI
- * pour m'éviter à redéfinir le design de chaque JButton
+ * Classe de Label standardisee avec la charte graphique de la GUI
  * @author Louis Dhanis
  */
 public class GuiStdLabel extends JLabel{
 
     /**
      * Constructeur du GuiStdLabel
-     * Prend en paramètre le texte à mettre sur le JLabel
-     * @param text
+     * @param text le texte a afficher dans le JLabel
      */
     public GuiStdLabel(String text){
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -39,7 +37,7 @@ public class GuiStdLabel extends JLabel{
             Logger.getLogger(GuiStdButton.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.setText(text);
-        //Code inspiré de https://stackoverflow.com/questions/12691832/how-to-put-an-image-on-a-jbutton
+        //Code inspire de https://stackoverflow.com/questions/12691832/how-to-put-an-image-on-a-jbutton
         this.setForeground(Color.red);
     }
 }

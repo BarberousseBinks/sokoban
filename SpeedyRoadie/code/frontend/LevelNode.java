@@ -8,8 +8,8 @@ import backend.Game;
 
 /**
  * Noeud de niveau
- * élément de la liste chaînée représentant le mode histoire du jeu
- * permet de récupérer facilement le niveau suivant
+ * element de la liste chaînee representant le mode histoire du jeu
+ * permet de recuperer facilement le niveau suivant
  * @author Louis Dhanis
  */
 public class LevelNode {
@@ -19,6 +19,14 @@ public class LevelNode {
     public int steps;
     public int id;
     public boolean doable;
+    
+    /**
+     * Constructeur du LevelNode.
+     * @param current la partie que represente le LevelNode
+     * @param text le texte a afficher avant de lancer le niveau
+     * @param steps le nombre de pas effectues (dans sauvegarde.xml)
+     * @param doable true si les niveaux precedents ont ete reussis, false sinon (permet d'instancier les GuiLevelSelectorBtn)
+     **/
     
     LevelNode(Game current, String text, int steps, int id, boolean doable){
         this.current = current;
@@ -36,22 +44,22 @@ public class LevelNode {
     
     /**
      * Retourne le niveau actuel
-     * @return niveau actuel
+     * @return niveau le niveau actuel
      */
     public Game getLevel(){
         return this.current;
     }
     
     /**
-     * Retourne le noeud suivant de la liste chaînée
-     * @return noeud suivant
+     * Retourne le noeud suivant de la liste chaînee
+     * @return noeud le noeud suivant
      */
     public LevelNode getNextNode(){
         return this.next;
     }
     
     /**
-     * Définit le noeud suivant
+     * Definit le noeud suivant
      * @param next (le noeud suivant)
      */
     public void setNextNode(LevelNode next){
@@ -59,8 +67,8 @@ public class LevelNode {
     }
     
     /**
-     * Renvoie true s'il existe un noeud après celui-ci
-     * @return hasNextNode
+     * Renvoie true s'il existe un noeud apres celui-ci
+     * @return hasNextNode true s'il y a un node apres, false sinon
      */
     public boolean hasNextNode(){
         if(this.next == null){

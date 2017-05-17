@@ -11,16 +11,16 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 /**
- * Classe représentant les éléments (boutons cliquables du plateau de jeu)
+ * Classe representant les elements (boutons cliquables du plateau de jeu)
  * 
  * @author Louis Dhanis
  */
 public class GuiElemButton extends JButton{
 
     /**
-     * x,y sont les coordonnées du bouton.
-     * Cela permet de déplacer facilement le joueur.
-     * En stockant les coordonnées de l'élément dans la classe du bouton, je n'ai qu'à appeler ces variables locales lors de l'utilisation des méthodes programmées dans la partie backend
+     * x,y sont les coordonnees du bouton.
+     * Cela permet de deplacer facilement le joueur.
+     * En stockant les coordonnees de l'element dans la classe du bouton, je n'ai qu'a appeler ces variables locales lors de l'utilisation des methodes programmees dans la partie backend
      */
     protected int x, y;
     private final int height = 50;
@@ -28,8 +28,8 @@ public class GuiElemButton extends JButton{
     private char content;
     
     /**
-     * Retourne la hauteur (standardisée à 50px) du bouton
-     * @return height
+     * Retourne la hauteur (standardisee a 50px) du bouton
+     * @return height la hauteur (standardisee a 50px) du bouton
      */
     @Override
     public int getHeight(){
@@ -37,8 +37,8 @@ public class GuiElemButton extends JButton{
     }
     
     /**
-     * Retourne la largeur (standardisée à 50px) du bouton
-     * @return width
+     * Retourne la largeur (standardisee a 50px) du bouton
+     * @return width la largeur (standardisee a 50px) du bouton
      */
     @Override
     public int getWidth(){
@@ -46,31 +46,31 @@ public class GuiElemButton extends JButton{
     }
     
     /**
-     * Retourne le caractère représentant l'élément dans un plateau XSB
-     * @return content
+     * Retourne le caractere representant l'element dans un plateau XSB
+     * @return content le caractere representant l'element dans le plateau .xsb
      */
     public char getContent(){
         return this.content;
     }
     /**
-     * Renvoie la coordonnée en x du bouton sur la map.
-     * @return xPos
+     * Renvoie la coordonnee en x du bouton sur la map.
+     * @return xPos la position en x 
      */
     public int getPosX(){
         return this.x;
     }
 
     /**
-     * Renvoie la coordonnée en y du bouton sur la map.
-     * @return yPos
+     * Renvoie la coordonnee en y du bouton sur la map.
+     * @return yPos la position en y
      */
     public int getPosY(){
         return this.y;
     }
     
     /**
-     * Modifie le caractère représentant l'élément dans le plateau XSB
-     * @param content
+     * Modifie le caractere representant l'element dans le plateau XSB
+     * @param content le caractere representant l'element dans le plateau .xsb
      */
     public void setContent(char content){
         this.setFocusable(false);
@@ -97,7 +97,7 @@ public class GuiElemButton extends JButton{
                 }
             break;
             case '@':
-                //Code inspiré de https://stackoverflow.com/questions/12691832/how-to-put-an-image-on-a-jbutton
+                //Code inspire de https://stackoverflow.com/questions/12691832/how-to-put-an-image-on-a-jbutton
                 try{
                     Image img = ImageIO.read(getClass().getResource("misc/roadie.gif"));
                     img = img.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_SMOOTH);
@@ -152,12 +152,12 @@ public class GuiElemButton extends JButton{
     
     /**
      * Constructeur de l'objet GuiElement (qui est un bouton)
-     * Prend en paramètre le contenu de l'élément (son identifiant char sur le board)
-     * Prend en paramètre les coordonnées absolues sur le board.
+     * Prend en parametre le contenu de l'element (son identifiant char sur le board)
+     * Prend en parametre les coordonnees absolues sur le board.
      * 
-     * @param content
-     * @param x
-     * @param y
+     * @param content le caractere que le GuiElemButton represente sur le board (# pour les murs, @ pour le personnage, $ pour les caisses, etc.)
+     * @param x la position en x du bouton
+     * @param y la position en y du bouton
      */
     public GuiElemButton(char content, int x, int y){
         setContent(content);

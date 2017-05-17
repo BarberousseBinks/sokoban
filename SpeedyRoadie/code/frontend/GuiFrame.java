@@ -58,30 +58,30 @@ public class GuiFrame extends JFrame implements ActionListener{
      * GuiFrame
      * Fenêtre du jeu
      * Principale interface entre l'utilisateur et le jeu
-     * @throws IOException
+     * @throws IOException en cas d'erreur de chargement du fichier .mov ou .xsb de la PermanentSave
      */
     public GuiFrame() throws IOException{
 		
 		
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Pour quitter l'exécution du programme avec la croix en haut à droite
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH); 	//Pour mettre en plein écran
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Pour quitter l'execution du programme avec la croix en haut a droite
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH); 	//Pour mettre en plein ecran
         this.setUndecorated(true); //Pour retirer les bordures et les menus contextuels (sous Windows ça fait un vrai mode fullscreen)
         storyChain = new StoryMode(); //initialisation de la chaîne des niveaux
         setMenuScreen();
         
-        //Si on a quitté le jeu alors qu'un niveau était en cours d'exécution, on affiche une petite fenêtre pour savoir si le joueur veut continuer son niveau
+        //Si on a quitte le jeu alors qu'un niveau etait en cours d'execution, on affiche une petite fenêtre pour savoir si le joueur veut continuer son niveau
         
-        if(PuzzleDataManager.psHasSave()){ //Méthodes de Corentin pour savoir si une partie en cours est existante
+        if(PuzzleDataManager.psHasSave()){ //Methodes de Corentin pour savoir si une partie en cours est existante
 			
-            int n = JOptionPane.showConfirmDialog(null,"Voulez-vous continuer la partie en cours?","Partie quittée inopinément",JOptionPane.YES_NO_OPTION); // On affiche un JOptionPane. L'entier "n" contiendra la réponse de l'utilisateur
+            int n = JOptionPane.showConfirmDialog(null,"Voulez-vous continuer la partie en cours?","Partie quittee inopinement",JOptionPane.YES_NO_OPTION); // On affiche un JOptionPane. L'entier "n" contiendra la reponse de l'utilisateur
             
             if(n == 0){//Si le joueur veut continuer la partie
 				
                 try {
 					
-                    this.level = new Game("PermanSave/permanBoardSave.xsb"); //On charge la map sauvegardée dans la permanentSave
-                    this.mov = PuzzleDataManager.psGetMovesSaved(); //On charge le .mov qui lui est assoscié sous forme d'ArrayList grâce à la méthode de Corentin
-                    this.readLevel(new GuiGamePanel(this.level, this, this.mov), this.mov); //On lit l'avancement en mode cinématique
+                    this.level = new Game("PermanSave/permanBoardSave.xsb"); //On charge la map sauvegardee dans la permanentSave
+                    this.mov = PuzzleDataManager.psGetMovesSaved(); //On charge le .mov qui lui est assoscie sous forme d'ArrayList grâce a la methode de Corentin
+                    this.readLevel(new GuiGamePanel(this.level, this, this.mov), this.mov); //On lit l'avancement en mode cinematique
                     
                 } 
                 catch (InterruptedException ex) {
@@ -100,8 +100,8 @@ public class GuiFrame extends JFrame implements ActionListener{
     }
     
     /**
-     * Définit le JPanel à mettre en contentPane de notre JFrame (visible)
-     * @param panel le JPanel à mettre en contentPane
+     * Definit le JPanel a mettre en contentPane de notre JFrame (visible)
+     * @param panel le JPanel a mettre en contentPane
      * @param focus s'il requiert le focus ou non
      */
     private void setPane(JPanel panel, boolean focus){
@@ -121,10 +121,10 @@ public class GuiFrame extends JFrame implements ActionListener{
     }
     
     /**
-     * Méthode de lecture progressive du niveau
-     * Rejoue tous les pas joués dans l'arrayList fourni en paramètre
+     * Methode de lecture progressive du niveau
+     * Rejoue tous les pas joues dans l'arrayList fourni en parametre
      * @param gamePanel Le GamePanel dans lequel on va rejouer le mov
-     * @param mov l'historique des mouvements à rejouer
+     * @param mov l'historique des mouvements a rejouer
      * @throws InterruptedException 
      */
      
@@ -144,8 +144,8 @@ public class GuiFrame extends JFrame implements ActionListener{
     
     /**
      * Action Listener qui rejoue les mouvements
-     * @param gamePanel le panel de la partie (pour y faire les déplacements)
-     * @param movements l'arrayList de mouvements à effectuer
+     * @param gamePanel le panel de la partie (pour y faire les deplacements)
+     * @param movements l'arrayList de mouvements a effectuer
      */
     private class ClockListener implements ActionListener { // Clock Listener class for timing the reading of the map
 
@@ -183,9 +183,9 @@ public class GuiFrame extends JFrame implements ActionListener{
     
     /**
      * setWonScreen
-     * Affiche un écran de félicitations.
+     * Affiche un ecran de felicitations.
      * Si nous sommes dans un gameMode = 0 (mode Histoire) un bouton s'affiche pour proposer au joueur de lancer le niveau suivant
-     * @param steps
+     * @param steps le nombre de pas qu'il a fallu pour terminer le niveau
      */
     public void setWonScreen(int steps){
 		
@@ -206,7 +206,7 @@ public class GuiFrame extends JFrame implements ActionListener{
         GuiBgPanel buttons = new GuiBgPanel("run/frontend/misc/grph/steel.jpg");
         menu.add(buttons, BorderLayout.SOUTH);
         
-        backToMenu = new GuiStdButton("Retour à l'accueil");
+        backToMenu = new GuiStdButton("Retour a l'accueil");
         backToMenu.addActionListener(this);  
         buttons.add(backToMenu);
         
@@ -226,7 +226,7 @@ public class GuiFrame extends JFrame implements ActionListener{
         setPane(menu, true);
     }
     /**
-     * affiche le menu d'accueil du jeu
+     * affiche le menu d'accueil du jeu en remplacant le JPanel actuel par celui du menu
      */
     public void setMenuScreen(){
 		
@@ -235,9 +235,9 @@ public class GuiFrame extends JFrame implements ActionListener{
         GuiBgPanel buttons = new GuiBgPanel("run/frontend/misc/grph/steel.jpg");
         menu.add(buttons, BorderLayout.SOUTH);
         this.storyChain.initStory();
-        //On initialise les boutons enregistrés en variable de classe. Plus facile pour y affecter des actions
+        //On initialise les boutons enregistres en variable de classe. Plus facile pour y affecter des actions
         story = new GuiStdButton("Mode histoire"); //GAMEMODE 0
-        random = new GuiStdButton("Mode aléatoire");//GAMEMODE 1
+        random = new GuiStdButton("Mode aleatoire");//GAMEMODE 1
         loadGame = new GuiStdButton("Charger une partie");//GAMEMODE 2
         exitGame = new GuiStdButton("Quitter le jeu");
         //On leur ajoute l'actionListener
@@ -256,8 +256,8 @@ public class GuiFrame extends JFrame implements ActionListener{
     }
     
     /**
-     * Affiche le texte lié à un niveau. Le niveau en question est un LevelNode
-     * Ce LevelNode est enregistré en variable de classe
+     * Affiche le texte lie a un niveau. Le niveau en question est un LevelNode
+     * Ce LevelNode est enregistre en variable de classe (pas de parametre a passer)
      */
     
     public void readStory(){
@@ -286,7 +286,7 @@ public class GuiFrame extends JFrame implements ActionListener{
     }
     
     /**
-     * Affiche les niveaux du mode Classic
+     * Affiche les niveaux du mode Classic en remplacant le JPanel actuel par celui des niveaux du mode histoire
      */
      
     public void showStoryLevels(){
@@ -312,8 +312,8 @@ public class GuiFrame extends JFrame implements ActionListener{
         setPane(menu, true);
     }
     /**
-     * Permet de récuperer les actions jouées par les boutons
-     * @param ae
+     * Permet de recuperer les actions jouees par les boutons
+     * @param ae l'action event (les boutons des menus declanchent des actions)
      */
     @Override
     public void actionPerformed(ActionEvent ae) {
@@ -328,10 +328,10 @@ public class GuiFrame extends JFrame implements ActionListener{
             this.level = currentLevel.getLevel();
             setPane(new GuiGamePanel(this.level, this, this.mov), true);
         }
-        else if(source == random){ //GAMEMODE 1 - Marche à suivre pour le mode aléatoire
+        else if(source == random){ //GAMEMODE 1 - Marche a suivre pour le mode aleatoire
             try {
                 String[] difficulty = { "Facile", "Moyen", "Difficile", "HARDCOOOOORE" };
-                String levelDifficultySelector = (String) JOptionPane.showInputDialog(this, "Veuillez sélectionner un niveau de difficulté", "Partie aléatoire", JOptionPane.QUESTION_MESSAGE, null, difficulty, difficulty[1]);
+                String levelDifficultySelector = (String) JOptionPane.showInputDialog(this, "Veuillez selectionner un niveau de difficulte", "Partie aleatoire", JOptionPane.QUESTION_MESSAGE, null, difficulty, difficulty[1]);
                 this.mov = new ArrayList<>();
                 if(levelDifficultySelector == null){
                     System.out.println("User didn't select a difficulty.");
@@ -435,7 +435,7 @@ public class GuiFrame extends JFrame implements ActionListener{
     
     /**
      * Affiche un JOptionPane d'information
-     * @param message le message à afficher
+     * @param message le message a afficher
      * @param title le titre du JOptionPane
      */
     public static void guiInformFrame(String message, String title)

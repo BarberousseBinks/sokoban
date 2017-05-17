@@ -46,7 +46,7 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
     
     /**
      * Constructeur de la partie
-     * @param game (le niveau à jouer, c'est un objet du type Game)
+     * @param game (le niveau a jouer, c'est un objet du type Game)
      * @see Game
      * @param container (le JFrame contenant la partie, pour pouvoir le modifier depuis la partie courante)
      * @param moves (l'arrayList contenant l'historique des mouvements)
@@ -60,8 +60,8 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         this.setLayout(new BorderLayout());
         this.infos = new GuiBgPanel("run/frontend/misc/grph/steel.jpg");
         this.gameContainer = new JPanel();
-        //Récupérons le plateau sous forme de tableau de caractère
-        //Pour stocker chaque élément dans un ArrayList<ArrayList<GuiElement>>
+        //Recuperons le plateau sous forme de tableau de caractere
+        //Pour stocker chaque element dans un ArrayList<ArrayList<GuiElement>>
         //ça sera plus facile pour modifier leur contenu par la suite
         this.game = game;
         this.steps = new GuiStdLabel(""+this.game.getNbSteps());
@@ -74,13 +74,13 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
         } catch (FileNotFoundException | UnsupportedEncodingException ex) {
             System.out.println("ERREUR DE SAUVEGARDE DU FICHIER PERMANENT SAVE");
         }
-        //parcourons ce tableau et stockons chaque élément dans l'arrayList d'arrayList
+        //parcourons ce tableau et stockons chaque element dans l'arrayList d'arrayList
         this.elementArrayList = new ArrayList<ArrayList<GuiElemButton>>();
         
-        //Paramétrons le JPanel interne
+        //Parametrons le JPanel interne
         width = initBoard.length;
         length = initBoard[0].length;
-        this.resetGame = new GuiStdButton("Réinitialiser");
+        this.resetGame = new GuiStdButton("Reinitialiser");
         this.resetGame.addActionListener(this);
         this.exitGame = new GuiStdButton("Quitter le jeu");
         this.exitGame.addActionListener(this);
@@ -130,10 +130,10 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
     }
     
     /**
-     * Permet de sauvegarder la partie au format mov à tout moment de la partie
+     * Permet de sauvegarder la partie au format mov a tout moment de la partie
      */
     public void saveState(){
-        // Code inspiré de https://stackoverflow.com/questions/356671/jfilechooser-showsavedialog-how-to-set-suggested-file-name
+        // Code inspire de https://stackoverflow.com/questions/356671/jfilechooser-showsavedialog-how-to-set-suggested-file-name
         // et de https://stackoverflow.com/questions/14589386/how-to-save-file-using-jfilechooser-in-java
         //String sb = moveHistory();
         JFileChooser chooser = new JFileChooser();
@@ -154,8 +154,8 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
     }
     
     /**
-     * Méthode PlayReader pour jouer un mouvement depuis le JFrame (lecture du .mov pour le "replay" de la partie sauvegardée)
-     * @param i le mouvement à jouer
+     * Methode PlayReader pour jouer un mouvement depuis le JFrame (lecture du .mov pour le "replay" de la partie sauvegardee)
+     * @param i le mouvement a jouer
      */
     public void playReader(int i){
         switch(i){
@@ -176,8 +176,7 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
     }
     
     /**
-     * Rafraîchir le JPanel
-     * affiche le jeu en son état actuel dans sa représentation en tableau de caractère
+     * Methode de rafraichissement du JPanel du plateau. Affiche le jeu en son etat actuel dans sa representation en tableau de caractere
      */
     public void updatePanel(){
         
@@ -200,7 +199,7 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
     }   
     
     /**
-     * Renvoie l'historique des mouvements sous forme de chaîne de caractère
+     * Renvoie l'historique des mouvements sous forme de chaîne de caractere
      * @deprecated 
      * @return historique des mouvements
      */
@@ -213,18 +212,18 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
     }
     
     /**
-     * Vérifie si la partie est gagnée ou non
-     * @return true si la partie est gagnée, false sinon
+     * Verifie si la partie est gagnee ou non
+     * @return true si la partie est gagnee, false sinon
      */
     public boolean gameWon(){
         return this.game.isGameWon();
     }
     
     /**
-     * Modifie la position du joueur via le KeyListener ou via le déplacement en lecture du MOV
+     * Modifie la position du joueur via le KeyListener ou via le deplacement en lecture du MOV
      * @param x la direction en x
      * @param y la directon en y
-     * @param save true s'il faut enregistrer le mouvement dans l'arrayList (ce n'est pas le cas si la méthode est appelée pour déplacer via la lecture du MOV)
+     * @param save true s'il faut enregistrer le mouvement dans l'arrayList (ce n'est pas le cas si la methode est appelee pour deplacer via la lecture du MOV)
      */
     private void moveKey(int x, int y, boolean save){
         int move = this.game.movePlayer(x,y);
@@ -240,8 +239,8 @@ public class GuiGamePanel extends JPanel implements ActionListener, KeyListener{
     }
     
     /**
-     *
-     * @param ae
+     * Methode qui s'execute quand une action est actionnee au clic sur un bouton
+     * @param ae l'ActionEvent qui est declanchee par un bouton (ici ceux du menu ou du plateau de jeu)
      */
     @Override
     public void actionPerformed(ActionEvent ae) {
