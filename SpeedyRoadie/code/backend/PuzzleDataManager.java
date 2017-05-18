@@ -65,10 +65,16 @@ public class PuzzleDataManager {
                  tab.set(i, tempLengthAdapted);
                 }
             }
-            /*System.out.println("-----"+longmax+"------");
+
+            //On va compléter les vides éventuels, qui sont en dehors du plateau, par des murs plutot que des vide (pour des questions d'esthétique)
+            int compt=0;
             for(int i=0;i<tab.size();i++){
-                System.out.println(tab.get(i).length);
-            }*/
+                compt=0;
+                while(tab.get(i)[compt]!='#'){
+                    tab.get(i)[compt]='#';
+                    compt++;
+                }
+            }
             
             return tab;
         }
