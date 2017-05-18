@@ -7,7 +7,7 @@ import static java.lang.Math.abs;
 
 /**
  * Classe comportant tout ce qui est nécessaire à la création de puzzle aléatoire pour notre Sokoban
- * @author Alfatta
+ * @author Corentin Dachy
  */
 public class PuzzleGenerator {
     
@@ -57,7 +57,7 @@ public class PuzzleGenerator {
      *
      * @return Un pattern adapté aux conditions
      */
-    public static SPattern getSPattern(char c1, char c2, char c3, char c4, char c5, char c6, char c7, char c8, char c9, char c10, char c11, char c12, char c13, char c14,char c15,char c16,char ca1, char ca2, char ca3, char ca4, char ca5, char ca6,char ca7,char ca8, char ca9 ){
+    private static SPattern getSPattern(char c1, char c2, char c3, char c4, char c5, char c6, char c7, char c8, char c9, char c10, char c11, char c12, char c13, char c14,char c15,char c16,char ca1, char ca2, char ca3, char ca4, char ca5, char ca6,char ca7,char ca8, char ca9 ){
         Random rnd = new Random();
    //     int a=1;
         while(true){
@@ -80,7 +80,7 @@ public class PuzzleGenerator {
      * @param nbBox le nombre de boites que l'on souhaite mettre sur cette map (afin d'éviter d'en générer une trop petite)
      * @return
      */
-    public static char[][] generateEmptyRoom(int height, int width, int nbBox){ //heigth et widith le nombre de bloc 3*3 à mettre
+    private static char[][] generateEmptyRoom(int height, int width, int nbBox){ //heigth et widith le nombre de bloc 3*3 à mettre
         int mapheight=(3*height)+2;
         int mapwidth=(3*width)+2;
         
@@ -189,7 +189,7 @@ public class PuzzleGenerator {
      * @param nbBox
      * @return boolean
      */
-    public static boolean checkMap(char[][] map, int nbBox){
+    private static boolean checkMap(char[][] map, int nbBox){
         ArrayList<int[]> listEmpty = new ArrayList<int[]>(); //Liste pour stocker les coordonnées des cases vides de la map (taille: [nb cases vides][2])
         int[] tempCoord;
         for(int i=0;i<map.length;i++){
@@ -250,7 +250,7 @@ public class PuzzleGenerator {
     }
     
     
-    public static Object[] generateLayout(char[][] map, int nbBox) throws IOException{
+    private static Object[] generateLayout(char[][] map, int nbBox) throws IOException{
         //Initialisation du nouveau Board
         ArrayList<char[]> arraymap = new ArrayList<char[]>();
         for(int i=0;i<map.length;i++){
@@ -466,6 +466,14 @@ public class PuzzleGenerator {
        return result;
     }
     
+
+    /**
+     * Génère un board aléatoirement.
+     * @param height la hauteur souhaitée pour le Board, qui sera multipliée par 3 puis augmentée de 2 (murs exterieurs)
+     * @param width la largeur souhaitée pour le Board, qui sera multipliée par 3 puis augmentée de 2 (murs exterieurs)
+     * @param nbBox le nombre souhaité de boites (et de goals) qui le Board devra contenir
+     * @return le board généré
+     */
     public static Board generateBoard(int height, int width, int nbBox) throws IOException{ 
         char[][] map = generateEmptyRoom(height,width,nbBox);
        
