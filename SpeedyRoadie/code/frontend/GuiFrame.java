@@ -339,16 +339,16 @@ public class GuiFrame extends JFrame implements ActionListener{
                 else{
                     switch(levelDifficultySelector){
                         case "Facile":
-                            this.level = new Game(PuzzleGenerator.generateBoard(4,4,5));
+                            this.level = new Game(PuzzleGenerator.generateBoard(2,2,5));
                             break;
                         case "Moyen":
-                            this.level = new Game(PuzzleGenerator.generateBoard(4,4,7));
+                            this.level = new Game(PuzzleGenerator.generateBoard(3,3,8));
                             break;
                         case "Difficile":
-                            this.level = new Game(PuzzleGenerator.generateBoard(5,5,10));
+                            this.level = new Game(PuzzleGenerator.generateBoard(4,3,11));
                             break;
                         case "HARDCOOOOORE":
-                            this.level = new Game(PuzzleGenerator.generateBoard(5,5,15));
+                            this.level = new Game(PuzzleGenerator.generateBoard(5,5,16));
                             break; 
                     }
                     this.gameMode = 1;
