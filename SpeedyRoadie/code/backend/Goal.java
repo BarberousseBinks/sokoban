@@ -6,8 +6,8 @@
 package backend;
 
 /**
- *
- * @author Alfa
+ * Layoutable implémentant Objectif. Il doit contenir un objet de type Wall pour remplir sa condition de victoire (en tant qu'Objectif). Un goal peut contenir d'autres Layoutable que des caisses.
+ * @author Corentin Dachy
  */
 public class Goal extends Objectif implements Layoutable {
     //static final String type = "goal";
@@ -21,17 +21,26 @@ public class Goal extends Objectif implements Layoutable {
         content=c;
     }
     
-
+    /**
+     * Renvoit true si le goal contient une emptycase, false sinon
+     */
     public boolean isEmpty(){
         return "emptycase".equals(content.getType());
     }       
+    /**
+     * Renvoit true si le goal contient une ClassicBox, false sinon
+     */
     public boolean cboxOn(){
         return "cbox".equals(content.getType());
     }  
+    /**
+     * Renvoit true si le goal contient le Player, false sinon
+     */
     public boolean playerOn(){
         return "player".equals(content.getType());
     }
     
+
     public void setEmpty(Emptycase c){
         content=c;
     }
@@ -41,6 +50,10 @@ public class Goal extends Objectif implements Layoutable {
     public void setPlayerOn(Player c){
         content=c;
     }
+    /**
+     * Configure le contenu du goal
+     * @param c le Layoutable contenu dans le goal après appel de cette méthode
+     */
     public void setContent(Layoutable c){
         if(c.getType()=="goal"){
             throw new IllegalArgumentException("a goal can't contain an another goal (only a player, an emptycase or a box)");

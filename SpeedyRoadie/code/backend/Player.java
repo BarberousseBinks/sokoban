@@ -7,7 +7,7 @@ package backend;
 
 /**
  *
- * @author Alfa
+ * @author Corentin Dachy
  */
 public class Player implements Layoutable{
 

@@ -189,7 +189,7 @@ public class PuzzleGenerator {
      * @param nbBox
      * @return boolean
      */
-    private static boolean checkMap(char[][] map, int nbBox){
+    public static boolean checkMap(char[][] map, int nbBox){
         ArrayList<int[]> listEmpty = new ArrayList<int[]>(); //Liste pour stocker les coordonnées des cases vides de la map (taille: [nb cases vides][2])
         int[] tempCoord;
         for(int i=0;i<map.length;i++){

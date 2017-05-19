@@ -1,8 +1,8 @@
 package backend;
 
 /**
- *
- * @author Alfa
+ * Une boite qui n'a rien de spécial. Une boite normale.
+ * @author Corentin Dachy
  */
 public class ClassicBox extends Box{
     

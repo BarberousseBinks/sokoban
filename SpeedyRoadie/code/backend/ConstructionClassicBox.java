@@ -7,7 +7,7 @@ package backend;
 /**
  * Cette classe est comme ClassicBox mais comporte une variable suplémentaire, lastMove. 
  * Elle sert uniquement dans la construction d'un niveau avec PuzzleGenerator
- * @author Alfatta
+ * @author Corentin Dachy
  */
 public class ConstructionClassicBox extends ClassicBox {
     protected int lastMove; //0 = Pas encore déplace, 1 = Haut, 2 = Droite, 3 = Bas, 4 = Gauche

@@ -8,7 +8,7 @@ import java.util.Random;
 
 /**
  * Classe représentant un Pattenr pour le PuzzleGenerator
- * @author Alfatta
+ * @author Corentin Dachy
  */
 public class SPattern {
     char[][] patternContent;

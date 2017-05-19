@@ -6,8 +6,8 @@
 package backend;
 
 /**
- *
- * @author Alfa
+ * Un mur infranchissable pour le Board
+ * @author Corentin Dachy
  */
 public class Wall implements Layoutable{
 

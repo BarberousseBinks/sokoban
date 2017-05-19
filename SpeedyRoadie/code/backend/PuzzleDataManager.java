@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 
 /**
  * Classe comprenant les outils nécessaire pour tout ce qui concerne la lecture et l'écriture des fichier relatifs à notre Sokoban
- * @author Alfa
+ * @author Corentin Dachy
  */
 public class PuzzleDataManager {
     

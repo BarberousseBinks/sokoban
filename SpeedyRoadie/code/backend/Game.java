@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * Classe représentant une partie. Bon nombre de ses informations viennent du board. Elle ajoute d'autres information tel que le nombre de pas (pourrait rajouter un timer mais non implémenté)
  * réalisés ainsi que le temps écoulé (à implémenter). Elle sert également de communication avec l'interphace graphique une fois une instance de Game
  * passé en paramètre
- * @author Alfa
+ * @author Corentin Dachy
  */
 public class Game {
     Board board;

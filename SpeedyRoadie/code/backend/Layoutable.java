@@ -6,8 +6,8 @@
 package backend;
 
 /**
- *
- * @author Alfa
+ * Interface informant sur le type d'un objet contenu dans le Board. Voir rapport partie "Implémentation d'une partie" pour plus de détails
+ * @author Corentin Dachy
  */
 public interface Layoutable {
 

@@ -6,8 +6,8 @@
 package backend;
 
 /**
- *
- * @author Alfa
+ * Layoutable représentant l'absence de tout autre chose chose. Une case vide.
+ * @author Corentin Dachy
  */
 public class Emptycase implements Layoutable{
 
