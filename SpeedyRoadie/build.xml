@@ -51,6 +51,10 @@
     <target name="reset">
 		<delete file="ClassicMode/sauvegarde.xml"/>
 		<copy file="ClassicMode/reset.xml" tofile="ClassicMode/sauvegarde.xml"/>
+		<delete file="PermanSave/permanSave.mov"/>
+		<delete file="PermanSave/permanBoardSave.xsb"/>
+		<touch file="PermanSave/permanSave.mov"/>
+		<touch file="PermanSave/permanBoardSave.xsb"/>
     </target>
     
     <target name="javadoc" depends="cleandoc">

@@ -4,7 +4,7 @@ FICHIER D'INFOS DU JEU SPEEDYROADIE
 Les dossiers ClassicMode et PermanSave permettent le bon fonctionnement du jeu.
 ClassicMode contient les maps du mode histoire ainsi que les fichiers de sauvegarde.
 
-Pour réinitialiser la sauvegarde du ClassicMode, il faut utiliser la commande
+Pour réinitialiser la sauvegarde du ClassicMode et PermanSave, il faut utiliser la commande
 
 > ant reset
 
